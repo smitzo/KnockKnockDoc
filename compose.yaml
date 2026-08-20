@@ -1,0 +1,106 @@
+name: knocknockdoc
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: knocknockdoc
+      POSTGRES_USER: knocknockdoc
+      POSTGRES_PASSWORD: local-development-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U knocknockdoc -d knocknockdoc"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [private]
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks: [private]
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      PROTOTYPE_MODE: "true"
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      DJANGO_SECRET_KEY: prototype-only-not-for-real-data-change-before-deployment
+      DATABASE_URL: postgresql://knocknockdoc:local-development-only@db:5432/knocknockdoc
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/', timeout=2)"]
+      interval: 10s
+      timeout: 4s
+      retries: 12
+      start_period: 15s
+    ports:
+      - "127.0.0.1:${KND_BACKEND_PORT:-8000}:8000"
+    networks: [private]
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ./backend
+    entrypoint: []
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=2"]
+    environment:
+      PROTOTYPE_MODE: "true"
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: backend
+      DJANGO_SECRET_KEY: prototype-only-not-for-real-data-change-before-deployment
+      DATABASE_URL: postgresql://knocknockdoc:local-development-only@db:5432/knocknockdoc
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [private]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_INTERNAL_URL: http://backend:8000
+    environment:
+      BACKEND_INTERNAL_URL: http://backend:8000
+      NEXT_TELEMETRY_DISABLED: "1"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:3000/"]
+      interval: 10s
+      timeout: 4s
+      retries: 12
+      start_period: 15s
+    ports:
+      - "127.0.0.1:${KND_FRONTEND_PORT:-3000}:3000"
+    networks: [private]
+    restart: unless-stopped
+
+networks:
+  private:
+    driver: bridge
+
+volumes:
+  postgres_data:
