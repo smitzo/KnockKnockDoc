@@ -11,9 +11,10 @@ sequenceDiagram
     participant DB as PostgreSQL
 
     User->>UI: Open synthetic workspace
-    UI->>API: GET /api/v1/demo/workspace/
-    API->>Query: get_demo_workspace()
-    Query->>DB: Case + prefetched related records
+    UI->>API: GET /api/v1/demo/workspace/ + session cookie
+    API->>Query: authorized_workspace(user, case:view)
+    Query->>DB: Active profile + membership + assignment + grant + scope
+    Query->>DB: Authorized case + prefetched related records
     DB-->>Query: Aggregate rows
     Query-->>API: ReferralCase
     API-->>UI: Bounded JSON representation
@@ -24,10 +25,13 @@ Expected call path:
 
 ```text
 app/workspace/page.tsx
-  -> lib/api.ts:getDemoWorkspace()
-    -> GET /api/v1/demo/workspace/
+  -> lib/api.ts:getDemoWorkspace(cookie)
+    -> GET /api/v1/demo/workspace/ + session cookie
+      -> SessionAuthentication
       -> referrals.api.views.DemoWorkspaceView.get()
-        -> referrals.selectors.get_demo_workspace()
+        -> referrals.selectors.get_authorized_demo_workspace(user, "case:view")
+          -> identity state + membership + assignment + grant + scope filters
+        -> referrals.selectors.referral_workspace_queryset()
           -> ReferralCase.objects.select_related(...).prefetch_related(...)
         -> referrals.api.serializers.ReferralCaseDetailSerializer
 ```
@@ -46,12 +50,14 @@ sequenceDiagram
     participant Worker as Celery
 
     User->>Form: Enter synthetic planned-care scenario
-    Form->>API: POST JSON /api/v1/cases/
+    Form->>API: POST JSON /api/v1/cases/ + session + CSRF token
+    API->>DB: Resolve active verified referrer membership
     API->>Serializer: Validate shape and safety boundaries
-    Serializer->>Service: create_referral_case(validated_data)
+    Serializer->>Service: create_referral_case(validated_data, membership)
     Service->>DB: BEGIN
     Service->>DB: INSERT case
-    Service->>DB: INSERT append-only case event
+    Service->>DB: INSERT assignment + scoped access grant
+    Service->>DB: INSERT append-only case and security events
     Service->>DB: COMMIT
     Service-->>Queue: enqueue(case UUID) after commit
     API-->>Form: 201 + case representation
@@ -101,16 +107,16 @@ sequenceDiagram
 
 This flow requires authentication, object-level permission evaluation, separate quarantine, content-type detection, malware scanning, safe preview generation, encryption/key policy, audit, retention, and incident response. Adding an S3 SDK alone is not an implementation of this design.
 
-## Future authorization decision flow — required before real data
+## Authorization decision flow — implemented for synthetic cases
 
 ```text
-request identity
-  -> active organization membership
-  -> case relationship or explicit assignment
-  -> active consent and case access grant
-  -> requested purpose and document category scope
-  -> current case/participant state
-  -> allow with audit OR deny with audit
+authenticated session
+  -> active verified identity profile
+  -> active organization and membership
+  -> active case assignment in its valid interval
+  -> active, unexpired, unrevoked case access grant
+  -> normalized requested scope
+  -> allow with append-only security event OR conceal case existence
 ```
 
-Every condition is conjunctive. A verified doctor or hospital membership alone never grants case access.
+Every condition is conjunctive. A verified doctor or hospital membership alone never grants case access. Consent and document-category scope remain future mandatory gates before real data.

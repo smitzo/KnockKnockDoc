@@ -23,7 +23,8 @@ Profiles, messages, dashboards, and quotations support that loop. They are not t
 
 - Prototype V0 only.
 - Synthetic data only.
-- No authentication or real authorization yet.
+- Django session authentication and synthetic case-level assignment/grant authorization are implemented.
+- Authentication is a prototype foundation, not approval for real personal or health data.
 - No real patient or doctor onboarding.
 - No file upload or external object storage.
 - One Django/DRF modular monolith, PostgreSQL, Celery/Redis, and Next.js frontend.
@@ -38,7 +39,7 @@ Do not silently broaden this scope into a production medical system.
 - Never represent coordination as emergency support.
 - Never use “verified” without the verified claim, evidence/source, date, scope, and current state.
 - Never share one hospital's response with another hospital.
-- Never let a profile, organization membership, or UUID imply case access.
+- Never let a profile, organization membership, role, participant row, or UUID imply case access; require an active assignment and scoped grant.
 - Never log patient names, clinical text, record labels, tokens, or object URLs.
 - Never add real upload before the security gates in `PERFORMANCE_AND_SECURITY.md` are implemented and tested.
 - Never add hidden ranking, referral commissions, sponsored clinical placement, or public doctor ratings.

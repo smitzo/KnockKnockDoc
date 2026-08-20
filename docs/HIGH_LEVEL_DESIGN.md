@@ -34,11 +34,24 @@ flowchart LR
 | `core` | Health, base models, request/security utilities | Referral business rules |
 | `referrals` | Cases, participants, access summaries, record metadata, information requests, responses, timeline, decisions | Identity verification or hospital billing |
 | `notifications` (future) | Purpose-limited email/SMS delivery | Clinical content or access decisions |
-| `identity` (future gate) | Authentication, organizations, memberships, role and assignment policy | Patient consent decisions |
+| `identity` | Session authentication, organizations, memberships, account state, and append-only security events | Patient consent decisions or clinical records |
 | `records` (future gate) | Encrypted object metadata, scan status, derived previews, retention | Open public uploads |
 | `audit` (future gate) | Immutable access and security events | Mutable operational notes |
 
-V0 implements `core` and `referrals`. Future modules are named now to prevent uploads or role checks from being improvised inside view code.
+V0 implements `core`, `identity`, and `referrals`. Identity is intentionally a module inside the monolith: Django owns password hashing and sessions, while the module owns account profiles, organizations, memberships, and security events. Referral access policy remains in `referrals` because assignments and grants are part of the case aggregate. Future modules are named now to prevent uploads from being improvised inside view code.
+
+## Identity and access foundation
+
+The first post-V0 phase adds authenticated synthetic workspaces without admitting real patient data. It extends Django's migrated default user model instead of replacing it after initial migrations.
+
+An authorization decision is allowed only when all of these conditions are current:
+
+1. the Django user and linked identity profile are active and the prototype email is marked verified;
+2. the user has an active organization membership;
+3. that exact membership has an active assignment to the case; and
+4. that assignment has an active, unexpired, unrevoked grant containing the requested scope.
+
+This is deny-by-default and case-specific. Organization membership, role, UUID knowledge, and a participant presentation row are never sufficient by themselves. Cross-hospital isolation is proven with negative API tests.
 
 ## Primary user experience
 
@@ -74,13 +87,15 @@ AWS is an option, not a V0 dependency. An architecture decision record is requir
 
 ## Key design decisions
 
-1. **Synthetic-only until authorization exists.** Anonymous APIs and real health data cannot safely coexist.
+1. **Synthetic-only beyond initial authorization.** Authentication and case authorization reduce anonymous exposure, but real health data remains blocked until every release gate is met.
 2. **No native file upload yet.** Document rows in V0 are presentation metadata for rehearsal.
 3. **API versioning from day one.** Public application endpoints live under `/api/v1/`.
 4. **Service layer for commands.** HTTP serializers validate transport; services enforce transitions and transaction boundaries.
 5. **Asynchronous work is supplementary.** The request transaction creates the durable fact; Celery processes idempotent follow-up work by opaque UUID.
 6. **No microservices in V0.** A database transaction is more valuable than premature distributed boundaries.
 7. **No medical automation.** Completeness and clinical decisions remain attributable to humans.
+8. **Server-side session authority.** The browser receives an opaque, HTTP-only session cookie; it stores no bearer token. Unsafe requests require Django CSRF validation.
+9. **Explicit object grants.** Membership, assignment, and scoped grant are separate durable facts so suspension, reassignment, expiry, and revocation are testable.
 
 ## Release boundaries
 

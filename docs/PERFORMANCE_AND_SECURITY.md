@@ -2,7 +2,7 @@
 
 ## Security posture
 
-Prototype V0 is **not approved for real personal or health data**. Authentication has been deliberately deferred, so every API resource is effectively public to a caller who can reach the service. UUIDs, a hidden URL, CORS, or a role-preview switch do not change that fact.
+Prototype V0 is **not approved for real personal or health data**. The identity-and-access phase adds server-side sessions and case-level scoped grants for synthetic workflows. This is necessary but not sufficient for real health data: credential proof, patient-channel verification, consent enforcement, document-category policy, secure records, MFA, and the remaining release gates are still absent.
 
 The safe V0 posture is therefore:
 
@@ -17,12 +17,12 @@ The safe V0 posture is therefore:
 
 | Threat | V0 control | Required production control |
 |---|---|---|
-| Unauthorized case access | Synthetic-only data; no real deployment | Strong authentication, role + assignment + consent policy, object-level tests, audited denies |
+| Unauthorized case access | Session auth; active profile + membership + assignment + scoped grant; Hospital A/B negative tests; synthetic-only data | Credential/MFA policy, consent and document-category authorization, audited denies, independent assessment |
 | ID enumeration | UUID identifiers | Authorization still mandatory; anomaly detection and rate limits |
 | Mass anonymous creation | DRF anonymous throttles, body/field limits, local exposure | Auth, abuse scoring, verified invitations, WAF/rate limits |
 | Malicious files | Upload not implemented; JSON parser only | Quarantine, type inspection, malware/CDR scan, safe preview, private bucket |
 | Injection/XSS | ORM parameters, DRF validation, React escaping, restrictive headers | CSP nonces, dependency scanning, security tests, stored-content review |
-| CSRF | No cookie authentication or stateful browser session in V0 | SameSite/secure cookies and CSRF tokens when session auth is introduced |
+| CSRF | SameSite secure-cookie policy; Django CSRF middleware; masked token endpoint; required token on unsafe session requests | Production proxy/TLS validation, trusted-origin review, penetration testing |
 | Sensitive logging | Safe operational IDs only; no request body logging | Central redaction, access control, retention, alerting, audit separation |
 | Queue data exposure | UUID task arguments only | TLS/auth/private Redis, short retention, key rotation, least privilege |
 | Database loss | Container volume for prototype | Encrypted managed backups, PITR, restore exercises, region/retention decision |
@@ -42,14 +42,19 @@ The safe V0 posture is therefore:
 - Database constraints for synthetic-only V0 and planned-care confirmation.
 - No raw file, S3, email, SMS, analytics, or external AI integration.
 - Background jobs take UUIDs only and use finite retries.
+- Django password validators and password hashing; no password storage or browser bearer token.
+- Server-side sessions with HTTP-only cookies, login session rotation, logout flush, and bounded lifetime.
+- Enumeration-safe login failures with a dedicated login throttle.
+- Deny-by-default case querysets requiring active identity, organization membership, assignment, grant, and scope.
+- Append-only security events with allowlisted metadata that excludes case text and clinical fields.
 
 ## Security gates before any real patient
 
 All gates are mandatory; none is replaced by a policy document.
 
-1. Phishing-resistant staff authentication, patient channel verification, recovery, session rotation/revocation, and MFA policy.
-2. Organization membership, role, case assignment, consent, purpose, category, and document-level authorization enforced server-side.
-3. Negative permission matrix tests covering every role and Hospital A/Hospital B isolation.
+1. Phishing-resistant staff authentication, patient channel verification, recovery, global session revocation, and MFA policy. Basic password sessions are implemented for synthetic demonstration only.
+2. Consent, purpose, record category, and document-level authorization enforced server-side. Organization membership, role, case assignment, and case scopes are implemented for synthetic cases.
+3. A complete negative permission matrix for every mutation, consent state, record category, and role. Initial case-read and Hospital A/Hospital B isolation tests are implemented.
 4. Reviewed, versioned notices and consent; grant/withdrawal semantics; participant access view; export/restriction/deletion request workflow.
 5. Credential and facility verification evidence model with expiry/suspension.
 6. Private upload quarantine, malware scanning, safe preview, immutable originals, derived versions, encrypted object storage, short-lived signed access, and download audit.
