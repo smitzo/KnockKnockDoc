@@ -140,6 +140,7 @@ class SecurityAction(models.TextChoices):
     LOGOUT = "auth.logout", "Logout"
     CASE_VIEWED = "case.viewed", "Case viewed"
     CASE_CREATED = "case.created", "Case created"
+    ADMIN_LAB_VIEWED = "admin.lab_viewed", "Admin lab viewed"
 
 
 class ImmutableSecurityEventQuerySet(models.QuerySet):

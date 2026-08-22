@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
@@ -22,6 +23,7 @@ DEMO_PASSWORD = "local-test-password-only-42"
 
 class SessionAuthenticationApiTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.email = "referrer.test@knocknockdoc.test"
         self.user = get_user_model().objects.create_user(
             username=self.email,

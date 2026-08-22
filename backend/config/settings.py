@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "rest_framework",
     "apps.core",
+    "apps.demo_lab",
     "apps.identity",
     "apps.referrals",
 ]
