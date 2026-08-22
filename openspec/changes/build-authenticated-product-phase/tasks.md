@@ -9,10 +9,10 @@
 
 ## 2. Admin-only synthetic data lab
 
-- [ ] 2.1 Model bounded synthetic doctor and patient profiles without real personal or health data.
-- [ ] 2.2 Seed at least 30 fictional doctors and 30 fictional patients plus useful organizations and account states.
-- [ ] 2.3 Add deterministic local avatars and clear fictional-data labels.
-- [ ] 2.4 Add platform-admin-only list/detail/summary APIs and a negative permission matrix.
+- [x] 2.1 Model bounded synthetic doctor and patient profiles without real personal or health data.
+- [x] 2.2 Seed at least 30 fictional doctors and 30 fictional patients plus useful organizations and account states.
+- [x] 2.3 Add deterministic local avatar keys and clear fictional-data labels.
+- [x] 2.4 Add platform-admin-only list/summary APIs and a negative permission matrix.
 - [ ] 2.5 Build the responsive admin data-lab route with search, filters, summaries, and flow inspection.
 
 ## 3. Education and visual onboarding
@@ -24,7 +24,7 @@
 
 ## 4. Runtime and documentation
 
-- [ ] 4.1 Require local strong demo passwords without committing credentials.
+- [x] 4.1 Require local strong demo passwords without committing credentials.
 - [ ] 4.2 Update startup, environment examples, developer handoff, architecture, data flow, security, and agent context.
 - [ ] 4.3 Append worklog entries for request, decisions, implementation, evidence, limitations, and next gate.
 
