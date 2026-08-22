@@ -1,0 +1,14 @@
+.workspaceAccount { display: flex; align-items: center; gap: 12px; }
+.workspaceAccount > div { display: grid; max-width: 220px; line-height: 1.25; text-align: right; }
+.workspaceAccount span, .workspaceAccount small { color: var(--ink-muted); font-size: .61rem; }
+.workspaceAccount strong { overflow: hidden; font-size: .72rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.authenticatedReferrer { display: grid; grid-template-columns: 38px 1fr; gap: 12px; margin-top: 25px; padding: 15px; border: 1px solid #cfe0d8; border-radius: 11px; background: #f1f8f4; }
+.authenticatedReferrer > svg { width: 22px; margin: 5px auto 0; color: var(--brand); }
+.authenticatedReferrer > div { display: grid; }
+.authenticatedReferrer span, .authenticatedReferrer small { color: var(--ink-muted); font-size: .64rem; }
+.authenticatedReferrer strong { color: var(--ink-deep); font-size: .77rem; }
+
+@media (max-width: 560px) {
+  .workspaceAccount > div { display: none; }
+}

@@ -1,0 +1,6 @@
+.page { min-height: 75vh; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.page :global(.brand) { margin-bottom: 70px; }
+.code { color: var(--brand); font-size: .72rem; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+.page h1 { max-width: 720px; margin: 12px 0 18px; color: var(--ink-deep); font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.2rem); font-weight: 500; line-height: 1.05; }
+.page p { max-width: 650px; margin: 0 0 28px; color: var(--ink-muted); }
+.page > div { display: flex; flex-wrap: wrap; gap: 10px; }

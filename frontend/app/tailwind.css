@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/*
+ * Tailwind owns utility generation and its base layer. Product-specific visual
+ * systems live in colocated CSS Modules; globals.css is retained only for the
+ * original V0 shell and shared design tokens while it is migrated incrementally.
+ */

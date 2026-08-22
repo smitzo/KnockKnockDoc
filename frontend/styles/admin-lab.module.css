@@ -1,0 +1,87 @@
+.app { min-height: 100vh; background: #f5f7f5; }
+.app :global(.lab-header) { min-height: 72px; display: grid; grid-template-columns: 245px 1fr auto; align-items: center; gap: 24px; padding: 0 30px; border-bottom: 1px solid var(--line); background: white; }
+.app :global(.lab-header nav) { justify-self: center; display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 12px; background: #f3f6f4; }
+.app :global(.lab-header nav button) { min-height: 38px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-muted); font-size: .72rem; font-weight: 750; cursor: pointer; }
+.app :global(.lab-header nav button span) { min-width: 21px; padding: 2px 5px; border-radius: 999px; background: #e2eae6; font-size: .61rem; }
+.app :global(.lab-header nav button.is-active) { background: white; color: var(--brand-dark); box-shadow: var(--shadow-sm); }
+.app :global(.lab-main) { padding-block: 58px 90px; }
+.app :global(.lab-heading) { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
+.app :global(.lab-heading > div) { max-width: 790px; }
+.app :global(.lab-heading h1) { margin: 11px 0 14px; color: var(--ink-deep); font-family: var(--serif); font-size: clamp(2.7rem, 4.5vw, 4rem); font-weight: 500; line-height: 1.05; }
+.app :global(.lab-heading p) { max-width: 720px; margin: 0; color: var(--ink-muted); line-height: 1.65; }
+.app :global(.lab-stats) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-top: 38px; }
+.app :global(.lab-stats article) { display: grid; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+.app :global(.lab-stats span) { color: var(--ink-muted); font-size: .65rem; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; }
+.app :global(.lab-stats strong) { margin-block: 4px; color: var(--ink-deep); font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.app :global(.lab-stats small) { color: var(--ink-muted); font-size: .62rem; line-height: 1.45; }
+.app :global(.lab-toolbar) { display: grid; grid-template-columns: minmax(260px, 1fr) 230px auto; align-items: center; gap: 12px; margin: 32px 0 18px; }
+.app :global(.lab-toolbar label) { position: relative; }
+.app :global(.lab-toolbar label > svg) { position: absolute; left: 13px; top: 13px; z-index: 1; width: 17px; color: var(--ink-muted); }
+.app :global(.lab-toolbar input), .app :global(.lab-toolbar select) { width: 100%; min-height: 44px; padding: 9px 13px; border: 1px solid var(--line-strong); border-radius: 10px; background: white; color: var(--ink); outline: 0; }
+.app :global(.lab-toolbar input) { padding-left: 40px; }
+.app :global(.lab-toolbar input:focus), .app :global(.lab-toolbar select:focus) { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(21,108,99,.1); }
+.app :global(.lab-toolbar > span) { color: var(--ink-muted); font-size: .7rem; }
+.app :global(.profile-grid) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.app :global(.profile-card) { position: relative; display: grid; grid-template-columns: 72px 1fr; gap: 15px; padding: 20px; border: 1px solid var(--line); border-radius: 15px; background: white; box-shadow: var(--shadow-sm); }
+.app :global(.profile-card__avatar) { width: 72px; height: 72px; border: 1px solid var(--line); border-radius: 20px; background: var(--mint); }
+.app :global(.profile-card__identity) { min-width: 0; display: grid; align-content: center; }
+.app :global(.profile-card__identity > span) { color: var(--brand); font-size: .6rem; font-weight: 850; letter-spacing: .05em; text-transform: uppercase; }
+.app :global(.profile-card__identity h2) { overflow: hidden; margin: 3px 0; color: var(--ink-deep); font-family: var(--serif); font-size: 1.02rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.app :global(.profile-card__identity p) { overflow: hidden; margin: 0; color: var(--ink-muted); font-size: .62rem; text-overflow: ellipsis; white-space: nowrap; }
+.app :global(.capacity) { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 4px 8px; border-radius: 999px; background: #eaf5ef; color: #24715d; font-size: .59rem; font-weight: 800; }
+.app :global(.capacity i) { width: 6px; height: 6px; border-radius: 50%; background: #3da77e; }
+.app :global(.capacity--limited) { background: var(--gold-soft); color: #8a5d25; }
+.app :global(.capacity--limited i) { background: #bc7b2d; }
+.app :global(.capacity--paused) { background: #f1f2f2; color: #687773; }
+.app :global(.capacity--paused i) { background: #899792; }
+.app :global(.capacity--patient) { background: var(--blue-soft); color: #315e9d; }
+.app :global(.capacity--patient i) { background: var(--blue); }
+.app :global(.profile-card dl) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px 16px; margin: 0; padding-top: 14px; border-top: 1px solid var(--line); }
+.app :global(.profile-card dl div) { display: grid; }
+.app :global(.profile-card dt) { color: var(--ink-muted); font-size: .57rem; }
+.app :global(.profile-card dd) { margin: 1px 0 0; color: var(--ink); font-size: .64rem; font-weight: 650; }
+.app :global(.profile-card__summary) { grid-column: 1 / -1; margin: 0; color: var(--ink-muted); font-size: .63rem; line-height: 1.5; }
+.app :global(.profile-card > small) { grid-column: 1 / -1; overflow: hidden; color: #8a9995; font-size: .56rem; text-overflow: ellipsis; white-space: nowrap; }
+.app :global(.flow-map) { margin-top: 32px; padding: 36px; border: 1px solid var(--line); border-radius: 20px; background: white; box-shadow: var(--shadow-sm); }
+.app :global(.flow-map__heading) { max-width: 700px; }
+.app :global(.flow-map__heading h2) { margin: 8px 0; color: var(--ink-deep); font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.app :global(.flow-map__heading p) { margin: 0; color: var(--ink-muted); }
+.app :global(.flow-map ol) { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 35px 0; padding: 0; list-style: none; }
+.app :global(.flow-map li) { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 8px; min-width: 0; }
+.app :global(.flow-map li > span) { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--brand); color: white; font-size: .65rem; font-weight: 850; }
+.app :global(.flow-map li > div) { min-width: 0; display: grid; }
+.app :global(.flow-map li strong) { overflow: hidden; font-size: .65rem; text-overflow: ellipsis; white-space: nowrap; }
+.app :global(.flow-map li small) { color: var(--ink-muted); font-size: .57rem; }
+.app :global(.flow-map li i) { height: 4px; overflow: hidden; margin-top: 7px; border-radius: 999px; background: #e7eeeb; }
+.app :global(.flow-map li i b) { display: block; max-width: 100%; height: 100%; background: var(--brand); }
+.app :global(.flow-map li > svg) { position: absolute; right: -9px; top: 7px; width: 12px; color: #9baba6; }
+.app :global(.flow-map__boundary) { display: grid; grid-template-columns: 25px 1fr; gap: 11px; padding: 16px; border-radius: 11px; background: #f3f7f5; color: var(--ink-muted); }
+.app :global(.flow-map__boundary svg) { color: var(--brand); }
+.app :global(.flow-map__boundary p) { margin: 0; font-size: .7rem; }
+.app :global(.flow-map__boundary strong) { color: var(--ink); }
+
+@media (max-width: 1050px) {
+  .app :global(.profile-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app :global(.lab-stats) { grid-template-columns: repeat(2, 1fr); }
+  .app :global(.flow-map ol) { grid-template-columns: repeat(4, 1fr); gap: 22px 12px; }
+}
+
+@media (max-width: 800px) {
+  .app :global(.lab-header) { grid-template-columns: 1fr auto; padding: 12px 16px; }
+  .app :global(.lab-header nav) { grid-row: 2; grid-column: 1 / -1; justify-self: stretch; overflow-x: auto; }
+  .app :global(.lab-header nav button) { flex: 1 0 auto; justify-content: center; }
+  .app :global(.lab-heading) { align-items: flex-start; flex-direction: column; }
+  .app :global(.lab-toolbar) { grid-template-columns: 1fr 1fr; }
+  .app :global(.lab-toolbar > span) { grid-column: 1 / -1; }
+  .app :global(.flow-map ol) { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .app :global(.lab-stats), .app :global(.profile-grid), .app :global(.lab-toolbar) { grid-template-columns: 1fr; }
+  .app :global(.lab-main) { padding-top: 38px; }
+  .app :global(.lab-heading h1) { font-size: 2.5rem; }
+  .app :global(.lab-toolbar > span) { grid-column: auto; }
+  .app :global(.flow-map) { padding: 24px 18px; }
+  .app :global(.flow-map ol) { grid-template-columns: 1fr; }
+  .app :global(.flow-map li > svg) { display: none; }
+}
