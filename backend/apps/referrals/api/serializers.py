@@ -178,8 +178,6 @@ class ReferralCaseCreateSerializer(serializers.Serializer):
     )
     clinical_question = serializers.CharField(min_length=20, max_length=500)
     summary = serializers.CharField(min_length=30, max_length=2000)
-    referrer_display_name = serializers.CharField(min_length=2, max_length=100)
-    referrer_country = serializers.CharField(min_length=2, max_length=80)
     is_planned_care = serializers.BooleanField()
     accepts_synthetic_only = serializers.BooleanField()
 
@@ -217,6 +215,7 @@ class ReferralCaseCreateSerializer(serializers.Serializer):
         return attrs
 
     def create(self, validated_data):
+        referrer_membership = validated_data.pop("referrer_membership")
         command = CreateReferralCommand(
             **{
                 key: validated_data[key]
@@ -227,9 +226,7 @@ class ReferralCaseCreateSerializer(serializers.Serializer):
                     "specialty",
                     "clinical_question",
                     "summary",
-                    "referrer_display_name",
-                    "referrer_country",
                 ]
             }
         )
-        return create_referral_case(command)
+        return create_referral_case(command, referrer_membership=referrer_membership)

@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 
 from apps.core.models import UUIDTimeStampedModel
+from apps.identity.models import OrganizationMembership
 
 
 class CaseStatus(models.TextChoices):
@@ -61,6 +64,119 @@ class ReferralCase(UUIDTimeStampedModel):
 
     def __str__(self) -> str:
         return self.reference
+
+
+class AssignmentStatus(models.TextChoices):
+    ACTIVE = "active", "Active"
+    ENDED = "ended", "Ended"
+
+
+class CaseAssignment(UUIDTimeStampedModel):
+    case = models.ForeignKey(
+        ReferralCase,
+        related_name="assignments",
+        on_delete=models.CASCADE,
+    )
+    membership = models.ForeignKey(
+        OrganizationMembership,
+        related_name="case_assignments",
+        on_delete=models.PROTECT,
+    )
+    purpose = models.CharField(max_length=180)
+    status = models.CharField(
+        max_length=16,
+        choices=AssignmentStatus.choices,
+        default=AssignmentStatus.ACTIVE,
+    )
+    starts_at = models.DateTimeField(default=timezone.now)
+    ends_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["case", "membership"],
+                name="unique_case_membership_assignment",
+            ),
+            models.CheckConstraint(
+                condition=Q(ends_at__isnull=True) | Q(ends_at__gt=models.F("starts_at")),
+                name="assignment_end_after_start",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["membership", "status"], name="ref_assignment_member_idx"),
+            models.Index(fields=["case", "status"], name="ref_assignment_case_idx"),
+        ]
+
+
+class AccessScope(models.TextChoices):
+    CASE_VIEW = "case:view", "View case"
+    CASE_EDIT = "case:edit", "Edit case"
+    CASE_MANAGE = "case:manage", "Manage case access"
+    RECORDS_VIEW = "records:view", "View shared record metadata"
+    RESPONSE_ISSUE = "response:issue", "Issue a provider response"
+
+
+class CaseAccessGrant(UUIDTimeStampedModel):
+    assignment = models.ForeignKey(
+        CaseAssignment,
+        related_name="grants",
+        on_delete=models.PROTECT,
+    )
+    purpose = models.CharField(max_length=180)
+    granted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="case_grants_issued",
+        on_delete=models.PROTECT,
+    )
+    granted_at = models.DateTimeField(default=timezone.now)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    revoked_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="case_grants_revoked",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
+    revocation_reason = models.CharField(max_length=180, blank=True)
+
+    class Meta:
+        ordering = ["-granted_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["assignment"],
+                condition=Q(revoked_at__isnull=True),
+                name="one_current_grant_per_assignment",
+            ),
+            models.CheckConstraint(
+                condition=Q(expires_at__isnull=True) | Q(expires_at__gt=models.F("granted_at")),
+                name="grant_expiry_after_grant",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["assignment", "revoked_at"], name="ref_grant_assignment_idx"),
+            models.Index(fields=["expires_at"], name="ref_grant_expiry_idx"),
+        ]
+
+
+class GrantScope(UUIDTimeStampedModel):
+    grant = models.ForeignKey(
+        CaseAccessGrant,
+        related_name="scopes",
+        on_delete=models.CASCADE,
+    )
+    scope = models.CharField(max_length=40, choices=AccessScope.choices)
+
+    class Meta:
+        ordering = ["scope"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["grant", "scope"],
+                name="unique_grant_scope",
+            )
+        ]
+        indexes = [models.Index(fields=["scope", "grant"], name="ref_scope_lookup_idx")]
 
 
 class ParticipantRole(models.TextChoices):
