@@ -18,11 +18,11 @@ export function SiteHeader() {
         <Brand />
         <nav className="site-nav" aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
-          <a href="#built-for-care">For patients & doctors</a>
-          <a href="#safety">Safety</a>
+          <Link href="/how-to">Product guide</Link>
+          <Link href="/blog">Insights</Link>
         </nav>
         <div className="site-header__actions">
-          <Link className="text-link hide-mobile" href="/workspace">View demo case</Link>
+          <Link className="text-link hide-mobile" href="/login">Sign in</Link>
           <Link className="button button--small" href="/refer">
             Start a referral <Icon name="arrow" />
           </Link>
