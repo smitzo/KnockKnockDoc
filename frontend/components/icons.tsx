@@ -12,6 +12,7 @@ export type IconName =
   | "message"
   | "people"
   | "plus"
+  | "search"
   | "shield"
   | "spark"
   | "timeline";
@@ -28,6 +29,7 @@ const paths: Record<IconName, React.ReactNode> = {
   message: <path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A7 7 0 0 1 3 13V8a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" />,
   people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></>,
   plus: <path d="M12 5v14M5 12h14" />,
+  search: <><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></>,
   shield: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-5"/></>,
   spark: <><path d="m12 3 1.2 4.1L17 9l-3.8 1.9L12 15l-1.2-4.1L7 9l3.8-1.9Z"/><path d="m19 15 .7 2.3L22 18.5l-2.3 1.2L19 22l-.7-2.3-2.3-1.2 2.3-1.2Z"/></>,
   timeline: <><circle cx="7" cy="5" r="2"/><circle cx="17" cy="12" r="2"/><circle cx="7" cy="19" r="2"/><path d="M9 5h3a5 5 0 0 1 5 5m-2 4a5 5 0 0 1-5 5H9"/></>,
