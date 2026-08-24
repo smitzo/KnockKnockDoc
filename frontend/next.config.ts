@@ -38,6 +38,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/api/backend/auth/:endpoint",
+        destination: `${backendUrl}/api/v1/auth/:endpoint/`,
+      },
+      {
         source: "/api/backend/cases/",
         destination: `${backendUrl}/api/v1/cases/`,
       },

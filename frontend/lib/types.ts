@@ -1,5 +1,32 @@
 export type RolePreview = "patient" | "referrer" | "hospital" | "coordinator";
 
+export interface OrganizationSummary {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+}
+
+export interface SessionMembership {
+  id: string;
+  role: string;
+  role_label: string;
+  organization: OrganizationSummary;
+}
+
+export interface SessionResponse {
+  authenticated: true;
+  profile: {
+    id: string;
+    email: string;
+    display_name: string;
+    account_type: string;
+    account_type_label: string;
+  };
+  memberships: SessionMembership[];
+  session: { expires_at: string };
+}
+
 export interface Participant {
   id: string;
   display_name: string;
@@ -94,7 +121,69 @@ export interface DemoWorkspaceResponse {
   prototype: {
     mode: "synthetic-only";
     real_patient_data_allowed: false;
-    role_switch_is_authorization: false;
+    authorization_enforced: true;
+  };
+  viewer: {
+    display_name: string;
+    membership_role: string;
+    membership_role_label: string;
+    organization_name: string;
   };
   case: ReferralCase;
+}
+
+export interface SyntheticDoctor {
+  id: string;
+  fixture_key: string;
+  display_name: string;
+  login_email: string;
+  specialty: string;
+  city: string;
+  hospital_name: string;
+  experience_years: number;
+  languages: string[];
+  availability: string;
+  availability_label: string;
+  response_hours: number;
+  credential_state: string;
+  avatar_url: string;
+  profile_summary: string;
+  is_synthetic: true;
+}
+
+export interface SyntheticPatient {
+  id: string;
+  fixture_key: string;
+  display_alias: string;
+  login_email: string;
+  home_country: string;
+  age_band: string;
+  specialty_interest: string;
+  journey_stage: string;
+  journey_stage_label: string;
+  preferred_city: string;
+  language: string;
+  coordination_need: string;
+  avatar_url: string;
+  is_synthetic: true;
+}
+
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
+export interface AdminLabSummary {
+  prototype: { mode: "synthetic-only"; real_people: false; admin_only: true };
+  counts: { doctors: number; patients: number };
+  doctor_specialties: { specialty: string; count: number }[];
+  patient_stages: { journey_stage: string; count: number }[];
+}
+
+export interface AdminLabData {
+  summary: AdminLabSummary;
+  doctors: SyntheticDoctor[];
+  patients: SyntheticPatient[];
 }

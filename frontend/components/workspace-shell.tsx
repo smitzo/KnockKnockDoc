@@ -1,21 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import type { DemoWorkspaceResponse, RolePreview } from "@/lib/types";
+import { logoutSession } from "@/lib/api";
+import styles from "@/styles/authenticated.module.css";
 
 import { Icon, type IconName } from "./icons";
 import { Brand } from "./site-header";
 
 type WorkspaceTab = "overview" | "records" | "access" | "activity";
-
-const roleOptions: { value: RolePreview; label: string }[] = [
-  { value: "patient", label: "Patient" },
-  { value: "referrer", label: "Referring doctor" },
-  { value: "hospital", label: "Hospital team" },
-  { value: "coordinator", label: "Coordinator" },
-];
 
 const roleGuidance: Record<RolePreview, { heading: string; note: string; action: string }> = {
   patient: {
@@ -54,14 +50,20 @@ function formatDate(value: string | null, options?: Intl.DateTimeFormatOptions) 
   return new Intl.DateTimeFormat("en", options ?? { day: "numeric", month: "short", year: "numeric" }).format(new Date(value));
 }
 
+function roleFromMembership(membershipRole: string): RolePreview {
+  if (membershipRole === "patient") return "patient";
+  if (membershipRole === "referrer") return "referrer";
+  if (["specialist", "hospital_coordinator"].includes(membershipRole)) return "hospital";
+  return "coordinator";
+}
+
 export function WorkspaceShell({
   workspace,
-  source,
 }: {
   workspace: DemoWorkspaceResponse;
-  source: "api" | "fallback";
 }) {
-  const [role, setRole] = useState<RolePreview>("patient");
+  const router = useRouter();
+  const role = roleFromMembership(workspace.viewer.membership_role);
   const [tab, setTab] = useState<WorkspaceTab>("overview");
   const currentRole = roleGuidance[role];
   const referral = workspace.case;
@@ -71,23 +73,26 @@ export function WorkspaceShell({
   );
   const readyRecords = referral.records.filter((record) => record.state === "ready").length;
 
+  async function handleLogout() {
+    await logoutSession();
+    router.replace("/login");
+    router.refresh();
+  }
+
   return (
     <div className="workspace-app">
       <div className="workspace-prototype-bar">
         <strong>Synthetic prototype</strong>
-        <span>No real patient data. Role switching previews UX only—it is not authorization.</span>
-        {source === "fallback" && <span className="offline-chip">Sample mode · API unavailable</span>}
+        <span>No real patient data. Account, assignment, and scoped grant checks are enforced.</span>
       </div>
       <header className="workspace-header">
         <Brand />
         <div className="workspace-header__case">
           <span>Case</span><strong>{referral.reference}</strong>
         </div>
-        <div className="role-preview">
-          <label htmlFor="role-preview">Preview as</label>
-          <select id="role-preview" value={role} onChange={(event) => setRole(event.target.value as RolePreview)}>
-            {roleOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-          </select>
+        <div className={styles.workspaceAccount}>
+          <div><span>{workspace.viewer.membership_role_label}</span><strong>{workspace.viewer.display_name}</strong><small>{workspace.viewer.organization_name}</small></div>
+          <button className="button button--ghost button--small" onClick={handleLogout} type="button">Sign out</button>
         </div>
       </header>
 
@@ -121,7 +126,7 @@ export function WorkspaceShell({
                 <span className="status-pill status-pill--soft"><span /> {referral.status_label}</span>
                 <span>{referral.corridor_label}</span>
               </div>
-              <h1>{role === "patient" ? "Your referral workspace" : `${roleOptions.find((item) => item.value === role)?.label} workspace`}</h1>
+              <h1>{role === "patient" ? "Your referral workspace" : `${workspace.viewer.membership_role_label} workspace`}</h1>
               <p>{referral.patient_alias} · {referral.patient_age_band} · {referral.specialty}</p>
             </div>
             <button className="icon-button" aria-label="Open synthetic case messages" type="button"><Icon name="message" /><span>1</span></button>
@@ -231,7 +236,7 @@ function OverviewTab({
           <div className="avatar-stack" aria-label="Case participant avatars">
             <span className="avatar avatar--patient">AK</span><span className="avatar avatar--referrer">LA</span><span className="avatar avatar--specialist">AR</span><span className="avatar avatar--coordinator">N</span>
           </div>
-          <p>Access is shown for understanding in V0. It is not yet enforced by authentication.</p>
+          <p>Server checks require an active identity, membership, assignment, grant, and case-view scope.</p>
           <button className="card-link" type="button">Review participants and purpose <Icon name="arrow" /></button>
         </section>
 
@@ -265,7 +270,7 @@ function RecordsTab({ referral }: { referral: DemoWorkspaceResponse["case"] }) {
 function AccessTab({ referral }: { referral: DemoWorkspaceResponse["case"] }) {
   return (
     <section className="content-card tab-panel">
-      <div className="content-card__heading"><div><span className="card-kicker">Visible sharing</span><h2>Who is part of this case</h2><p>Each person has a named purpose and scope. Production enforcement is a future release gate.</p></div><span className="issued-chip"><Icon name="lock" /> Consent: {referral.consent_status_label}</span></div>
+      <div className="content-card__heading"><div><span className="card-kicker">Visible sharing</span><h2>Who is part of this case</h2><p>Each person has a named purpose. Authentication and case-view scope are enforced; consent and document-category gates remain future work.</p></div><span className="issued-chip"><Icon name="lock" /> Consent: {referral.consent_status_label}</span></div>
       <div className="participant-grid">
         {referral.participants.map((participant, index) => (
           <article className="participant-card" key={participant.id}>

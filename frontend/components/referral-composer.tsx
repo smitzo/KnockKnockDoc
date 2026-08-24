@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 import { createSyntheticReferral } from "@/lib/api";
+import styles from "@/styles/authenticated.module.css";
 
 import { Icon } from "./icons";
 
@@ -14,13 +15,17 @@ const initialForm = {
   specialty: "Oncology",
   clinical_question: "Please review this fictional planned-care referral for specialist fit.",
   summary: "A fully fictional, stable planned-care scenario created only to rehearse the referral workflow.",
-  referrer_display_name: "Dr. Referrer B · synthetic",
-  referrer_country: "Kenya",
   is_planned_care: true,
   accepts_synthetic_only: false,
 };
 
-export function ReferralComposer() {
+export function ReferralComposer({
+  referrerName,
+  referrerOrganization,
+}: {
+  referrerName: string;
+  referrerOrganization: string;
+}) {
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -82,13 +87,7 @@ export function ReferralComposer() {
           <label><span>What should the receiving specialist review?</span><textarea minLength={20} maxLength={500} required rows={3} value={form.clinical_question} onChange={(event) => setForm({ ...form, clinical_question: event.target.value })}/><small>{form.clinical_question.length}/500 · Preserve the referring doctor&apos;s wording</small></label>
           <label><span>Brief sourced context</span><textarea minLength={30} maxLength={2000} required rows={4} value={form.summary} onChange={(event) => setForm({ ...form, summary: event.target.value })}/><small>Describe a fictional, stable planned-care scenario. Do not diagnose.</small></label>
         </fieldset>
-        <fieldset>
-          <legend>Fictional referrer</legend>
-          <div className="form-grid form-grid--two">
-            <label><span>Display name</span><input maxLength={100} required value={form.referrer_display_name} onChange={(event) => setForm({ ...form, referrer_display_name: event.target.value })}/></label>
-            <label><span>Country</span><input maxLength={80} required value={form.referrer_country} onChange={(event) => setForm({ ...form, referrer_country: event.target.value })}/></label>
-          </div>
-        </fieldset>
+        <div className={styles.authenticatedReferrer}><Icon name="shield" /><div><span>Creating as</span><strong>{referrerName}</strong><small>{referrerOrganization} · identity supplied by the server</small></div></div>
         <div className="confirmation-list">
           <label><input checked={form.is_planned_care} onChange={(event) => setForm({ ...form, is_planned_care: event.target.checked })} type="checkbox"/><span><strong>This is a stable, planned-care rehearsal</strong><small>Not an urgent or emergency concern</small></span></label>
           <label><input checked={form.accepts_synthetic_only} onChange={(event) => setForm({ ...form, accepts_synthetic_only: event.target.checked })} type="checkbox"/><span><strong>Everything entered here is fictional</strong><small>I have not included real personal or health data</small></span></label>
