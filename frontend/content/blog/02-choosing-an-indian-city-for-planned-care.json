@@ -1,0 +1,53 @@
+{
+  "slug": "choosing-an-indian-city-for-planned-care",
+  "category": "Decision guide",
+  "title": "Which Indian city is ‘best’ for planned care? Start with the team, not a ranking",
+  "dek": "Delhi NCR, Mumbai, Chennai, Bengaluru, Hyderabad and other clusters can all be relevant. A universal winner is not evidence-based.",
+  "readMinutes": 7,
+  "reviewed": "11 August 2026",
+  "image": "/images/referral-guide-hero.png",
+  "imageAlt": "Illustrative AI-generated referral journey connecting a fictional patient, home doctor and Indian care team.",
+  "sections": [
+    {
+      "heading": "There is no defensible single-city winner",
+      "paragraphs": [
+        "A city does not treat a patient: a named clinical team, facility, and follow-up plan do. Public datasets do not provide risk-adjusted international-patient outcomes that support a broad city league table. We therefore do not label any city ‘best.’",
+        "A better short list starts with specialty fit and the named clinician’s current scope, then checks the facility’s accreditation status, capacity, communication, indicative plan, and continuity with the home doctor."
+      ]
+    },
+    {
+      "heading": "Use city as an operational filter",
+      "paragraphs": [
+        "Large care clusters may offer more specialist choice and international connectivity, while a smaller city may offer a specific team or simpler local logistics. Neither trade-off is automatically superior."
+      ],
+      "bullets": [
+        "Delhi NCR: broad multi-specialty cluster and a common international gateway.",
+        "Mumbai: major tertiary-care cluster; local travel time and accommodation location need planning.",
+        "Chennai: established hospital cluster; heat, language support and recovery logistics belong in the plan.",
+        "Bengaluru and Hyderabad: major clinical and transport hubs; verify the exact specialty team and facility.",
+        "Kochi and other regional centres: may suit a named service, but never infer capability from destination marketing."
+      ]
+    },
+    {
+      "heading": "A repeatable verification sequence",
+      "paragraphs": [
+        "Search the current NABH directory by city and specialty, but treat accreditation as one signal rather than a guarantee of an individual outcome. Confirm the certificate scope and status directly, then ask the receiving team to answer the original referral question in writing."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "publisher": "National Accreditation Board for Hospitals & Healthcare Providers",
+      "title": "Find an accredited healthcare organisation",
+      "url": "https://nabh.co/find-a-healthcare-organisation/",
+      "supports": "Searchable accreditation, certification and empanelment directory with city and specialty filters."
+    },
+    {
+      "publisher": "Deakin University research repository",
+      "title": "Factors influencing inbound medical travel to India",
+      "url": "https://dro.deakin.edu.au/articles/journal_contribution/Factors_influencing_inbound_medical_travel_to_India/21025981",
+      "supports": "A peer-reviewed qualitative study based on interviews with 24 foreign medical travellers at six Indian private hospitals."
+    }
+  ],
+  "order": 2
+}

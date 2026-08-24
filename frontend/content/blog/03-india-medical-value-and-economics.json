@@ -1,0 +1,57 @@
+{
+  "slug": "india-medical-value-and-economics",
+  "category": "Economics",
+  "title": "Why travellers consider India: value is broader than a low price",
+  "dek": "Official economic material signals a large sector, while patient research shows that safety, expertise and information remain central.",
+  "readMinutes": 6,
+  "reviewed": "11 August 2026",
+  "image": "/images/medical-travel-planning.png",
+  "imageAlt": "Illustrative AI-generated scene of a care coordinator reviewing a fictional plan in a bright reception area.",
+  "keyNumber": {
+    "value": "$13.42bn",
+    "label": "published 2026 market projection—not observed revenue"
+  },
+  "sections": [
+    {
+      "heading": "Observed context and projected market are different things",
+      "paragraphs": [
+        "A February 2025 Ministry of Tourism brief says India’s overall tourism sector represented 5% of GDP and 7.6 crore jobs in FY2023, while foreign-exchange earnings from tourism were US$28 billion in 2023. Those are economy-wide tourism figures, not medical-travel revenue.",
+        "The same brief repeats a projection that the medical-value-travel market could reach US$13.42 billion by 2026 from a stated US$2.89 billion in 2020. This is a forecast cited by government material, not a measured 2026 result, and should be labelled accordingly."
+      ]
+    },
+    {
+      "heading": "Patients do not choose on sticker price alone",
+      "paragraphs": [
+        "Interviews with 24 foreign travellers across six Indian private hospitals identified a wider decision set: waiting time, quality and accreditation, clinician expertise, usable information, facilities, safety, travel risk, surgical cost and the travel opportunity.",
+        "A trustworthy comparison therefore separates the hospital estimate, exclusions, travel, accommodation, companion costs, time away from work, possible extra tests, recovery, and home-country follow-up. Knock Knock Doc does not promise a saving or hide these categories inside one headline quote."
+      ]
+    },
+    {
+      "heading": "The product implication",
+      "paragraphs": [
+        "Value comes from a clear referral question, attributable response, realistic uncertainty, explicit next owner, and handback—not from presenting the cheapest provider first. Paid ranking and undisclosed referral incentives would undermine that model."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "publisher": "Press Information Bureau, Ministry of Tourism",
+      "title": "Tourism as a key driver for employment and growth",
+      "url": "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/feb/doc202524496301.pdf",
+      "supports": "Tourism GDP/jobs/foreign-exchange context and the published medical-value-travel market projection."
+    },
+    {
+      "publisher": "Deakin University research repository",
+      "title": "Factors influencing inbound medical travel to India",
+      "url": "https://dro.deakin.edu.au/articles/journal_contribution/Factors_influencing_inbound_medical_travel_to_India/21025981",
+      "supports": "A peer-reviewed qualitative study based on interviews with 24 foreign medical travellers at six Indian private hospitals."
+    },
+    {
+      "publisher": "Press Information Bureau, Government of India",
+      "title": "India initiative for medical tourism",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2212575&lang=1&reg=3",
+      "supports": "644,387 foreign tourist arrivals for medical purposes in 2024 and the comparison with 2020."
+    }
+  ],
+  "order": 3
+}

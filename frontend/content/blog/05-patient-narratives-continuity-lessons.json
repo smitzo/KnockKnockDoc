@@ -1,0 +1,54 @@
+{
+  "slug": "patient-narratives-continuity-lessons",
+  "category": "Research case study",
+  "title": "What published traveller narratives teach about trust and handback",
+  "dek": "A credible case study does not need an invented miracle story. Qualitative research exposes the recurring coordination work.",
+  "readMinutes": 7,
+  "reviewed": "11 August 2026",
+  "image": "/images/referral-guide-hero.png",
+  "imageAlt": "Illustrative AI-generated cross-border referral team; it does not depict a real case.",
+  "sections": [
+    {
+      "heading": "The evidence base",
+      "paragraphs": [
+        "A peer-reviewed qualitative analysis examined public first-person narratives from people who travelled to India for health care. A separate peer-reviewed study interviewed 24 foreign travellers at six private hospitals. These are not representative outcome registries, but they are credible sources for experience themes.",
+        "The narrative analysis reported that trustworthy information could be difficult to identify and that experiences included both positive and negative factors. The interview study likewise placed information, safety, accreditation, expertise, facilities, travel risk and follow-up inside the decision—not outside it."
+      ]
+    },
+    {
+      "heading": "A composite workflow lesson—not a real person",
+      "paragraphs": [
+        "Consider a composite fictional patient who finds a hospital online, receives a preliminary plan, travels with a relative, and later returns home with multiple reports. The dangerous gap is not only the outbound choice: it is whether the home doctor knows what was reviewed, what changed, which source document is authoritative, what warning signs were explained, and who owns follow-up.",
+        "This composite is a teaching device derived from research themes. It is not presented as a documented individual or successful treatment story."
+      ]
+    },
+    {
+      "heading": "Design consequences",
+      "bullets": [
+        "Preserve the original referral question and the home clinician relationship.",
+        "Name the clinical author separately from the coordinator and commercial team.",
+        "Show limitations and missing information beside the response.",
+        "Record proceed, pause, clarify or decline without pressure.",
+        "Make an attributable handback a completion criterion, not an optional PDF at the end."
+      ],
+      "paragraphs": [
+        "These patterns explain why Knock Knock Doc is designed as a closed-loop referral workflow rather than a popularity-ranked doctor directory."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "publisher": "Journal of Medical Internet Research",
+      "title": "Internet narratives focused on health travelers’ experiences in India",
+      "url": "https://doi.org/10.2196/15665",
+      "supports": "Qualitative themes from publicly available first-person health-travel narratives, including information and continuity challenges."
+    },
+    {
+      "publisher": "Deakin University research repository",
+      "title": "Factors influencing inbound medical travel to India",
+      "url": "https://dro.deakin.edu.au/articles/journal_contribution/Factors_influencing_inbound_medical_travel_to_India/21025981",
+      "supports": "A peer-reviewed qualitative study based on interviews with 24 foreign medical travellers at six Indian private hospitals."
+    }
+  ],
+  "order": 5
+}

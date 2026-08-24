@@ -29,6 +29,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  outputFileTracingIncludes: {
+    "/blog": ["./content/blog/*.json"],
+    "/blog/*": ["./content/blog/*.json"],
+  },
   poweredByHeader: false,
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,

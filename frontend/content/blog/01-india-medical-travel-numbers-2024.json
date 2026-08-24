@@ -1,0 +1,55 @@
+{
+  "slug": "india-medical-travel-numbers-2024",
+  "category": "Evidence brief",
+  "title": "How many international medical travellers came to India?",
+  "dek": "The strongest current public number is useful—but it needs the right definition and context.",
+  "readMinutes": 5,
+  "reviewed": "11 August 2026",
+  "image": "/images/medical-travel-planning.png",
+  "imageAlt": "Illustrative AI-generated scene of a fictional family reviewing a care-travel plan with a coordinator.",
+  "keyNumber": {
+    "value": "644,387",
+    "label": "foreign tourist arrivals for medical purposes in 2024"
+  },
+  "sections": [
+    {
+      "heading": "The headline number",
+      "paragraphs": [
+        "A Government of India answer citing the Bureau of Immigration reports 644,387 foreign tourist arrivals for medical purposes in 2024. It reports 659,356 in 2023, so the series is substantial but not a straight upward line.",
+        "This is an arrivals measure, not a count of unique patients, successful procedures, hospital admissions, or outcomes. It should not be converted into any of those without another data source."
+      ]
+    },
+    {
+      "heading": "Why the denominator matters",
+      "paragraphs": [
+        "The same government release says medical-purpose arrivals were 6.48% of all foreign tourist arrivals in 2024. Pandemic-era percentages can be misleading because total international travel fell sharply, so 2020–2021 shares should not be read as normal demand structure."
+      ],
+      "bullets": [
+        "Use arrivals to understand corridor scale, not clinical quality.",
+        "Ask hospitals for unique-patient, specialty, completion, and follow-up figures separately.",
+        "Prefer a dated series to a promotional claim such as ‘millions of patients’ with no definition."
+      ]
+    },
+    {
+      "heading": "What this means for a referral network",
+      "paragraphs": [
+        "The public data supports the existence of meaningful cross-border demand. It does not prove that a new platform can acquire trusted referrals, improve hospital response, or close the handback loop. Those are product hypotheses that must be measured case by case."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "publisher": "Press Information Bureau, Government of India",
+      "title": "India initiative for medical tourism",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2212575&lang=1&reg=3",
+      "supports": "644,387 foreign tourist arrivals for medical purposes in 2024 and the comparison with 2020."
+    },
+    {
+      "publisher": "Ministry of Tourism, Government of India",
+      "title": "India Tourism Data Compendium 2024",
+      "url": "https://data.tourism.gov.in/mrd/Uploads/tourism_data/India%20Tourism%20Data%20Compendium%202024.pdf",
+      "supports": "Bureau of Immigration tourism totals and purpose-of-visit context for 2023."
+    }
+  ],
+  "order": 1
+}

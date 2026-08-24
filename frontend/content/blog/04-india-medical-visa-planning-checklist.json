@@ -1,0 +1,40 @@
+{
+  "slug": "india-medical-visa-planning-checklist",
+  "category": "Travel readiness",
+  "title": "Medical-visa planning belongs after clinical fit—not before it",
+  "dek": "The official e-Visa route has specific categories and documents. A platform should not turn eligibility into a promise.",
+  "readMinutes": 5,
+  "reviewed": "11 August 2026",
+  "image": "/images/medical-travel-planning.png",
+  "imageAlt": "Illustrative AI-generated planning meeting with no real patient or hospital shown.",
+  "sections": [
+    {
+      "heading": "What the official portal currently says",
+      "paragraphs": [
+        "India’s official e-Visa portal lists e-Medical and e-Medical Attendant categories. It currently describes a 60-day stay from arrival with multiple entry for the listed e-Medical category, an application window beginning at least four days before arrival, and up to two e-Medical Attendant visas against one e-Medical visa.",
+        "Rules depend on nationality, passport, treatment route and current government policy. Always re-check the official portal; a coordinator or hospital letter does not guarantee approval."
+      ]
+    },
+    {
+      "heading": "A safer order of operations",
+      "paragraphs": [
+        "First confirm that a named receiving team has reviewed enough sourced information to say an in-person assessment may be appropriate. Then obtain the facility’s required invitation or letter, verify passport and category rules, plan a companion where needed, and keep flexible travel arrangements until formal decisions exist."
+      ],
+      "bullets": [
+        "Do not buy non-refundable travel based only on a directory profile.",
+        "Keep originals and translated copies attributable to their source.",
+        "Plan medication continuity, accessibility, recovery accommodation and the return handback.",
+        "Use government channels; beware of anyone charging an unofficial ‘emergency visa’ fee."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "publisher": "Government of India",
+      "title": "Official Indian e-Visa portal",
+      "url": "https://indianvisaonline.gov.in/evisa/tvoa.html",
+      "supports": "Current e-Medical and e-Medical Attendant categories, application window, stay and document rules."
+    }
+  ],
+  "order": 4
+}
