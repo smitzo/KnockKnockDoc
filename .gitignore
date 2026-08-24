@@ -28,3 +28,6 @@ npm-debug.log*
 # Runtime data
 *.log
 tmp/
+
+# Founder strategy workspace (local, intentionally never versioned)
+/business/
