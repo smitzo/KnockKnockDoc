@@ -19,6 +19,7 @@
 
 - [ ] 3.1 Research current authoritative India medical-travel statistics and record direct source URLs and review dates.
 - [ ] 3.2 Publish at least five sourced articles with uncertainty and medical-advice boundaries.
+- [x] 3.2a Move articles into a validated, file-backed content collection with reusable listing and reader components.
 - [ ] 3.3 Generate original local editorial imagery and label illustrative AI-generated scenes.
 - [ ] 3.4 Build an annotated how-to guide with arrows, route-specific actions, role expectations, and safety boundaries.
 
@@ -34,3 +35,19 @@
 - [ ] 5.2 Pass frontend lint, typecheck, production build, dependency audit, and accessibility-focused browser smoke tests.
 - [ ] 5.3 Pass Compose health, Redis/Celery, login/CSRF/logout, admin isolation, and cross-hospital runtime smoke tests.
 - [ ] 5.4 Inspect every staged diff and create convention-compliant feature commits.
+
+## 6. Business and product scrutiny
+
+- [x] 6.1 Create a permanently git-ignored business workspace with evidence, thesis, use cases, economics, probability, sales, outreach, roadmap, and decision reports.
+- [x] 6.2 Separate sourced facts, inferences, assumptions, targets, and stop conditions; reject unsupported top-down TAM claims.
+- [x] 6.3 Record an adversarial product/engineering review and reconcile missing authentication requirements.
+- [x] 6.3a Add an investor/founder diligence questionnaire covering thesis, economics, GTM, safety, technology, traction, fundraise, and hostile questions.
+- [ ] 6.4 Founder decides whether the company sources demand or sells neutral referral workflow.
+- [ ] 6.5 Validate the first corridor, specialty, buyer, budget, and baseline through the interview thresholds in the business roadmap.
+
+## 7. Real-data release gates (future, explicit stop-ship)
+
+- [ ] 7.1 Obtain corridor-specific privacy, clinical, telemedicine, and commercial review.
+- [ ] 7.2 Specify patient authorization/withdrawal, administrative separation, MFA/recovery, retention/deletion, and clinical issuance/addendum behavior.
+- [ ] 7.3 Prove private document security, immutable audit, observability, incident response, backup/restore, RPO/RTO, and independent security testing.
+- [ ] 7.4 Approve production infrastructure only after residency, procurement, workload, recovery, integration, and cost requirements are measured.

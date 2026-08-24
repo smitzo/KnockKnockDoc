@@ -28,6 +28,14 @@ Each article stores a source list with publisher, title, URL, publication/access
 
 The seed command reads `DEMO_ADMIN_PASSWORD` and `DEMO_ACCOUNT_PASSWORD` from local environment configuration, applies a minimum length plus Django validators, and never prints either value. Weak defaults are rejected even in prototype mode.
 
+### Bound frontend style ownership
+
+Tailwind CSS provides the utility/base pipeline. New authenticated, admin, editorial, and guide surfaces use feature-scoped CSS Modules so the global stylesheet does not continue growing. The original V0 global rules are migrated incrementally rather than rewritten during a security-sensitive phase.
+
+### Keep founder strategy local
+
+Business hypotheses, economics, outreach material, and private founder questions live under the git-ignored `/business/` workspace. Product requirements and release gates remain in tracked OpenSpec/docs; an ignored strategy document cannot authorize a production feature or weaken a safety requirement.
+
 ## Risks and controls
 
 - Large synthetic fixtures may look real: every API envelope, route, card, and profile states that it is fictional.
