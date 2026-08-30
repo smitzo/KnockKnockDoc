@@ -4,13 +4,14 @@
 
 The authenticated prototype is visually polished but cognitively expensive. It explains access-control concepts before the user understands the product, uses oversized editorial typography, exposes too many parallel concepts, and lacks a clear place for a doctor to discover or contact another doctor. A user should be able to answer “what can I do here?” in seconds.
 
-Professional discovery and communication can support the referral loop, but an unrestricted global social network or generic chat would create spam, clinical-boundary, privacy, moderation, and cold-start risk. The product needs the smallest safe interaction: verified professionals find a relevant professional, send a purpose-bound connection request, exchange synthetic professional messages after acceptance, and move patient-specific work into a referral case.
+The referring doctor is the primary product user. Professional discovery and communication lead the referral loop, but an unrestricted global social network or generic chat would create spam, clinical-boundary, privacy, moderation, and cold-start risk. The product needs the smallest safe interaction: a verified doctor compares relevant specialists and attributable peer-collaboration ratings, sends a purpose-bound connection request, exchanges synthetic professional messages after acceptance, and then starts a patient-authorized referral with that specialist.
 
 ## What changes
 
 - Replace jargon-first navigation and oversized serif typography with a plain sans-serif task hierarchy.
-- Present three primary jobs: find a doctor, discuss a professional connection, and manage an assigned referral.
+- Present the doctor-first journey: discover, compare, connect, discuss, and refer.
 - Add a professional-only, synthetic directory distinct from the admin-only detailed data lab.
+- Add clearly labelled synthetic peer ratings for communication, referral collaboration, and handback—not clinical outcomes.
 - Add purpose-bound connection requests with explicit accept/decline/withdraw states.
 - Add accepted-connection messaging with no attachments and a strict synthetic/no-patient-data boundary.
 - Add a simple authenticated application shell for directory, connections, messages, and referrals.
@@ -18,7 +19,7 @@ Professional discovery and communication can support the referral loop, but an u
 
 ## Non-goals
 
-- Public social feeds, followers, popularity counts, reviews, endorsements, or paid ranking.
+- Public social feeds, followers, popularity leaderboards, anonymous reviews, outcome ratings, endorsements, or paid ranking.
 - Patient-to-doctor cold messaging, unsolicited bulk outreach, lead resale, or referral commission.
 - Patient-specific information in professional chat.
 - File, image, voice, video, link-preview, or group-chat support.

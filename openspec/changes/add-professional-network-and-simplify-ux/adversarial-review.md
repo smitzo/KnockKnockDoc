@@ -2,7 +2,7 @@
 
 ## Verdict
 
-Build a bounded synthetic professional network to test the workflow; do not declare “global network” product-market fit. Chat is commodity infrastructure and provides no moat by itself. It is valuable only if it increases trusted connection-to-referral conversion or keeps the home clinician in the loop.
+Build a bounded synthetic professional network to test the workflow; do not declare “global network” product-market fit. Chat and ratings are commodity primitives and provide no moat by themselves. They are valuable only if they increase trusted doctor-to-doctor connection-to-referral conversion or keep the home clinician in the loop.
 
 ## Business challenges
 
@@ -10,6 +10,7 @@ Build a bounded synthetic professional network to test the workflow; do not decl
 - Doctors already use WhatsApp, email, LinkedIn, hospital portals, and personal referrals. A new inbox must earn repeat attention.
 - Free doctor accounts can create support and verification cost without revenue.
 - Connection count is a vanity metric unless connections create qualified, completed, closed-loop referrals.
+- Anonymous/popularity ratings can be gamed, become pay-to-play, and falsely imply clinical quality or outcomes.
 - Hospital-paid distribution can compromise neutrality if ranking or outreach is influenced by payment.
 - Unrestricted chat invites spam, patient solicitation, unlicensed cross-border advice, and off-platform leakage.
 
@@ -18,6 +19,7 @@ Build a bounded synthetic professional network to test the workflow; do not decl
 - corridor-limited verified professional network, free to participating clinicians;
 - hospitals pay for measured referral workflow and operations, not access to vulnerable leads;
 - no paid ranking or hidden commission;
+- publish rating scope, count, categories, and provenance; never label peer collaboration as clinical quality;
 - measure accepted connections that lead to appropriate referrals, response, and handback;
 - stop expanding the directory if fewer than 20% of qualified connection requests are accepted or accepted connections do not create repeat workflow use.
 
@@ -38,5 +40,6 @@ Build a bounded synthetic professional network to test the workflow; do not decl
 5. Who handles spam, harassment, solicitation, and clinical-boundary reports?
 6. What network metric predicts paid hospital value?
 7. Will hospitals accept a directory whose ordering cannot be purchased?
+8. What completed interaction makes a doctor eligible to rate, and who adjudicates disputes?
 
 Recommended default: prove one corridor with connection-to-referral behavior before using the word “global” in customer-facing claims.

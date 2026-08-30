@@ -2,7 +2,7 @@
 
 ## Requirement: product purpose is understandable before domain mechanics
 
-The public page SHALL describe the product in plain language using three primary actions: find a doctor, connect professionally, and create/manage a referral. Primary headings SHALL use a legible sans-serif system with responsive scale and SHALL avoid unexplained access-control or medical-tourism jargon.
+The public page SHALL identify doctors as the primary users and describe the flow in plain language: discover specialists, compare bounded professional signals, connect, discuss, and start/manage a referral. Primary headings SHALL use a legible sans-serif system with responsive scale and SHALL avoid unexplained access-control or medical-tourism jargon.
 
 ### Scenario: new visitor scans the first viewport
 
@@ -11,7 +11,7 @@ The public page SHALL describe the product in plain language using three primary
 
 ## Requirement: authenticated navigation follows user tasks
 
-Eligible professionals SHALL receive persistent navigation labelled `Find doctors`, `Connections`, `Messages`, and `Referrals`. Patient accounts SHALL not receive professional discovery or chat links.
+Eligible doctors SHALL receive persistent navigation labelled `Discover`, `My network`, `Messages`, and `Referrals`. Patient and non-clinical operator accounts SHALL not receive professional discovery or chat links.
 
 ### Scenario: professional opens the application
 

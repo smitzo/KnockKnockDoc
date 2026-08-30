@@ -8,7 +8,8 @@
 
 ## 2. Backend professional network
 
-- [ ] 2.1 Add minimal discoverable professional profiles separate from the admin lab.
+- [ ] 2.1 Add bounded LinkedIn-like professional profiles separate from the admin lab.
+- [ ] 2.1a Add attributable synthetic peer-collaboration ratings with category aggregates, count, and non-clinical disclaimer.
 - [ ] 2.2 Add connection state machine with purpose, pair uniqueness, and participant authorization.
 - [ ] 2.3 Add accepted-connection conversations and append-only bounded messages.
 - [ ] 2.4 Add throttles, security events, serializers/services/selectors, migrations, and API routes.
@@ -17,9 +18,9 @@
 
 ## 3. Simplified frontend
 
-- [ ] 3.1 Replace the public homepage with plain-language `Find -> Connect -> Refer` hierarchy.
-- [ ] 3.2 Add an authenticated app shell with Find doctors, Connections, Messages, and Referrals.
-- [ ] 3.3 Add searchable professional cards and purpose-bound connection requests.
+- [ ] 3.1 Replace the public homepage with plain-language doctor-first `Discover -> Compare -> Connect -> Refer` hierarchy.
+- [ ] 3.2 Add an authenticated doctor app shell with Discover, My network, Messages, and Referrals.
+- [ ] 3.3 Add searchable professional cards with specialty, experience, transparent ratings, and purpose-bound connection requests.
 - [ ] 3.4 Add connection inbox and accepted-connection conversation UI.
 - [ ] 3.5 Preserve clear synthetic/no-patient-data boundaries and accessible empty/error states.
 

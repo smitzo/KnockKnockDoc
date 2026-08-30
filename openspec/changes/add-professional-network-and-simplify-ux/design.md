@@ -8,9 +8,15 @@ Patient-specific work belongs to a case because a case can carry assignment, gra
 
 ## Directory data separation
 
-`ProfessionalDirectoryProfile` is a minimal discoverable card: display name, professional role, specialty, country/city, organization label, languages, short professional summary, verification state, avatar key, and connection availability. It does not expose the admin lab’s login email, capacity rehearsal, response-hour metric, credential internals, or patient fixture data.
+`ProfessionalDirectoryProfile` is a bounded LinkedIn-like professional card: display name, role, specialty, experience, country/city, organization label, languages, short professional summary, verification state, avatar key, and connection availability. It does not expose the admin lab’s login email, capacity rehearsal, response-hour metric, credential internals, or patient fixture data.
 
 For Prototype V0 all directory profiles are fictional and labelled synthetic. In production, discoverability would require a separate verification and publication workflow.
+
+## Ratings are collaboration signals, not medical quality
+
+Doctors need comparison signals, but a generic star score can falsely imply clinical outcomes or competence. `ProfessionalRating` stores attributable peer scores for professional communication, referral collaboration, and handback reliability. Directory cards show an aggregate, category breakdown, count, and synthetic/provenance label. They never call the score treatment quality, success rate, or patient outcome.
+
+Prototype ratings are fictional fixtures. A real rating workflow would require an eligible completed professional interaction, one rating per reviewer/subject context, conflict/moderation controls, right of reply/appeal, fraud detection, and published methodology before display.
 
 ## Connection state machine
 
@@ -35,8 +41,8 @@ HTTP polling is sufficient for the synthetic prototype. WebSockets would add con
 - Use a legible system sans-serif stack; reserve no decorative type for primary tasks.
 - Default body size at least 16px on public/product explanations and 14px in dense application lists.
 - One primary action per page.
-- Use direct labels: `Find doctors`, `Connections`, `Messages`, `Referrals`.
-- Explain the product with `Find -> Connect -> Refer`, then disclose safety boundaries.
+- Use direct doctor-first labels: `Discover`, `My network`, `Messages`, `Referrals`.
+- Explain the product with `Discover -> Compare -> Connect -> Refer`, then disclose safety boundaries.
 - Hide access-control mechanics until they explain a denial or build user trust.
 - Keep advanced admin/flow inspection outside normal professional navigation.
 
