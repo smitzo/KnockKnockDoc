@@ -1,6 +1,8 @@
 import type {
   AdminLabData,
   AdminLabSummary,
+  DeleteDemoFixtureResponse,
+  DemoFixtureStatus,
   DemoWorkspaceResponse,
   PaginatedResponse,
   ReferralCase,
@@ -110,6 +112,44 @@ export async function logoutSession(): Promise<void> {
   if (!response.ok && response.status !== 403) {
     throw new Error("The session could not be closed safely.");
   }
+}
+
+export async function loadDemoFixtures(): Promise<DemoFixtureStatus> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch("/api/backend/admin/lab/fixtures/", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-CSRFToken": csrfToken,
+    },
+    body: "{}",
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The demo data could not be loaded.");
+  }
+  return body as DemoFixtureStatus;
+}
+
+export async function deleteDemoFixtures(): Promise<DeleteDemoFixtureResponse> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch("/api/backend/admin/lab/fixtures/", {
+    method: "DELETE",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify({ confirmation: "DELETE SYNTHETIC DEMO DATA" }),
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The demo data could not be deleted.");
+  }
+  return body as DeleteDemoFixtureResponse;
 }
 
 export async function createSyntheticReferral(

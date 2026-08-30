@@ -178,8 +178,26 @@ export interface PaginatedResponse<T> {
 export interface AdminLabSummary {
   prototype: { mode: "synthetic-only"; real_people: false; admin_only: true };
   counts: { doctors: number; patients: number };
+  fixture: DemoFixtureStatus;
   doctor_specialties: { specialty: string; count: number }[];
   patient_stages: { journey_stage: string; count: number }[];
+}
+
+export interface DemoFixtureStatus {
+  fixture: {
+    id: string;
+    schema_version: number;
+    synthetic_only: true;
+    disclosure: string;
+  };
+  state: "empty" | "partial" | "loaded";
+  loaded: boolean;
+  counts: Record<string, { actual: number; expected: number }>;
+}
+
+export interface DeleteDemoFixtureResponse {
+  fixture_status: DemoFixtureStatus;
+  removed: Record<string, number>;
 }
 
 export interface AdminLabData {

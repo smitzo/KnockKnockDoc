@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import type { AdminLabData } from "@/lib/types";
-import { logoutSession } from "@/lib/api";
+import { deleteDemoFixtures, loadDemoFixtures, logoutSession } from "@/lib/api";
 import styles from "@/styles/admin-lab.module.css";
 
 import { Icon } from "./icons";
@@ -19,6 +19,10 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
   const [tab, setTab] = useState<LabTab>("doctors");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const [fixtureBusy, setFixtureBusy] = useState(false);
+  const [fixtureNotice, setFixtureNotice] = useState("");
+  const [fixtureError, setFixtureError] = useState("");
+  const fixtureLoaded = data.summary.fixture.loaded;
   const normalizedQuery = query.trim().toLowerCase();
   const doctors = useMemo(
     () => data.doctors.filter((doctor) => {
@@ -49,9 +53,36 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
     router.refresh();
   }
 
+  async function toggleDemoFixtures() {
+    if (fixtureLoaded) {
+      const confirmed = window.confirm(
+        "Delete all versioned synthetic doctors, patients, ratings, messages, and referral rehearsals? The platform admin account will be kept so you can load them again.",
+      );
+      if (!confirmed) return;
+    }
+    setFixtureBusy(true);
+    setFixtureError("");
+    setFixtureNotice("");
+    try {
+      if (fixtureLoaded) {
+        await deleteDemoFixtures();
+        setFixtureNotice("Demo data deleted. The administrator account was preserved.");
+        chooseTab("doctors");
+      } else {
+        await loadDemoFixtures();
+        setFixtureNotice("30 doctors, 30 patients, and the referral rehearsal were loaded.");
+      }
+      router.refresh();
+    } catch (error) {
+      setFixtureError(error instanceof Error ? error.message : "The demo data action failed.");
+    } finally {
+      setFixtureBusy(false);
+    }
+  }
+
   return (
     <div className={styles.app}>
-      <div className="workspace-prototype-bar"><strong>Admin-only synthetic lab</strong><span>60 fictional people · no real records · no case access implied</span></div>
+      <div className="workspace-prototype-bar"><strong>Admin-only synthetic lab</strong><span>{data.summary.counts.doctors + data.summary.counts.patients} fictional people loaded · no real records</span></div>
       <header className="lab-header">
         <Brand />
         <nav aria-label="Admin lab sections">
@@ -63,9 +94,24 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
       </header>
       <main className="lab-main page-shell">
         <section className="lab-heading">
-          <div><span className="eyebrow">Operator rehearsal environment</span><h1>Understand the network before touching a real workflow.</h1><p>Inspect fictional profiles, account states, capacity signals, and journey distribution. Directory presence never creates a case grant.</p></div>
+          <div><span className="eyebrow">Demo data controls</span><h1>Load the sample network when you need it.</h1><p>The records live in versioned JSON files. Only a platform admin can load, inspect, or delete the complete collection.</p></div>
           <Link className="button button--ghost" href="/how-to">Open product guide <Icon name="arrow" /></Link>
         </section>
+        <section className={`fixture-control fixture-control--${data.summary.fixture.state}`} aria-labelledby="fixture-control-title">
+          <div>
+            <span className="fixture-control__state">{fixtureLoaded ? "Demo data loaded" : data.summary.fixture.state === "partial" ? "Demo data needs repair" : "Demo data is empty"}</span>
+            <h2 id="fixture-control-title">{fixtureLoaded ? "Your full rehearsal dataset is ready." : "Create the full rehearsal dataset in one click."}</h2>
+            <p>{fixtureLoaded ? "Deleting removes synthetic accounts, directory cards, ratings, chats, and referral rehearsals. Your admin account stays active." : "Loading creates 30 fictional doctors, 30 fictional patients, professional ratings, illustrated avatars, and one complete referral flow."}</p>
+            <small>Fixture {data.summary.fixture.fixture.id} · schema {data.summary.fixture.fixture.schema_version} · credentials are never stored in JSON</small>
+          </div>
+          <button className={`button ${fixtureLoaded ? "button--danger" : ""}`} disabled={fixtureBusy} onClick={toggleDemoFixtures} type="button">
+            {fixtureBusy ? "Working…" : fixtureLoaded ? "Delete demo data" : "Load demo data"}
+          </button>
+        </section>
+        <div aria-live="polite" className="fixture-feedback">
+          {fixtureNotice && <p className="fixture-feedback__success">{fixtureNotice}</p>}
+          {fixtureError && <p className="fixture-feedback__error" role="alert">{fixtureError}</p>}
+        </div>
         <section className="lab-stats" aria-label="Synthetic lab summary">
           <article><span>Fictional doctors</span><strong>{data.summary.counts.doctors}</strong><small>All have demo auth; none has a case grant</small></article>
           <article><span>Fictional patients</span><strong>{data.summary.counts.patients}</strong><small>Distributed across seven journey stages</small></article>
@@ -73,7 +119,15 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
           <article><span>Real people</span><strong>0</strong><small>Every name, account, and scenario is synthetic</small></article>
         </section>
 
-        {tab !== "flow" && (
+        {!fixtureLoaded && (
+          <section className="lab-empty">
+            <span><Icon name="people" /></span>
+            <h2>No demo profiles are loaded</h2>
+            <p>Use <strong>Load demo data</strong> above. The admin-only API validates the JSON manifest before creating anything.</p>
+          </section>
+        )}
+
+        {fixtureLoaded && tab !== "flow" && (
           <section className="lab-toolbar" aria-label="Directory controls">
             <label><Icon name="search" /><span className="sr-only">Search profiles</span><input onChange={(event) => setQuery(event.target.value)} placeholder={tab === "doctors" ? "Search doctor, specialty, city…" : "Search alias, country, specialty…"} type="search" value={query} /></label>
             <select aria-label={tab === "doctors" ? "Filter by specialty" : "Filter by journey stage"} onChange={(event) => setFilter(event.target.value)} value={filter}>
@@ -86,9 +140,9 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
           </section>
         )}
 
-        {tab === "doctors" && <DoctorGrid doctors={doctors} />}
-        {tab === "patients" && <PatientGrid patients={patients} />}
-        {tab === "flow" && <FlowMap data={data} />}
+        {fixtureLoaded && tab === "doctors" && <DoctorGrid doctors={doctors} />}
+        {fixtureLoaded && tab === "patients" && <PatientGrid patients={patients} />}
+        {fixtureLoaded && tab === "flow" && <FlowMap data={data} />}
       </main>
     </div>
   );
