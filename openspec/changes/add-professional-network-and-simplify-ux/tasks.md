@@ -8,13 +8,13 @@
 
 ## 2. Backend professional network
 
-- [ ] 2.1 Add bounded LinkedIn-like professional profiles separate from the admin lab.
-- [ ] 2.1a Add attributable synthetic peer-collaboration ratings with category aggregates, count, and non-clinical disclaimer.
-- [ ] 2.2 Add connection state machine with purpose, pair uniqueness, and participant authorization.
-- [ ] 2.3 Add accepted-connection conversations and append-only bounded messages.
-- [ ] 2.4 Add throttles, security events, serializers/services/selectors, migrations, and API routes.
-- [ ] 2.5 Seed fictional professional profiles without exposing admin-only operational fields.
-- [ ] 2.6 Prove professional-only visibility, patient/outsider denial, transition rules, and message isolation.
+- [x] 2.1 Add bounded LinkedIn-like professional profiles separate from the admin lab.
+- [x] 2.1a Add attributable synthetic peer-collaboration ratings with category aggregates, count, and non-clinical disclaimer.
+- [x] 2.2 Add connection state machine with purpose, pair uniqueness, and participant authorization.
+- [x] 2.3 Add accepted-connection conversations and append-only bounded messages.
+- [x] 2.4 Add throttles, security events, serializers/services/selectors, migrations, and API routes.
+- [x] 2.5 Seed fictional professional profiles without exposing admin-only operational fields.
+- [x] 2.6 Prove professional-only visibility, patient/outsider denial, transition rules, and message isolation in focused backend tests.
 
 ## 3. Simplified frontend
 
