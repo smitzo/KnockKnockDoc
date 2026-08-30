@@ -141,6 +141,9 @@ class SecurityAction(models.TextChoices):
     CASE_VIEWED = "case.viewed", "Case viewed"
     CASE_CREATED = "case.created", "Case created"
     ADMIN_LAB_VIEWED = "admin.lab_viewed", "Admin lab viewed"
+    NETWORK_CONNECTION_REQUESTED = "network.connection_requested", "Connection requested"
+    NETWORK_CONNECTION_RESPONDED = "network.connection_responded", "Connection responded"
+    NETWORK_MESSAGE_SENT = "network.message_sent", "Professional message sent"
 
 
 class ImmutableSecurityEventQuerySet(models.QuerySet):

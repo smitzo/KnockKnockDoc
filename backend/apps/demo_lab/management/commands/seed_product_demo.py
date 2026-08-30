@@ -27,6 +27,11 @@ from apps.identity.models import (
     OrganizationType,
 )
 from apps.identity.services import normalize_login_email
+from apps.professional_network.models import (
+    ProfessionalDirectoryProfile,
+    ProfessionalRating,
+    ProfessionalRole,
+)
 
 
 DOCTOR_NAMES = [
@@ -116,7 +121,9 @@ class Command(BaseCommand):
                 "DEMO_ACCOUNT_PASSWORD and DEMO_ADMIN_PASSWORD must each be at least 14 characters."
             )
         if account_password == admin_password:
-            raise CommandError("The demo administrator and participant passwords must be different.")
+            raise CommandError(
+                "The demo administrator and participant passwords must be different."
+            )
 
         call_command("seed_access_demo", verbosity=0)
         now = timezone.now()
@@ -143,7 +150,9 @@ class Command(BaseCommand):
         )
 
         hospitals = self._upsert_hospitals()
-        self._upsert_doctors(hospitals, account_password, now)
+        directory_profiles = self._upsert_doctors(hospitals, account_password, now)
+        directory_profiles.extend(self._upsert_access_demo_profiles())
+        self._upsert_professional_ratings(directory_profiles)
         self._upsert_patients(platform, account_password, now)
         self.stdout.write(
             self.style.SUCCESS(
@@ -168,6 +177,7 @@ class Command(BaseCommand):
 
     def _upsert_doctors(self, hospitals, password, verified_at):
         availability_values = list(DoctorAvailability.values)
+        directory_profiles = []
         for index, name in enumerate(DOCTOR_NAMES, start=1):
             city, hospital = hospitals[(index - 1) % len(hospitals)]
             specialty = SPECIALTIES[(index - 1) % len(SPECIALTIES)]
@@ -210,6 +220,102 @@ class Command(BaseCommand):
                     "is_synthetic": True,
                 },
             )
+            directory_profile, _created = ProfessionalDirectoryProfile.objects.update_or_create(
+                user=user,
+                defaults={
+                    "professional_role": ProfessionalRole.SPECIALIST,
+                    "specialty": specialty,
+                    "experience_years": 7 + ((index * 3) % 24),
+                    "country": "India",
+                    "city": city,
+                    "organization_name": hospital.name,
+                    "languages": ["English", "Hindi", LANGUAGES[index % len(LANGUAGES)]],
+                    "professional_summary": (
+                        f"Fictional {specialty.lower()} specialist profile for doctor-to-doctor "
+                        "discovery and referral rehearsal. No clinical outcome is represented."
+                    ),
+                    "avatar_key": f"doctor-{index:02d}",
+                    "is_discoverable": True,
+                    "accepts_connections": True,
+                    "is_synthetic": True,
+                },
+            )
+            directory_profiles.append(directory_profile)
+        return directory_profiles
+
+    def _upsert_access_demo_profiles(self):
+        specs = [
+            (
+                "referrer.demo@knocknockdoc.test",
+                ProfessionalRole.REFERRER,
+                "General medicine",
+                14,
+                "Kenya",
+                "Nairobi",
+                "Nairobi referring practice · fictional",
+                ["English", "Swahili"],
+                "doctor-31",
+            ),
+            (
+                "specialist.demo@knocknockdoc.test",
+                ProfessionalRole.SPECIALIST,
+                "Oncology",
+                18,
+                "India",
+                "New Delhi",
+                "Aarunya Cancer Centre · fictional",
+                ["English", "Hindi"],
+                "doctor-32",
+            ),
+        ]
+        profiles = []
+        user_model = get_user_model()
+        for email, role, specialty, years, country, city, organization, languages, avatar in specs:
+            user = user_model.objects.get(username=email)
+            profile, _created = ProfessionalDirectoryProfile.objects.update_or_create(
+                user=user,
+                defaults={
+                    "professional_role": role,
+                    "specialty": specialty,
+                    "experience_years": years,
+                    "country": country,
+                    "city": city,
+                    "organization_name": organization,
+                    "languages": languages,
+                    "professional_summary": (
+                        "Fictional verified professional profile for a doctor-first connection "
+                        "and closed-loop referral rehearsal."
+                    ),
+                    "avatar_key": avatar,
+                    "is_discoverable": True,
+                    "accepts_connections": True,
+                    "is_synthetic": True,
+                },
+            )
+            profiles.append(profile)
+        return profiles
+
+    def _upsert_professional_ratings(self, profiles):
+        for subject_index, subject in enumerate(profiles):
+            reviewers = [
+                profiles[(subject_index + offset) % len(profiles)]
+                for offset in range(1, 6)
+            ]
+            for reviewer_index, reviewer in enumerate(reviewers, start=1):
+                ProfessionalRating.objects.update_or_create(
+                    reviewer=reviewer.user,
+                    subject=subject,
+                    defaults={
+                        "communication_score": 3 + ((subject_index + reviewer_index) % 3),
+                        "collaboration_score": 3 + ((subject_index + reviewer_index + 1) % 3),
+                        "handback_score": 3 + ((subject_index + reviewer_index + 2) % 3),
+                        "comment": (
+                            "Fictional peer collaboration signal for prototype comparison; "
+                            "not a clinical quality or outcome review."
+                        ),
+                        "is_synthetic": True,
+                    },
+                )
 
     def _upsert_patients(self, platform, password, verified_at):
         stages = list(PatientJourneyStage.values)

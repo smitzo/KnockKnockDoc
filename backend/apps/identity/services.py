@@ -6,7 +6,14 @@ from django.contrib.auth import get_user_model
 from .models import Organization, SecurityAction, SecurityEvent
 
 SAFE_METADATA_KEYS = frozenset(
-    {"authentication_method", "membership_role", "resource", "scope"}
+    {
+        "authentication_method",
+        "connection_purpose",
+        "membership_role",
+        "resource",
+        "scope",
+        "transition_result",
+    }
 )
 
 
