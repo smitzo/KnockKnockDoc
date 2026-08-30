@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "fixture_id": "product-demo-v1",
+  "synthetic_only": true,
+  "disclosure": "All people, organizations, credentials, collaboration signals, and care events are fictional. Never enter real health data.",
+  "credential_policy": "Passwords are never stored in fixtures. Local environment variables are required when loading.",
+  "files": {
+    "organizations": "organizations.json",
+    "access_accounts": "access_accounts.json",
+    "doctors": "doctors.json",
+    "patients": "patients.json",
+    "access_professional_profiles": "access_professional_profiles.json",
+    "professional_ratings": "professional_ratings.json",
+    "referral_workspace": "referral_workspace.json"
+  },
+  "expected_counts": {
+    "organizations": 10,
+    "access_accounts": 5,
+    "doctors": 30,
+    "patients": 30,
+    "access_professional_profiles": 2,
+    "professional_ratings": 160,
+    "referral_workspaces": 1
+  }
+}

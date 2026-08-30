@@ -4,54 +4,41 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from apps.demo_lab.fixtures import load_product_demo_fixture
 from apps.referrals.models import (
-    AccessState,
     CaseEvent,
     CaseParticipant,
-    CaseStatus,
-    ConsentStatus,
     InformationRequest,
-    ParticipantRole,
     ProviderResponse,
     RecordItem,
-    RecordState,
     ReferralCase,
-    RequestState,
-    ResponseState,
-    ResponseType,
 )
-from apps.referrals.selectors import DEMO_REFERENCE
 
 
 class Command(BaseCommand):
-    help = "Create or refresh the stable, synthetic referral workspace used by Prototype V0."
+    help = "Load the stable synthetic referral workspace from the versioned JSON fixture."
 
     @transaction.atomic
     def handle(self, *args, **options):
+        fixture = load_product_demo_fixture().referral_workspace
         now = timezone.now()
         referral, _created = ReferralCase.objects.update_or_create(
-            reference=DEMO_REFERENCE,
+            reference=fixture["reference"],
             defaults={
-                "patient_alias": "Ama K. · synthetic",
-                "patient_country": "Kenya",
-                "patient_age_band": "45–59",
-                "specialty": "Oncology",
-                "clinical_question": (
-                    "Please review the existing pathology and imaging summaries and advise whether "
-                    "an in-person specialist assessment in India is appropriate."
-                ),
-                "summary": (
-                    "A fictional planned-care scenario with prior local assessment, organized reports, "
-                    "and a home doctor who will remain involved. No real patient information is used."
-                ),
-                "status": CaseStatus.PATIENT_DECISION,
-                "consent_status": ConsentStatus.GRANTED,
-                "is_planned_care": True,
-                "is_synthetic": True,
-                "corridor_label": "Illustrative Kenya → India · Oncology",
-                "next_action": "Review the preliminary response with the referring doctor.",
-                "next_action_owner": "Ama K. · synthetic",
-                "next_action_due": now + timedelta(days=2),
+                "patient_alias": fixture["patient_alias"],
+                "patient_country": fixture["patient_country"],
+                "patient_age_band": fixture["patient_age_band"],
+                "specialty": fixture["specialty"],
+                "clinical_question": fixture["clinical_question"],
+                "summary": fixture["summary"],
+                "status": fixture["status"],
+                "consent_status": fixture["consent_status"],
+                "is_planned_care": fixture["is_planned_care"],
+                "is_synthetic": fixture["is_synthetic"],
+                "corridor_label": fixture["corridor_label"],
+                "next_action": fixture["next_action"],
+                "next_action_owner": fixture["next_action_owner"],
+                "next_action_due": now + timedelta(days=fixture["next_action_due_days"]),
             },
         )
         referral.participants.all().delete()
@@ -61,168 +48,72 @@ class Command(BaseCommand):
         referral.events.all().delete()
 
         CaseParticipant.objects.bulk_create(
-            [
-                CaseParticipant(
-                    case=referral,
-                    display_name="Ama K. · synthetic",
-                    role=ParticipantRole.PATIENT,
-                    access_scope="Entire patient-visible rehearsal workspace",
-                    access_state=AccessState.ACTIVE,
-                    purpose="Review and decide on the fictional referral",
-                ),
-                CaseParticipant(
-                    case=referral,
-                    display_name="Dr. Lena A. · synthetic",
-                    role=ParticipantRole.REFERRER,
-                    organization="Nairobi referring practice · fictional",
-                    access_scope="Referral packet, clinical response, and handback",
-                    access_state=AccessState.ACTIVE,
-                    purpose="Maintain the home-clinician care loop",
-                ),
-                CaseParticipant(
-                    case=referral,
-                    display_name="Dr. Arun Mehta · synthetic",
-                    role=ParticipantRole.SPECIALIST,
-                    organization="Aarunya Cancer Centre · fictional",
-                    access_scope="Explicitly shared synthetic clinical-record metadata",
-                    access_state=AccessState.ACTIVE,
-                    purpose="Provide a bounded preliminary review",
-                ),
-                CaseParticipant(
-                    case=referral,
-                    display_name="Nila · prototype coordinator",
-                    role=ParticipantRole.COORDINATOR,
-                    organization="Knock Knock Doc",
-                    access_scope="Coordination summary and assigned actions",
-                    access_state=AccessState.ACTIVE,
-                    purpose="Own the next safe operational step",
-                ),
-            ]
+            [CaseParticipant(case=referral, **item) for item in fixture["participants"]]
         )
         RecordItem.objects.bulk_create(
             [
                 RecordItem(
                     case=referral,
-                    label="Structured referral summary",
-                    category="Referral letter",
-                    clinical_date=date.today() - timedelta(days=12),
-                    source_label="Referring doctor · synthetic",
-                    state=RecordState.READY,
-                    note="Reviewed for completeness",
-                ),
-                RecordItem(
-                    case=referral,
-                    label="Pathology report summary",
-                    category="Pathology",
-                    clinical_date=date.today() - timedelta(days=28),
-                    source_label="Local laboratory · fictional",
-                    state=RecordState.READY,
-                    note="Original source remains attributable",
-                ),
-                RecordItem(
-                    case=referral,
-                    label="CT report summary",
-                    category="Radiology report",
-                    clinical_date=date.today() - timedelta(days=20),
-                    source_label="Local imaging centre · fictional",
-                    state=RecordState.READY,
-                    note="Still-image upload is not enabled in V0",
-                ),
-                RecordItem(
-                    case=referral,
-                    label="Current medicine list",
-                    category="Medication",
-                    clinical_date=date.today() - timedelta(days=3),
-                    source_label="Patient and referrer · synthetic",
-                    state=RecordState.NEEDS_UPDATE,
-                    note="Add frequency and last-dose dates before travel planning",
-                ),
+                    label=item["label"],
+                    category=item["category"],
+                    clinical_date=date.today()
+                    - timedelta(days=item["clinical_date_days_ago"]),
+                    source_label=item["source_label"],
+                    state=item["state"],
+                    note=item["note"],
+                )
+                for item in fixture["records"]
             ]
         )
-        InformationRequest.objects.create(
-            case=referral,
-            item="Medicine frequency and last-dose dates",
-            reason="Needed for a complete in-person assessment handoff; not blocking this preliminary review.",
-            requester_name="Dr. Arun Mehta · synthetic",
-            requester_role="Receiving specialist",
-            state=RequestState.OPEN,
-            is_blocking=False,
-            due_at=now + timedelta(days=4),
+        InformationRequest.objects.bulk_create(
+            [
+                InformationRequest(
+                    case=referral,
+                    item=item["item"],
+                    reason=item["reason"],
+                    requester_name=item["requester_name"],
+                    requester_role=item["requester_role"],
+                    state=item["state"],
+                    is_blocking=item["is_blocking"],
+                    due_at=now + timedelta(days=item["due_days"]),
+                    response_note=item["response_note"],
+                )
+                for item in fixture["information_requests"]
+            ]
         )
         ProviderResponse.objects.bulk_create(
             [
                 ProviderResponse(
                     case=referral,
-                    response_type=ResponseType.CLINICAL_OPINION,
-                    title="Preliminary specialist response",
-                    author_name="Dr. Arun Mehta · synthetic",
-                    author_role="Consultant oncologist · fictional profile",
-                    organization="Aarunya Cancer Centre · fictional",
-                    summary=(
-                        "The shared synthetic records have been reviewed. An in-person specialist "
-                        "assessment may be appropriate before any treatment decision. The receiving "
-                        "team would first confirm the source reports and may request further tests."
-                    ),
-                    limitations=(
-                        "Prototype content only. This is not a diagnosis or treatment recommendation "
-                        "and must not be used for a real person's care."
-                    ),
-                    state=ResponseState.ISSUED,
-                    issued_at=now - timedelta(hours=7),
-                    version=1,
-                ),
-                ProviderResponse(
-                    case=referral,
-                    response_type=ResponseType.COORDINATION_PLAN,
-                    title="If the patient chooses to continue",
-                    author_name="Aarunya international care team · synthetic",
-                    author_role="Hospital coordination",
-                    organization="Aarunya Cancer Centre · fictional",
-                    summary=(
-                        "The next step would be a coordinator call, source-document confirmation, "
-                        "and a provisional assessment window. Travel or visa outcomes are not promised."
-                    ),
-                    limitations="Timing remains indicative until the fictional hospital confirms capacity.",
-                    state=ResponseState.ISSUED,
-                    issued_at=now - timedelta(hours=6),
-                    version=1,
-                ),
+                    response_type=item["response_type"],
+                    title=item["title"],
+                    author_name=item["author_name"],
+                    author_role=item["author_role"],
+                    organization=item["organization"],
+                    summary=item["summary"],
+                    limitations=item["limitations"],
+                    state=item["state"],
+                    issued_at=now - timedelta(hours=item["issued_hours_ago"]),
+                    version=item["version"],
+                )
+                for item in fixture["responses"]
             ]
         )
         CaseEvent.objects.bulk_create(
             [
                 CaseEvent(
                     case=referral,
-                    event_type="response_issued",
-                    actor_label="Dr. Arun Mehta · synthetic",
-                    actor_role="Receiving specialist",
-                    summary="Issued a bounded preliminary response for patient and referrer review.",
-                    occurred_at=now - timedelta(hours=7),
-                ),
-                CaseEvent(
-                    case=referral,
-                    event_type="review_completed",
-                    actor_label="Aarunya review team · synthetic",
-                    actor_role="Hospital team",
-                    summary="Completed the fictional record review and returned an attributable response.",
-                    occurred_at=now - timedelta(hours=8),
-                ),
-                CaseEvent(
-                    case=referral,
-                    event_type="consent_granted",
-                    actor_label="Ama K. · synthetic",
-                    actor_role="Patient",
-                    summary="Approved the synthetic case-sharing preview for the named receiving team.",
-                    occurred_at=now - timedelta(days=2),
-                ),
-                CaseEvent(
-                    case=referral,
-                    event_type="referral_created",
-                    actor_label="Dr. Lena A. · synthetic",
-                    actor_role="Referring doctor",
-                    summary="Created the fictional planned-care referral and invited the patient preview.",
-                    occurred_at=now - timedelta(days=3),
-                ),
+                    event_type=item["event_type"],
+                    actor_label=item["actor_label"],
+                    actor_role=item["actor_role"],
+                    summary=item["summary"],
+                    occurred_at=now
+                    - timedelta(
+                        days=item.get("occurred_days_ago", 0),
+                        hours=item.get("occurred_hours_ago", 0),
+                    ),
+                )
+                for item in fixture["events"]
             ]
         )
         self.stdout.write(self.style.SUCCESS(f"Seeded synthetic workspace {referral.reference}"))

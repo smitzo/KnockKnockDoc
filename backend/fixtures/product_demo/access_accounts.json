@@ -1,0 +1,47 @@
+[
+  {
+    "fixture_key": "patient-demo",
+    "login_email": "patient.demo@knocknockdoc.test",
+    "display_name": "Ama K. · synthetic",
+    "account_type": "patient",
+    "organization_fixture_key": "platform",
+    "membership_role": "patient",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "referrer-demo",
+    "login_email": "referrer.demo@knocknockdoc.test",
+    "display_name": "Dr. Lena A. · synthetic",
+    "account_type": "professional",
+    "organization_fixture_key": "practice",
+    "membership_role": "referrer",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "specialist-demo",
+    "login_email": "specialist.demo@knocknockdoc.test",
+    "display_name": "Dr. Arun Mehta · synthetic",
+    "account_type": "professional",
+    "organization_fixture_key": "hospital-a",
+    "membership_role": "specialist",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "coordinator-demo",
+    "login_email": "coordinator.demo@knocknockdoc.test",
+    "display_name": "Nila · prototype coordinator",
+    "account_type": "coordinator",
+    "organization_fixture_key": "platform",
+    "membership_role": "platform_coordinator",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "hospital-b-demo",
+    "login_email": "hospitalb.demo@knocknockdoc.test",
+    "display_name": "Hospital B coordinator · synthetic",
+    "account_type": "coordinator",
+    "organization_fixture_key": "hospital-b",
+    "membership_role": "hospital_coordinator",
+    "is_synthetic": true
+  }
+]

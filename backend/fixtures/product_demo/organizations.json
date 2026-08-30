@@ -1,0 +1,82 @@
+[
+  {
+    "fixture_key": "platform",
+    "name": "Knock Knock Doc prototype",
+    "slug": "knock-knock-doc",
+    "organization_type": "platform",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "practice",
+    "name": "Nairobi referring practice · fictional",
+    "slug": "nairobi-referring-practice",
+    "organization_type": "referring_practice",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "hospital-a",
+    "name": "Aarunya Cancer Centre · fictional",
+    "slug": "aarunya-cancer-centre",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "hospital-b",
+    "name": "Riverview Hospital · fictional",
+    "slug": "riverview-hospital",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "saanvi-delhi",
+    "name": "Saanvi Institute of Medical Sciences · fictional",
+    "slug": "saanvi-delhi",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "harbourview-mumbai",
+    "name": "Harbourview Specialist Hospital · fictional",
+    "slug": "harbourview-mumbai",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "cedar-bengaluru",
+    "name": "Cedar Grove Medical Centre · fictional",
+    "slug": "cedar-bengaluru",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "marina-chennai",
+    "name": "Marina Advanced Care Institute · fictional",
+    "slug": "marina-chennai",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "deccan-hyderabad",
+    "name": "Deccan Clinical Centre · fictional",
+    "slug": "deccan-hyderabad",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "backwater-kochi",
+    "name": "Backwater International Hospital · fictional",
+    "slug": "backwater-kochi",
+    "organization_type": "hospital",
+    "status": "active",
+    "is_synthetic": true
+  }
+]

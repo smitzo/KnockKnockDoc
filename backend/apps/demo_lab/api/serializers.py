@@ -1,6 +1,18 @@
 from rest_framework import serializers
 
 from ..models import SyntheticDoctorProfile, SyntheticPatientProfile
+from ..services import DELETE_CONFIRMATION
+
+
+class DeleteDemoFixtureSerializer(serializers.Serializer):
+    confirmation = serializers.CharField(max_length=80, trim_whitespace=False)
+
+    def validate_confirmation(self, value):
+        if value != DELETE_CONFIRMATION:
+            raise serializers.ValidationError(
+                f'Type the exact confirmation phrase: "{DELETE_CONFIRMATION}".'
+            )
+        return value
 
 
 class SyntheticDoctorSerializer(serializers.ModelSerializer):

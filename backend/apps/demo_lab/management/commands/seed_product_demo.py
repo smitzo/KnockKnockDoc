@@ -1,198 +1,92 @@
-import os
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
 
-from apps.demo_lab.models import (
-    DoctorAvailability,
-    PatientJourneyStage,
-    SyntheticDoctorProfile,
-    SyntheticPatientProfile,
+from apps.demo_lab.bootstrap import (
+    DemoCredentialError,
+    ensure_demo_admin,
+    require_demo_password,
+    upsert_synthetic_account,
 )
-from apps.identity.models import (
-    AccountType,
-    IdentityProfile,
-    IdentityStatus,
-    MembershipRole,
-    MembershipStatus,
-    Organization,
-    OrganizationMembership,
-    OrganizationStatus,
-    OrganizationType,
-)
-from apps.identity.services import normalize_login_email
-from apps.professional_network.models import (
-    ProfessionalDirectoryProfile,
-    ProfessionalRating,
-    ProfessionalRole,
-)
-
-
-DOCTOR_NAMES = [
-    "Dr. Aanya Rao",
-    "Dr. Vihaan Sen",
-    "Dr. Mira Kapoor",
-    "Dr. Arjun Nair",
-    "Dr. Kavya Iyer",
-    "Dr. Rohan Mehta",
-    "Dr. Nisha Bose",
-    "Dr. Dev Malhotra",
-    "Dr. Tara Menon",
-    "Dr. Kabir Shah",
-    "Dr. Leela Joshi",
-    "Dr. Aditya Batra",
-    "Dr. Sana Kulkarni",
-    "Dr. Neel Varma",
-    "Dr. Isha Reddy",
-    "Dr. Aarav Khanna",
-    "Dr. Diya Pillai",
-    "Dr. Reyansh Gupta",
-    "Dr. Anika Desai",
-    "Dr. Ishaan Sethi",
-    "Dr. Myra Chawla",
-    "Dr. Arnav Dutta",
-    "Dr. Riya Narang",
-    "Dr. Dhruv Bansal",
-    "Dr. Siya Krishnan",
-    "Dr. Yuvan Chopra",
-    "Dr. Veda Anand",
-    "Dr. Samar Roy",
-    "Dr. Navya Prasad",
-    "Dr. Veer Oberoi",
-]
-
-SPECIALTIES = [
-    "Oncology",
-    "Cardiac sciences",
-    "Neurology",
-    "Orthopaedics",
-    "Transplant medicine",
-    "Complex surgery",
-]
-CITY_SPECS = [
-    ("Delhi NCR", "Saanvi Institute of Medical Sciences · fictional", "saanvi-delhi"),
-    ("Mumbai", "Harbourview Specialist Hospital · fictional", "harbourview-mumbai"),
-    ("Bengaluru", "Cedar Grove Medical Centre · fictional", "cedar-bengaluru"),
-    ("Chennai", "Marina Advanced Care Institute · fictional", "marina-chennai"),
-    ("Hyderabad", "Deccan Clinical Centre · fictional", "deccan-hyderabad"),
-    ("Kochi", "Backwater International Hospital · fictional", "backwater-kochi"),
-]
-PATIENT_COUNTRIES = [
-    "Kenya",
-    "Tanzania",
-    "Nigeria",
-    "Bangladesh",
-    "Nepal",
-    "Oman",
-    "Uganda",
-    "Ethiopia",
-    "Ghana",
-    "Sri Lanka",
-]
-AGE_BANDS = ["18–29", "30–44", "45–59", "60–74", "75+"]
-LANGUAGES = ["English", "Swahili", "Bengali", "Arabic", "Nepali", "French"]
-COORDINATION_NEEDS = [
-    "Clarify the next record needed",
-    "Prepare questions for the home doctor",
-    "Understand the preliminary response",
-    "Compare the plan with personal priorities",
-    "Prepare an attributable handback summary",
-]
+from apps.demo_lab.fixtures import DemoFixtureError, load_product_demo_fixture
+from apps.demo_lab.models import SyntheticDoctorProfile, SyntheticPatientProfile
+from apps.identity.models import MembershipStatus, Organization, OrganizationMembership
+from apps.professional_network.models import ProfessionalDirectoryProfile, ProfessionalRating
 
 
 class Command(BaseCommand):
-    help = "Seed the authenticated, admin-only synthetic product lab."
+    help = "Load the authenticated synthetic product lab from versioned JSON fixtures."
 
     @transaction.atomic
     def handle(self, *args, **options):
         if not settings.PROTOTYPE_MODE:
             raise CommandError("The synthetic product lab can run only in prototype mode.")
-
-        account_password = os.environ.get("DEMO_ACCOUNT_PASSWORD", "")
-        admin_password = os.environ.get("DEMO_ADMIN_PASSWORD", "")
-        if len(account_password) < 14 or len(admin_password) < 14:
-            raise CommandError(
-                "DEMO_ACCOUNT_PASSWORD and DEMO_ADMIN_PASSWORD must each be at least 14 characters."
-            )
-        if account_password == admin_password:
-            raise CommandError(
-                "The demo administrator and participant passwords must be different."
-            )
+        try:
+            account_password = require_demo_password("DEMO_ACCOUNT_PASSWORD")
+            admin_password = require_demo_password("DEMO_ADMIN_PASSWORD")
+            if account_password == admin_password:
+                raise DemoCredentialError(
+                    "The demo administrator and participant passwords must be different."
+                )
+            fixture = load_product_demo_fixture()
+            ensure_demo_admin()
+        except (DemoCredentialError, DemoFixtureError) as exc:
+            raise CommandError(str(exc)) from exc
 
         call_command("seed_access_demo", verbosity=0)
         now = timezone.now()
-        platform = Organization.objects.get(slug="knock-knock-doc")
-        admin_email = normalize_login_email(
-            os.environ.get("DEMO_ADMIN_EMAIL", "admin.demo@knocknockdoc.test")
+        organizations = {
+            item["fixture_key"]: Organization.objects.get(slug=item["slug"])
+            for item in fixture.organizations
+        }
+        profiles = self._upsert_doctors(
+            fixture.doctors,
+            organizations,
+            account_password,
+            now,
         )
-        admin = self._upsert_account(
-            email=admin_email,
-            display_name="Platform administrator · synthetic",
-            account_type=AccountType.COORDINATOR,
-            password=admin_password,
-            verified_at=now,
+        profiles.update(
+            self._upsert_access_demo_profiles(
+                fixture.access_professional_profiles,
+                fixture.access_accounts,
+            )
         )
-        OrganizationMembership.objects.update_or_create(
-            user=admin,
-            organization=platform,
-            role=MembershipRole.ADMIN,
-            defaults={
-                "status": MembershipStatus.ACTIVE,
-                "starts_at": now,
-                "ends_at": None,
-            },
+        self._upsert_professional_ratings(fixture.professional_ratings, profiles)
+        self._upsert_patients(
+            fixture.patients,
+            organizations,
+            account_password,
+            now,
         )
-
-        hospitals = self._upsert_hospitals()
-        directory_profiles = self._upsert_doctors(hospitals, account_password, now)
-        directory_profiles.extend(self._upsert_access_demo_profiles())
-        self._upsert_professional_ratings(directory_profiles)
-        self._upsert_patients(platform, account_password, now)
         self.stdout.write(
             self.style.SUCCESS(
-                "Seeded 30 fictional doctors and 30 fictional patients for the admin-only lab; "
+                f"Loaded {len(fixture.doctors)} fictional doctors and "
+                f"{len(fixture.patients)} fictional patients from {fixture.fixture_id}; "
                 "no password was printed."
             )
         )
 
-    def _upsert_hospitals(self):
-        hospitals = []
-        for city, name, slug in CITY_SPECS:
-            hospital, _created = Organization.objects.update_or_create(
-                slug=slug,
-                defaults={
-                    "name": name,
-                    "organization_type": OrganizationType.HOSPITAL,
-                    "status": OrganizationStatus.ACTIVE,
-                },
-            )
-            hospitals.append((city, hospital))
-        return hospitals
-
-    def _upsert_doctors(self, hospitals, password, verified_at):
-        availability_values = list(DoctorAvailability.values)
-        directory_profiles = []
-        for index, name in enumerate(DOCTOR_NAMES, start=1):
-            city, hospital = hospitals[(index - 1) % len(hospitals)]
-            specialty = SPECIALTIES[(index - 1) % len(SPECIALTIES)]
-            email = f"doctor{index:02d}.demo@knocknockdoc.test"
-            user = self._upsert_account(
-                email=email,
-                display_name=f"{name} · synthetic",
-                account_type=AccountType.PROFESSIONAL,
-                password=password,
-                verified_at=verified_at,
-            )
+    def _upsert_doctors(self, specs, organizations, password, verified_at):
+        profiles = {}
+        for spec in specs:
+            hospital = organizations[spec["organization_fixture_key"]]
+            try:
+                user = upsert_synthetic_account(
+                    email=spec["login_email"],
+                    display_name=spec["display_name"],
+                    account_type=spec["account_type"],
+                    password=password,
+                    verified_at=verified_at,
+                )
+            except DemoCredentialError as exc:
+                raise CommandError(str(exc)) from exc
             OrganizationMembership.objects.update_or_create(
                 user=user,
                 organization=hospital,
-                role=MembershipRole.SPECIALIST,
+                role=spec["membership_role"],
                 defaults={
                     "status": MembershipStatus.ACTIVE,
                     "starts_at": verified_at,
@@ -200,139 +94,103 @@ class Command(BaseCommand):
                 },
             )
             SyntheticDoctorProfile.objects.update_or_create(
-                fixture_key=f"doctor-{index:02d}",
+                fixture_key=spec["fixture_key"],
                 defaults={
                     "user": user,
-                    "display_name": f"{name} · synthetic",
-                    "specialty": specialty,
-                    "city": city,
-                    "hospital_name": hospital.name,
-                    "experience_years": 7 + ((index * 3) % 24),
-                    "languages": ["English", "Hindi", LANGUAGES[index % len(LANGUAGES)]],
-                    "availability": availability_values[(index - 1) % 3],
-                    "response_hours": 12 + ((index * 7) % 61),
-                    "credential_state": "synthetic_verified",
-                    "avatar_key": f"doctor-{index:02d}",
-                    "profile_summary": (
-                        f"Fictional {specialty.lower()} profile for referral-flow rehearsal. "
-                        "No real credential or clinical claim is represented."
-                    ),
-                    "is_synthetic": True,
+                    "display_name": spec["display_name"],
+                    "specialty": spec["specialty"],
+                    "city": spec["city"],
+                    "hospital_name": spec["hospital_name"],
+                    "experience_years": spec["experience_years"],
+                    "languages": spec["languages"],
+                    "availability": spec["availability"],
+                    "response_hours": spec["response_hours"],
+                    "credential_state": spec["credential_state"],
+                    "avatar_key": spec["avatar_key"],
+                    "profile_summary": spec["profile_summary"],
+                    "is_synthetic": spec["is_synthetic"],
                 },
             )
-            directory_profile, _created = ProfessionalDirectoryProfile.objects.update_or_create(
-                user=user,
-                defaults={
-                    "professional_role": ProfessionalRole.SPECIALIST,
-                    "specialty": specialty,
-                    "experience_years": 7 + ((index * 3) % 24),
-                    "country": "India",
-                    "city": city,
-                    "organization_name": hospital.name,
-                    "languages": ["English", "Hindi", LANGUAGES[index % len(LANGUAGES)]],
-                    "professional_summary": (
-                        f"Fictional {specialty.lower()} specialist profile for doctor-to-doctor "
-                        "discovery and referral rehearsal. No clinical outcome is represented."
-                    ),
-                    "avatar_key": f"doctor-{index:02d}",
-                    "is_discoverable": True,
-                    "accepts_connections": True,
-                    "is_synthetic": True,
-                },
-            )
-            directory_profiles.append(directory_profile)
-        return directory_profiles
-
-    def _upsert_access_demo_profiles(self):
-        specs = [
-            (
-                "referrer.demo@knocknockdoc.test",
-                ProfessionalRole.REFERRER,
-                "General medicine",
-                14,
-                "Kenya",
-                "Nairobi",
-                "Nairobi referring practice · fictional",
-                ["English", "Swahili"],
-                "doctor-31",
-            ),
-            (
-                "specialist.demo@knocknockdoc.test",
-                ProfessionalRole.SPECIALIST,
-                "Oncology",
-                18,
-                "India",
-                "New Delhi",
-                "Aarunya Cancer Centre · fictional",
-                ["English", "Hindi"],
-                "doctor-32",
-            ),
-        ]
-        profiles = []
-        user_model = get_user_model()
-        for email, role, specialty, years, country, city, organization, languages, avatar in specs:
-            user = user_model.objects.get(username=email)
             profile, _created = ProfessionalDirectoryProfile.objects.update_or_create(
                 user=user,
                 defaults={
-                    "professional_role": role,
-                    "specialty": specialty,
-                    "experience_years": years,
-                    "country": country,
-                    "city": city,
-                    "organization_name": organization,
-                    "languages": languages,
-                    "professional_summary": (
-                        "Fictional verified professional profile for a doctor-first connection "
-                        "and closed-loop referral rehearsal."
-                    ),
-                    "avatar_key": avatar,
+                    "professional_role": spec["professional_role"],
+                    "specialty": spec["specialty"],
+                    "experience_years": spec["experience_years"],
+                    "country": spec["country"],
+                    "city": spec["city"],
+                    "organization_name": spec["hospital_name"],
+                    "languages": spec["languages"],
+                    "professional_summary": spec["professional_summary"],
+                    "avatar_key": spec["avatar_key"],
                     "is_discoverable": True,
                     "accepts_connections": True,
-                    "is_synthetic": True,
+                    "is_synthetic": spec["is_synthetic"],
                 },
             )
-            profiles.append(profile)
+            profiles[spec["fixture_key"]] = profile
         return profiles
 
-    def _upsert_professional_ratings(self, profiles):
-        for subject_index, subject in enumerate(profiles):
-            reviewers = [
-                profiles[(subject_index + offset) % len(profiles)]
-                for offset in range(1, 6)
-            ]
-            for reviewer_index, reviewer in enumerate(reviewers, start=1):
-                ProfessionalRating.objects.update_or_create(
-                    reviewer=reviewer.user,
-                    subject=subject,
-                    defaults={
-                        "communication_score": 3 + ((subject_index + reviewer_index) % 3),
-                        "collaboration_score": 3 + ((subject_index + reviewer_index + 1) % 3),
-                        "handback_score": 3 + ((subject_index + reviewer_index + 2) % 3),
-                        "comment": (
-                            "Fictional peer collaboration signal for prototype comparison; "
-                            "not a clinical quality or outcome review."
-                        ),
-                        "is_synthetic": True,
-                    },
-                )
-
-    def _upsert_patients(self, platform, password, verified_at):
-        stages = list(PatientJourneyStage.values)
-        for index in range(1, 31):
-            email = f"patient{index:02d}.demo@knocknockdoc.test"
-            alias = f"Patient {index:02d} · synthetic"
-            user = self._upsert_account(
-                email=email,
-                display_name=alias,
-                account_type=AccountType.PATIENT,
-                password=password,
-                verified_at=verified_at,
+    def _upsert_access_demo_profiles(self, specs, account_specs):
+        account_by_key = {item["fixture_key"]: item for item in account_specs}
+        user_model = get_user_model()
+        profiles = {}
+        for spec in specs:
+            account = account_by_key[spec["fixture_key"]]
+            user = user_model.objects.get(username=account["login_email"])
+            profile, _created = ProfessionalDirectoryProfile.objects.update_or_create(
+                user=user,
+                defaults={
+                    "professional_role": spec["professional_role"],
+                    "specialty": spec["specialty"],
+                    "experience_years": spec["experience_years"],
+                    "country": spec["country"],
+                    "city": spec["city"],
+                    "organization_name": spec["organization_name"],
+                    "languages": spec["languages"],
+                    "professional_summary": spec["professional_summary"],
+                    "avatar_key": spec["avatar_key"],
+                    "is_discoverable": True,
+                    "accepts_connections": True,
+                    "is_synthetic": spec["is_synthetic"],
+                },
             )
+            profiles[spec["fixture_key"]] = profile
+        return profiles
+
+    def _upsert_professional_ratings(self, specs, profiles):
+        ProfessionalRating.objects.filter(is_synthetic=True).delete()
+        ProfessionalRating.objects.bulk_create(
+            [
+                ProfessionalRating(
+                    reviewer=profiles[spec["reviewer_profile_fixture_key"]].user,
+                    subject=profiles[spec["subject_profile_fixture_key"]],
+                    communication_score=spec["communication_score"],
+                    collaboration_score=spec["collaboration_score"],
+                    handback_score=spec["handback_score"],
+                    comment=spec["comment"],
+                    is_synthetic=spec["is_synthetic"],
+                )
+                for spec in specs
+            ]
+        )
+
+    def _upsert_patients(self, specs, organizations, password, verified_at):
+        for spec in specs:
+            try:
+                user = upsert_synthetic_account(
+                    email=spec["login_email"],
+                    display_name=spec["display_alias"],
+                    account_type=spec["account_type"],
+                    password=password,
+                    verified_at=verified_at,
+                )
+            except DemoCredentialError as exc:
+                raise CommandError(str(exc)) from exc
             OrganizationMembership.objects.update_or_create(
                 user=user,
-                organization=platform,
-                role=MembershipRole.PATIENT,
+                organization=organizations[spec["organization_fixture_key"]],
+                role=spec["membership_role"],
                 defaults={
                     "status": MembershipStatus.ACTIVE,
                     "starts_at": verified_at,
@@ -340,56 +198,18 @@ class Command(BaseCommand):
                 },
             )
             SyntheticPatientProfile.objects.update_or_create(
-                fixture_key=f"patient-{index:02d}",
+                fixture_key=spec["fixture_key"],
                 defaults={
                     "user": user,
-                    "display_alias": alias,
-                    "home_country": PATIENT_COUNTRIES[(index - 1) % len(PATIENT_COUNTRIES)],
-                    "age_band": AGE_BANDS[(index - 1) % len(AGE_BANDS)],
-                    "specialty_interest": SPECIALTIES[(index + 1) % len(SPECIALTIES)],
-                    "journey_stage": stages[(index - 1) % len(stages)],
-                    "preferred_city": CITY_SPECS[(index + 2) % len(CITY_SPECS)][0],
-                    "language": LANGUAGES[(index - 1) % len(LANGUAGES)],
-                    "coordination_need": COORDINATION_NEEDS[
-                        (index - 1) % len(COORDINATION_NEEDS)
-                    ],
-                    "avatar_key": f"patient-{index:02d}",
-                    "is_synthetic": True,
+                    "display_alias": spec["display_alias"],
+                    "home_country": spec["home_country"],
+                    "age_band": spec["age_band"],
+                    "specialty_interest": spec["specialty_interest"],
+                    "journey_stage": spec["journey_stage"],
+                    "preferred_city": spec["preferred_city"],
+                    "language": spec["language"],
+                    "coordination_need": spec["coordination_need"],
+                    "avatar_key": spec["avatar_key"],
+                    "is_synthetic": spec["is_synthetic"],
                 },
             )
-
-    def _upsert_account(
-        self,
-        *,
-        email,
-        display_name,
-        account_type,
-        password,
-        verified_at,
-    ):
-        normalized_email = normalize_login_email(email)
-        user_model = get_user_model()
-        user, _created = user_model.objects.get_or_create(
-            username=normalized_email,
-            defaults={"email": normalized_email, "is_active": True},
-        )
-        user.email = normalized_email
-        user.is_active = True
-        try:
-            validate_password(password, user=user)
-        except ValidationError as exc:
-            raise CommandError("A demo password does not meet Django validators.") from exc
-        if not user.check_password(password):
-            user.set_password(password)
-        user.save(update_fields=["email", "is_active", "password"])
-        IdentityProfile.objects.update_or_create(
-            user=user,
-            defaults={
-                "normalized_email": normalized_email,
-                "display_name": display_name,
-                "account_type": account_type,
-                "status": IdentityStatus.ACTIVE,
-                "email_verified_at": verified_at,
-            },
-        )
-        return user

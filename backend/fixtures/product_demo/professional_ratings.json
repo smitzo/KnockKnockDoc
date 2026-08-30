@@ -1,0 +1,1602 @@
+[
+  {
+    "fixture_key": "rating-doctor-01-1",
+    "subject_profile_fixture_key": "doctor-01",
+    "reviewer_profile_fixture_key": "doctor-02",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-01-2",
+    "subject_profile_fixture_key": "doctor-01",
+    "reviewer_profile_fixture_key": "doctor-03",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-01-3",
+    "subject_profile_fixture_key": "doctor-01",
+    "reviewer_profile_fixture_key": "doctor-04",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-01-4",
+    "subject_profile_fixture_key": "doctor-01",
+    "reviewer_profile_fixture_key": "doctor-05",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-01-5",
+    "subject_profile_fixture_key": "doctor-01",
+    "reviewer_profile_fixture_key": "doctor-06",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-02-1",
+    "subject_profile_fixture_key": "doctor-02",
+    "reviewer_profile_fixture_key": "doctor-03",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-02-2",
+    "subject_profile_fixture_key": "doctor-02",
+    "reviewer_profile_fixture_key": "doctor-04",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-02-3",
+    "subject_profile_fixture_key": "doctor-02",
+    "reviewer_profile_fixture_key": "doctor-05",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-02-4",
+    "subject_profile_fixture_key": "doctor-02",
+    "reviewer_profile_fixture_key": "doctor-06",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-02-5",
+    "subject_profile_fixture_key": "doctor-02",
+    "reviewer_profile_fixture_key": "doctor-07",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-03-1",
+    "subject_profile_fixture_key": "doctor-03",
+    "reviewer_profile_fixture_key": "doctor-04",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-03-2",
+    "subject_profile_fixture_key": "doctor-03",
+    "reviewer_profile_fixture_key": "doctor-05",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-03-3",
+    "subject_profile_fixture_key": "doctor-03",
+    "reviewer_profile_fixture_key": "doctor-06",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-03-4",
+    "subject_profile_fixture_key": "doctor-03",
+    "reviewer_profile_fixture_key": "doctor-07",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-03-5",
+    "subject_profile_fixture_key": "doctor-03",
+    "reviewer_profile_fixture_key": "doctor-08",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-04-1",
+    "subject_profile_fixture_key": "doctor-04",
+    "reviewer_profile_fixture_key": "doctor-05",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-04-2",
+    "subject_profile_fixture_key": "doctor-04",
+    "reviewer_profile_fixture_key": "doctor-06",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-04-3",
+    "subject_profile_fixture_key": "doctor-04",
+    "reviewer_profile_fixture_key": "doctor-07",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-04-4",
+    "subject_profile_fixture_key": "doctor-04",
+    "reviewer_profile_fixture_key": "doctor-08",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-04-5",
+    "subject_profile_fixture_key": "doctor-04",
+    "reviewer_profile_fixture_key": "doctor-09",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-05-1",
+    "subject_profile_fixture_key": "doctor-05",
+    "reviewer_profile_fixture_key": "doctor-06",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-05-2",
+    "subject_profile_fixture_key": "doctor-05",
+    "reviewer_profile_fixture_key": "doctor-07",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-05-3",
+    "subject_profile_fixture_key": "doctor-05",
+    "reviewer_profile_fixture_key": "doctor-08",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-05-4",
+    "subject_profile_fixture_key": "doctor-05",
+    "reviewer_profile_fixture_key": "doctor-09",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-05-5",
+    "subject_profile_fixture_key": "doctor-05",
+    "reviewer_profile_fixture_key": "doctor-10",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-06-1",
+    "subject_profile_fixture_key": "doctor-06",
+    "reviewer_profile_fixture_key": "doctor-07",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-06-2",
+    "subject_profile_fixture_key": "doctor-06",
+    "reviewer_profile_fixture_key": "doctor-08",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-06-3",
+    "subject_profile_fixture_key": "doctor-06",
+    "reviewer_profile_fixture_key": "doctor-09",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-06-4",
+    "subject_profile_fixture_key": "doctor-06",
+    "reviewer_profile_fixture_key": "doctor-10",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-06-5",
+    "subject_profile_fixture_key": "doctor-06",
+    "reviewer_profile_fixture_key": "doctor-11",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-07-1",
+    "subject_profile_fixture_key": "doctor-07",
+    "reviewer_profile_fixture_key": "doctor-08",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-07-2",
+    "subject_profile_fixture_key": "doctor-07",
+    "reviewer_profile_fixture_key": "doctor-09",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-07-3",
+    "subject_profile_fixture_key": "doctor-07",
+    "reviewer_profile_fixture_key": "doctor-10",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-07-4",
+    "subject_profile_fixture_key": "doctor-07",
+    "reviewer_profile_fixture_key": "doctor-11",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-07-5",
+    "subject_profile_fixture_key": "doctor-07",
+    "reviewer_profile_fixture_key": "doctor-12",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-08-1",
+    "subject_profile_fixture_key": "doctor-08",
+    "reviewer_profile_fixture_key": "doctor-09",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-08-2",
+    "subject_profile_fixture_key": "doctor-08",
+    "reviewer_profile_fixture_key": "doctor-10",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-08-3",
+    "subject_profile_fixture_key": "doctor-08",
+    "reviewer_profile_fixture_key": "doctor-11",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-08-4",
+    "subject_profile_fixture_key": "doctor-08",
+    "reviewer_profile_fixture_key": "doctor-12",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-08-5",
+    "subject_profile_fixture_key": "doctor-08",
+    "reviewer_profile_fixture_key": "doctor-13",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-09-1",
+    "subject_profile_fixture_key": "doctor-09",
+    "reviewer_profile_fixture_key": "doctor-10",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-09-2",
+    "subject_profile_fixture_key": "doctor-09",
+    "reviewer_profile_fixture_key": "doctor-11",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-09-3",
+    "subject_profile_fixture_key": "doctor-09",
+    "reviewer_profile_fixture_key": "doctor-12",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-09-4",
+    "subject_profile_fixture_key": "doctor-09",
+    "reviewer_profile_fixture_key": "doctor-13",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-09-5",
+    "subject_profile_fixture_key": "doctor-09",
+    "reviewer_profile_fixture_key": "doctor-14",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-10-1",
+    "subject_profile_fixture_key": "doctor-10",
+    "reviewer_profile_fixture_key": "doctor-11",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-10-2",
+    "subject_profile_fixture_key": "doctor-10",
+    "reviewer_profile_fixture_key": "doctor-12",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-10-3",
+    "subject_profile_fixture_key": "doctor-10",
+    "reviewer_profile_fixture_key": "doctor-13",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-10-4",
+    "subject_profile_fixture_key": "doctor-10",
+    "reviewer_profile_fixture_key": "doctor-14",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-10-5",
+    "subject_profile_fixture_key": "doctor-10",
+    "reviewer_profile_fixture_key": "doctor-15",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-11-1",
+    "subject_profile_fixture_key": "doctor-11",
+    "reviewer_profile_fixture_key": "doctor-12",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-11-2",
+    "subject_profile_fixture_key": "doctor-11",
+    "reviewer_profile_fixture_key": "doctor-13",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-11-3",
+    "subject_profile_fixture_key": "doctor-11",
+    "reviewer_profile_fixture_key": "doctor-14",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-11-4",
+    "subject_profile_fixture_key": "doctor-11",
+    "reviewer_profile_fixture_key": "doctor-15",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-11-5",
+    "subject_profile_fixture_key": "doctor-11",
+    "reviewer_profile_fixture_key": "doctor-16",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-12-1",
+    "subject_profile_fixture_key": "doctor-12",
+    "reviewer_profile_fixture_key": "doctor-13",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-12-2",
+    "subject_profile_fixture_key": "doctor-12",
+    "reviewer_profile_fixture_key": "doctor-14",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-12-3",
+    "subject_profile_fixture_key": "doctor-12",
+    "reviewer_profile_fixture_key": "doctor-15",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-12-4",
+    "subject_profile_fixture_key": "doctor-12",
+    "reviewer_profile_fixture_key": "doctor-16",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-12-5",
+    "subject_profile_fixture_key": "doctor-12",
+    "reviewer_profile_fixture_key": "doctor-17",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-13-1",
+    "subject_profile_fixture_key": "doctor-13",
+    "reviewer_profile_fixture_key": "doctor-14",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-13-2",
+    "subject_profile_fixture_key": "doctor-13",
+    "reviewer_profile_fixture_key": "doctor-15",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-13-3",
+    "subject_profile_fixture_key": "doctor-13",
+    "reviewer_profile_fixture_key": "doctor-16",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-13-4",
+    "subject_profile_fixture_key": "doctor-13",
+    "reviewer_profile_fixture_key": "doctor-17",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-13-5",
+    "subject_profile_fixture_key": "doctor-13",
+    "reviewer_profile_fixture_key": "doctor-18",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-14-1",
+    "subject_profile_fixture_key": "doctor-14",
+    "reviewer_profile_fixture_key": "doctor-15",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-14-2",
+    "subject_profile_fixture_key": "doctor-14",
+    "reviewer_profile_fixture_key": "doctor-16",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-14-3",
+    "subject_profile_fixture_key": "doctor-14",
+    "reviewer_profile_fixture_key": "doctor-17",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-14-4",
+    "subject_profile_fixture_key": "doctor-14",
+    "reviewer_profile_fixture_key": "doctor-18",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-14-5",
+    "subject_profile_fixture_key": "doctor-14",
+    "reviewer_profile_fixture_key": "doctor-19",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-15-1",
+    "subject_profile_fixture_key": "doctor-15",
+    "reviewer_profile_fixture_key": "doctor-16",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-15-2",
+    "subject_profile_fixture_key": "doctor-15",
+    "reviewer_profile_fixture_key": "doctor-17",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-15-3",
+    "subject_profile_fixture_key": "doctor-15",
+    "reviewer_profile_fixture_key": "doctor-18",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-15-4",
+    "subject_profile_fixture_key": "doctor-15",
+    "reviewer_profile_fixture_key": "doctor-19",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-15-5",
+    "subject_profile_fixture_key": "doctor-15",
+    "reviewer_profile_fixture_key": "doctor-20",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-16-1",
+    "subject_profile_fixture_key": "doctor-16",
+    "reviewer_profile_fixture_key": "doctor-17",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-16-2",
+    "subject_profile_fixture_key": "doctor-16",
+    "reviewer_profile_fixture_key": "doctor-18",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-16-3",
+    "subject_profile_fixture_key": "doctor-16",
+    "reviewer_profile_fixture_key": "doctor-19",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-16-4",
+    "subject_profile_fixture_key": "doctor-16",
+    "reviewer_profile_fixture_key": "doctor-20",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-16-5",
+    "subject_profile_fixture_key": "doctor-16",
+    "reviewer_profile_fixture_key": "doctor-21",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-17-1",
+    "subject_profile_fixture_key": "doctor-17",
+    "reviewer_profile_fixture_key": "doctor-18",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-17-2",
+    "subject_profile_fixture_key": "doctor-17",
+    "reviewer_profile_fixture_key": "doctor-19",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-17-3",
+    "subject_profile_fixture_key": "doctor-17",
+    "reviewer_profile_fixture_key": "doctor-20",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-17-4",
+    "subject_profile_fixture_key": "doctor-17",
+    "reviewer_profile_fixture_key": "doctor-21",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-17-5",
+    "subject_profile_fixture_key": "doctor-17",
+    "reviewer_profile_fixture_key": "doctor-22",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-18-1",
+    "subject_profile_fixture_key": "doctor-18",
+    "reviewer_profile_fixture_key": "doctor-19",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-18-2",
+    "subject_profile_fixture_key": "doctor-18",
+    "reviewer_profile_fixture_key": "doctor-20",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-18-3",
+    "subject_profile_fixture_key": "doctor-18",
+    "reviewer_profile_fixture_key": "doctor-21",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-18-4",
+    "subject_profile_fixture_key": "doctor-18",
+    "reviewer_profile_fixture_key": "doctor-22",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-18-5",
+    "subject_profile_fixture_key": "doctor-18",
+    "reviewer_profile_fixture_key": "doctor-23",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-19-1",
+    "subject_profile_fixture_key": "doctor-19",
+    "reviewer_profile_fixture_key": "doctor-20",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-19-2",
+    "subject_profile_fixture_key": "doctor-19",
+    "reviewer_profile_fixture_key": "doctor-21",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-19-3",
+    "subject_profile_fixture_key": "doctor-19",
+    "reviewer_profile_fixture_key": "doctor-22",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-19-4",
+    "subject_profile_fixture_key": "doctor-19",
+    "reviewer_profile_fixture_key": "doctor-23",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-19-5",
+    "subject_profile_fixture_key": "doctor-19",
+    "reviewer_profile_fixture_key": "doctor-24",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-20-1",
+    "subject_profile_fixture_key": "doctor-20",
+    "reviewer_profile_fixture_key": "doctor-21",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-20-2",
+    "subject_profile_fixture_key": "doctor-20",
+    "reviewer_profile_fixture_key": "doctor-22",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-20-3",
+    "subject_profile_fixture_key": "doctor-20",
+    "reviewer_profile_fixture_key": "doctor-23",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-20-4",
+    "subject_profile_fixture_key": "doctor-20",
+    "reviewer_profile_fixture_key": "doctor-24",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-20-5",
+    "subject_profile_fixture_key": "doctor-20",
+    "reviewer_profile_fixture_key": "doctor-25",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-21-1",
+    "subject_profile_fixture_key": "doctor-21",
+    "reviewer_profile_fixture_key": "doctor-22",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-21-2",
+    "subject_profile_fixture_key": "doctor-21",
+    "reviewer_profile_fixture_key": "doctor-23",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-21-3",
+    "subject_profile_fixture_key": "doctor-21",
+    "reviewer_profile_fixture_key": "doctor-24",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-21-4",
+    "subject_profile_fixture_key": "doctor-21",
+    "reviewer_profile_fixture_key": "doctor-25",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-21-5",
+    "subject_profile_fixture_key": "doctor-21",
+    "reviewer_profile_fixture_key": "doctor-26",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-22-1",
+    "subject_profile_fixture_key": "doctor-22",
+    "reviewer_profile_fixture_key": "doctor-23",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-22-2",
+    "subject_profile_fixture_key": "doctor-22",
+    "reviewer_profile_fixture_key": "doctor-24",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-22-3",
+    "subject_profile_fixture_key": "doctor-22",
+    "reviewer_profile_fixture_key": "doctor-25",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-22-4",
+    "subject_profile_fixture_key": "doctor-22",
+    "reviewer_profile_fixture_key": "doctor-26",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-22-5",
+    "subject_profile_fixture_key": "doctor-22",
+    "reviewer_profile_fixture_key": "doctor-27",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-23-1",
+    "subject_profile_fixture_key": "doctor-23",
+    "reviewer_profile_fixture_key": "doctor-24",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-23-2",
+    "subject_profile_fixture_key": "doctor-23",
+    "reviewer_profile_fixture_key": "doctor-25",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-23-3",
+    "subject_profile_fixture_key": "doctor-23",
+    "reviewer_profile_fixture_key": "doctor-26",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-23-4",
+    "subject_profile_fixture_key": "doctor-23",
+    "reviewer_profile_fixture_key": "doctor-27",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-23-5",
+    "subject_profile_fixture_key": "doctor-23",
+    "reviewer_profile_fixture_key": "doctor-28",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-24-1",
+    "subject_profile_fixture_key": "doctor-24",
+    "reviewer_profile_fixture_key": "doctor-25",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-24-2",
+    "subject_profile_fixture_key": "doctor-24",
+    "reviewer_profile_fixture_key": "doctor-26",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-24-3",
+    "subject_profile_fixture_key": "doctor-24",
+    "reviewer_profile_fixture_key": "doctor-27",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-24-4",
+    "subject_profile_fixture_key": "doctor-24",
+    "reviewer_profile_fixture_key": "doctor-28",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-24-5",
+    "subject_profile_fixture_key": "doctor-24",
+    "reviewer_profile_fixture_key": "doctor-29",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-25-1",
+    "subject_profile_fixture_key": "doctor-25",
+    "reviewer_profile_fixture_key": "doctor-26",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-25-2",
+    "subject_profile_fixture_key": "doctor-25",
+    "reviewer_profile_fixture_key": "doctor-27",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-25-3",
+    "subject_profile_fixture_key": "doctor-25",
+    "reviewer_profile_fixture_key": "doctor-28",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-25-4",
+    "subject_profile_fixture_key": "doctor-25",
+    "reviewer_profile_fixture_key": "doctor-29",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-25-5",
+    "subject_profile_fixture_key": "doctor-25",
+    "reviewer_profile_fixture_key": "doctor-30",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-26-1",
+    "subject_profile_fixture_key": "doctor-26",
+    "reviewer_profile_fixture_key": "doctor-27",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-26-2",
+    "subject_profile_fixture_key": "doctor-26",
+    "reviewer_profile_fixture_key": "doctor-28",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-26-3",
+    "subject_profile_fixture_key": "doctor-26",
+    "reviewer_profile_fixture_key": "doctor-29",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-26-4",
+    "subject_profile_fixture_key": "doctor-26",
+    "reviewer_profile_fixture_key": "doctor-30",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-26-5",
+    "subject_profile_fixture_key": "doctor-26",
+    "reviewer_profile_fixture_key": "referrer-demo",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-27-1",
+    "subject_profile_fixture_key": "doctor-27",
+    "reviewer_profile_fixture_key": "doctor-28",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-27-2",
+    "subject_profile_fixture_key": "doctor-27",
+    "reviewer_profile_fixture_key": "doctor-29",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-27-3",
+    "subject_profile_fixture_key": "doctor-27",
+    "reviewer_profile_fixture_key": "doctor-30",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-27-4",
+    "subject_profile_fixture_key": "doctor-27",
+    "reviewer_profile_fixture_key": "referrer-demo",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-27-5",
+    "subject_profile_fixture_key": "doctor-27",
+    "reviewer_profile_fixture_key": "specialist-demo",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-28-1",
+    "subject_profile_fixture_key": "doctor-28",
+    "reviewer_profile_fixture_key": "doctor-29",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-28-2",
+    "subject_profile_fixture_key": "doctor-28",
+    "reviewer_profile_fixture_key": "doctor-30",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-28-3",
+    "subject_profile_fixture_key": "doctor-28",
+    "reviewer_profile_fixture_key": "referrer-demo",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-28-4",
+    "subject_profile_fixture_key": "doctor-28",
+    "reviewer_profile_fixture_key": "specialist-demo",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-28-5",
+    "subject_profile_fixture_key": "doctor-28",
+    "reviewer_profile_fixture_key": "doctor-01",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-29-1",
+    "subject_profile_fixture_key": "doctor-29",
+    "reviewer_profile_fixture_key": "doctor-30",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-29-2",
+    "subject_profile_fixture_key": "doctor-29",
+    "reviewer_profile_fixture_key": "referrer-demo",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-29-3",
+    "subject_profile_fixture_key": "doctor-29",
+    "reviewer_profile_fixture_key": "specialist-demo",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-29-4",
+    "subject_profile_fixture_key": "doctor-29",
+    "reviewer_profile_fixture_key": "doctor-01",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-29-5",
+    "subject_profile_fixture_key": "doctor-29",
+    "reviewer_profile_fixture_key": "doctor-02",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-30-1",
+    "subject_profile_fixture_key": "doctor-30",
+    "reviewer_profile_fixture_key": "referrer-demo",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-30-2",
+    "subject_profile_fixture_key": "doctor-30",
+    "reviewer_profile_fixture_key": "specialist-demo",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-30-3",
+    "subject_profile_fixture_key": "doctor-30",
+    "reviewer_profile_fixture_key": "doctor-01",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-30-4",
+    "subject_profile_fixture_key": "doctor-30",
+    "reviewer_profile_fixture_key": "doctor-02",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-doctor-30-5",
+    "subject_profile_fixture_key": "doctor-30",
+    "reviewer_profile_fixture_key": "doctor-03",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-referrer-demo-1",
+    "subject_profile_fixture_key": "referrer-demo",
+    "reviewer_profile_fixture_key": "specialist-demo",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-referrer-demo-2",
+    "subject_profile_fixture_key": "referrer-demo",
+    "reviewer_profile_fixture_key": "doctor-01",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-referrer-demo-3",
+    "subject_profile_fixture_key": "referrer-demo",
+    "reviewer_profile_fixture_key": "doctor-02",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-referrer-demo-4",
+    "subject_profile_fixture_key": "referrer-demo",
+    "reviewer_profile_fixture_key": "doctor-03",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-referrer-demo-5",
+    "subject_profile_fixture_key": "referrer-demo",
+    "reviewer_profile_fixture_key": "doctor-04",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-specialist-demo-1",
+    "subject_profile_fixture_key": "specialist-demo",
+    "reviewer_profile_fixture_key": "doctor-01",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-specialist-demo-2",
+    "subject_profile_fixture_key": "specialist-demo",
+    "reviewer_profile_fixture_key": "doctor-02",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-specialist-demo-3",
+    "subject_profile_fixture_key": "specialist-demo",
+    "reviewer_profile_fixture_key": "doctor-03",
+    "communication_score": 4,
+    "collaboration_score": 5,
+    "handback_score": 3,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-specialist-demo-4",
+    "subject_profile_fixture_key": "specialist-demo",
+    "reviewer_profile_fixture_key": "doctor-04",
+    "communication_score": 5,
+    "collaboration_score": 3,
+    "handback_score": 4,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "rating-specialist-demo-5",
+    "subject_profile_fixture_key": "specialist-demo",
+    "reviewer_profile_fixture_key": "doctor-05",
+    "communication_score": 3,
+    "collaboration_score": 4,
+    "handback_score": 5,
+    "comment": "Fictional peer collaboration signal for prototype comparison; not a clinical quality or outcome review.",
+    "is_synthetic": true
+  }
+]

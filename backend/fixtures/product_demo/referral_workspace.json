@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "synthetic_only": true,
+  "reference": "KND-DEMO-001",
+  "patient_alias": "Ama K. · synthetic",
+  "patient_country": "Kenya",
+  "patient_age_band": "45–59",
+  "specialty": "Oncology",
+  "clinical_question": "Please review the existing pathology and imaging summaries and advise whether an in-person specialist assessment in India is appropriate.",
+  "summary": "A fictional planned-care scenario with prior local assessment, organized reports, and a home doctor who will remain involved. No real patient information is used.",
+  "status": "patient_decision",
+  "consent_status": "granted",
+  "is_planned_care": true,
+  "is_synthetic": true,
+  "corridor_label": "Illustrative Kenya → India · Oncology",
+  "next_action": "Review the preliminary response with the referring doctor.",
+  "next_action_owner": "Ama K. · synthetic",
+  "next_action_due_days": 2,
+  "participants": [
+    {
+      "display_name": "Ama K. · synthetic",
+      "role": "patient",
+      "organization": "",
+      "access_scope": "Entire patient-visible rehearsal workspace",
+      "access_state": "active",
+      "purpose": "Review and decide on the fictional referral"
+    },
+    {
+      "display_name": "Dr. Lena A. · synthetic",
+      "role": "referrer",
+      "organization": "Nairobi referring practice · fictional",
+      "access_scope": "Referral packet, clinical response, and handback",
+      "access_state": "active",
+      "purpose": "Maintain the home-clinician care loop"
+    },
+    {
+      "display_name": "Dr. Arun Mehta · synthetic",
+      "role": "specialist",
+      "organization": "Aarunya Cancer Centre · fictional",
+      "access_scope": "Explicitly shared synthetic clinical-record metadata",
+      "access_state": "active",
+      "purpose": "Provide a bounded preliminary review"
+    },
+    {
+      "display_name": "Nila · prototype coordinator",
+      "role": "coordinator",
+      "organization": "Knock Knock Doc",
+      "access_scope": "Coordination summary and assigned actions",
+      "access_state": "active",
+      "purpose": "Own the next safe operational step"
+    }
+  ],
+  "records": [
+    {
+      "label": "Structured referral summary",
+      "category": "Referral letter",
+      "clinical_date_days_ago": 12,
+      "source_label": "Referring doctor · synthetic",
+      "state": "ready",
+      "note": "Reviewed for completeness"
+    },
+    {
+      "label": "Pathology report summary",
+      "category": "Pathology",
+      "clinical_date_days_ago": 28,
+      "source_label": "Local laboratory · fictional",
+      "state": "ready",
+      "note": "Original source remains attributable"
+    },
+    {
+      "label": "CT report summary",
+      "category": "Radiology report",
+      "clinical_date_days_ago": 20,
+      "source_label": "Local imaging centre · fictional",
+      "state": "ready",
+      "note": "Still-image upload is not enabled in V0"
+    },
+    {
+      "label": "Current medicine list",
+      "category": "Medication",
+      "clinical_date_days_ago": 3,
+      "source_label": "Patient and referrer · synthetic",
+      "state": "needs_update",
+      "note": "Add frequency and last-dose dates before travel planning"
+    }
+  ],
+  "information_requests": [
+    {
+      "item": "Medicine frequency and last-dose dates",
+      "reason": "Needed for a complete in-person assessment handoff; not blocking this preliminary review.",
+      "requester_name": "Dr. Arun Mehta · synthetic",
+      "requester_role": "Receiving specialist",
+      "state": "open",
+      "is_blocking": false,
+      "due_days": 4,
+      "response_note": ""
+    }
+  ],
+  "responses": [
+    {
+      "response_type": "clinical_opinion",
+      "title": "Preliminary specialist response",
+      "author_name": "Dr. Arun Mehta · synthetic",
+      "author_role": "Consultant oncologist · fictional profile",
+      "organization": "Aarunya Cancer Centre · fictional",
+      "summary": "The shared synthetic records have been reviewed. An in-person specialist assessment may be appropriate before any treatment decision. The receiving team would first confirm the source reports and may request further tests.",
+      "limitations": "Prototype content only. This is not a diagnosis or treatment recommendation and must not be used for a real person's care.",
+      "state": "issued",
+      "issued_hours_ago": 7,
+      "version": 1
+    },
+    {
+      "response_type": "coordination_plan",
+      "title": "If the patient chooses to continue",
+      "author_name": "Aarunya international care team · synthetic",
+      "author_role": "Hospital coordination",
+      "organization": "Aarunya Cancer Centre · fictional",
+      "summary": "The next step would be a coordinator call, source-document confirmation, and a provisional assessment window. Travel or visa outcomes are not promised.",
+      "limitations": "Timing remains indicative until the fictional hospital confirms capacity.",
+      "state": "issued",
+      "issued_hours_ago": 6,
+      "version": 1
+    }
+  ],
+  "events": [
+    {
+      "event_type": "response_issued",
+      "actor_label": "Dr. Arun Mehta · synthetic",
+      "actor_role": "Receiving specialist",
+      "summary": "Issued a bounded preliminary response for patient and referrer review.",
+      "occurred_hours_ago": 7
+    },
+    {
+      "event_type": "review_completed",
+      "actor_label": "Aarunya review team · synthetic",
+      "actor_role": "Hospital team",
+      "summary": "Completed the fictional record review and returned an attributable response.",
+      "occurred_hours_ago": 8
+    },
+    {
+      "event_type": "consent_granted",
+      "actor_label": "Ama K. · synthetic",
+      "actor_role": "Patient",
+      "summary": "Approved the synthetic case-sharing preview for the named receiving team.",
+      "occurred_days_ago": 2
+    },
+    {
+      "event_type": "referral_created",
+      "actor_label": "Dr. Lena A. · synthetic",
+      "actor_role": "Referring doctor",
+      "summary": "Created the fictional planned-care referral and invited the patient preview.",
+      "occurred_days_ago": 3
+    }
+  ],
+  "access_grants": [
+    {
+      "account_fixture_key": "patient-demo",
+      "scopes": [
+        "case:view"
+      ]
+    },
+    {
+      "account_fixture_key": "referrer-demo",
+      "scopes": [
+        "case:view",
+        "case:edit",
+        "case:manage"
+      ]
+    },
+    {
+      "account_fixture_key": "specialist-demo",
+      "scopes": [
+        "case:view",
+        "records:view",
+        "response:issue"
+      ]
+    },
+    {
+      "account_fixture_key": "coordinator-demo",
+      "scopes": [
+        "case:view",
+        "case:manage"
+      ]
+    }
+  ],
+  "access_expires_days": 90
+}

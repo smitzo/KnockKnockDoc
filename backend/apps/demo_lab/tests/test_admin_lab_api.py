@@ -8,6 +8,16 @@ from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
 from apps.demo_lab.models import SyntheticDoctorProfile, SyntheticPatientProfile
+from apps.demo_lab.fixtures import load_product_demo_fixture
+from apps.identity.models import SecurityAction, SecurityEvent
+from apps.professional_network.models import (
+    ConnectionStatus,
+    ProfessionalConnection,
+    ProfessionalConversation,
+    ProfessionalDirectoryProfile,
+    ProfessionalMessage,
+    ProfessionalRating,
+)
 from apps.referrals.models import CaseAssignment
 
 ACCOUNT_PASSWORD = "Correct-Horse-Referral-Atlas-729!"
@@ -89,3 +99,142 @@ class AdminSyntheticLabApiTests(TestCase):
         ):
             with self.assertRaises(CommandError):
                 call_command("seed_product_demo", verbosity=0)
+
+    def test_non_admins_cannot_load_or_delete_fixture_data(self):
+        initial_doctors = SyntheticDoctorProfile.objects.count()
+        for user in [None, self.patient, self.doctor, self.referrer]:
+            self.client.force_authenticate(user=user)
+            loaded = self.client.post("/api/v1/admin/lab/fixtures/", {}, format="json")
+            deleted = self.client.delete(
+                "/api/v1/admin/lab/fixtures/",
+                {"confirmation": "DELETE SYNTHETIC DEMO DATA"},
+                format="json",
+            )
+            self.assertEqual(loaded.status_code, 403)
+            self.assertEqual(deleted.status_code, 403)
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), initial_doctors)
+
+
+@override_settings(
+    PASSWORD_HASHERS=["django.contrib.auth.hashers.MD5PasswordHasher"],
+)
+class AdminDemoFixtureLifecycleTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        with patch.dict(os.environ, {"DEMO_ADMIN_PASSWORD": ADMIN_PASSWORD}):
+            call_command("ensure_demo_admin", verbosity=0)
+        cls.admin = get_user_model().objects.get(
+            username="admin.demo@knocknockdoc.test"
+        )
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.admin)
+
+    def test_fixture_collection_is_versioned_complete_and_has_no_secret_keys(self):
+        fixture = load_product_demo_fixture()
+
+        self.assertEqual(fixture.fixture_id, "product-demo-v1")
+        self.assertEqual(len(fixture.doctors), 30)
+        self.assertEqual(len(fixture.patients), 30)
+        self.assertEqual(len(fixture.professional_ratings), 160)
+        self.assertFalse(
+            any(
+                forbidden in item
+                for item in [*fixture.access_accounts, *fixture.doctors, *fixture.patients]
+                for forbidden in ["password", "secret", "token", "api_key"]
+            )
+        )
+
+    def test_admin_fixture_mutation_requires_csrf_for_a_browser_session(self):
+        browser = APIClient(enforce_csrf_checks=True)
+        browser.force_login(self.admin)
+
+        response = browser.post("/api/v1/admin/lab/fixtures/", {}, format="json")
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 0)
+
+    def test_admin_can_load_delete_and_reload_complete_fixture(self):
+        empty = self.client.get("/api/v1/admin/lab/fixtures/")
+        self.assertEqual(empty.status_code, 200)
+        self.assertEqual(empty.data["state"], "empty")
+        self.assertFalse(empty.data["loaded"])
+
+        first_load = self._load()
+        self.assertEqual(first_load.status_code, 200)
+        self.assertTrue(first_load.data["loaded"])
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
+        self.assertEqual(SyntheticPatientProfile.objects.count(), 30)
+        self.assertEqual(ProfessionalDirectoryProfile.objects.count(), 32)
+        self.assertEqual(ProfessionalRating.objects.count(), 160)
+
+        second_load = self._load()
+        self.assertEqual(second_load.status_code, 200)
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
+        self.assertEqual(SyntheticPatientProfile.objects.count(), 30)
+        self.assertEqual(ProfessionalRating.objects.count(), 160)
+
+        self._create_demo_conversation()
+        rejected = self.client.delete(
+            "/api/v1/admin/lab/fixtures/",
+            {"confirmation": "delete demo data"},
+            format="json",
+        )
+        self.assertEqual(rejected.status_code, 400)
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
+
+        deleted = self.client.delete(
+            "/api/v1/admin/lab/fixtures/",
+            {"confirmation": "DELETE SYNTHETIC DEMO DATA"},
+            format="json",
+        )
+        self.assertEqual(deleted.status_code, 200)
+        self.assertEqual(deleted.data["fixture_status"]["state"], "empty")
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 0)
+        self.assertEqual(SyntheticPatientProfile.objects.count(), 0)
+        self.assertEqual(ProfessionalDirectoryProfile.objects.count(), 0)
+        self.assertEqual(ProfessionalRating.objects.count(), 0)
+        self.assertEqual(ProfessionalMessage._base_manager.count(), 0)
+        self.assertTrue(get_user_model().objects.filter(id=self.admin.id).exists())
+        self.assertFalse(
+            get_user_model().objects.filter(username__startswith="doctor01.demo").exists()
+        )
+
+        reloaded = self._load()
+        self.assertEqual(reloaded.status_code, 200)
+        self.assertTrue(reloaded.data["loaded"])
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
+        self.assertTrue(
+            SecurityEvent.objects.filter(
+                action=SecurityAction.ADMIN_LAB_DELETED,
+                actor=self.admin,
+            ).exists()
+        )
+
+    def _load(self):
+        with patch.dict(
+            os.environ,
+            {
+                "DEMO_ACCOUNT_PASSWORD": ACCOUNT_PASSWORD,
+                "DEMO_ADMIN_PASSWORD": ADMIN_PASSWORD,
+            },
+        ):
+            return self.client.post("/api/v1/admin/lab/fixtures/", {}, format="json")
+
+    def _create_demo_conversation(self):
+        users = get_user_model().objects
+        doctor_one = users.get(username="doctor01.demo@knocknockdoc.test")
+        doctor_two = users.get(username="doctor02.demo@knocknockdoc.test")
+        connection = ProfessionalConnection.objects.create(
+            requester=doctor_one,
+            recipient=doctor_two,
+            purpose="referral_collaboration",
+            status=ConnectionStatus.ACCEPTED,
+        )
+        conversation = ProfessionalConversation.objects.create(connection=connection)
+        ProfessionalMessage.objects.create(
+            conversation=conversation,
+            sender=doctor_one,
+            body="Fictional professional workflow rehearsal.",
+        )

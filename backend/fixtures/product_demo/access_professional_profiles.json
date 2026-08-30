@@ -1,0 +1,34 @@
+[
+  {
+    "fixture_key": "referrer-demo",
+    "professional_role": "referrer",
+    "specialty": "General medicine",
+    "experience_years": 14,
+    "country": "Kenya",
+    "city": "Nairobi",
+    "organization_name": "Nairobi referring practice · fictional",
+    "languages": [
+      "English",
+      "Swahili"
+    ],
+    "professional_summary": "Fictional verified professional profile for a doctor-first connection and closed-loop referral rehearsal.",
+    "avatar_key": "doctor-31",
+    "is_synthetic": true
+  },
+  {
+    "fixture_key": "specialist-demo",
+    "professional_role": "specialist",
+    "specialty": "Oncology",
+    "experience_years": 18,
+    "country": "India",
+    "city": "New Delhi",
+    "organization_name": "Aarunya Cancer Centre · fictional",
+    "languages": [
+      "English",
+      "Hindi"
+    ],
+    "professional_summary": "Fictional verified professional profile for a doctor-first connection and closed-loop referral rehearsal.",
+    "avatar_key": "doctor-32",
+    "is_synthetic": true
+  }
+]

@@ -141,6 +141,8 @@ class SecurityAction(models.TextChoices):
     CASE_VIEWED = "case.viewed", "Case viewed"
     CASE_CREATED = "case.created", "Case created"
     ADMIN_LAB_VIEWED = "admin.lab_viewed", "Admin lab viewed"
+    ADMIN_LAB_LOADED = "admin.lab_loaded", "Admin lab demo data loaded"
+    ADMIN_LAB_DELETED = "admin.lab_deleted", "Admin lab demo data deleted"
     NETWORK_CONNECTION_REQUESTED = "network.connection_requested", "Connection requested"
     NETWORK_CONNECTION_RESPONDED = "network.connection_responded", "Connection responded"
     NETWORK_MESSAGE_SENT = "network.message_sent", "Professional message sent"

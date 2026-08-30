@@ -1,7 +1,10 @@
 from django.db.models import Count, Q
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from apps.identity.models import SecurityAction
@@ -11,7 +14,17 @@ from apps.identity.services import record_security_event
 
 from ..models import SyntheticDoctorProfile, SyntheticPatientProfile
 from ..permissions import IsPlatformAdmin
-from .serializers import SyntheticDoctorSerializer, SyntheticPatientSerializer
+from ..services import (
+    DemoFixtureOperationError,
+    delete_demo_data,
+    get_demo_fixture_status,
+    load_demo_data,
+)
+from .serializers import (
+    DeleteDemoFixtureSerializer,
+    SyntheticDoctorSerializer,
+    SyntheticPatientSerializer,
+)
 
 
 class AdminLabPagination(PageNumberPagination):
@@ -47,6 +60,7 @@ class AdminLabSummaryView(AdminLabMixin, APIView):
                     "doctors": SyntheticDoctorProfile.objects.count(),
                     "patients": SyntheticPatientProfile.objects.count(),
                 },
+                "fixture": get_demo_fixture_status(),
                 "doctor_specialties": list(
                     SyntheticDoctorProfile.objects.values("specialty")
                     .annotate(count=Count("id"))
@@ -58,6 +72,50 @@ class AdminLabSummaryView(AdminLabMixin, APIView):
                     .order_by("journey_stage")
                 ),
             }
+        )
+
+
+class AdminLabFixtureView(AdminLabMixin, APIView):
+    throttle_classes = [ScopedRateThrottle]
+
+    def get_throttles(self):
+        self.throttle_scope = (
+            "admin_lab_read" if self.request.method == "GET" else "admin_lab_mutation"
+        )
+        return super().get_throttles()
+
+    def get(self, request):
+        self.audit_read(request, "fixture_status")
+        return Response(get_demo_fixture_status())
+
+    def post(self, request):
+        try:
+            fixture_status = load_demo_data()
+        except DemoFixtureOperationError as exc:
+            raise ValidationError({"detail": str(exc)}) from exc
+        self._audit_mutation(request, SecurityAction.ADMIN_LAB_LOADED)
+        return Response(fixture_status, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        serializer = DeleteDemoFixtureSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            fixture_status, removed = delete_demo_data()
+        except DemoFixtureOperationError as exc:
+            raise ValidationError({"detail": str(exc)}) from exc
+        self._audit_mutation(request, SecurityAction.ADMIN_LAB_DELETED)
+        return Response(
+            {"fixture_status": fixture_status, "removed": removed},
+            status=status.HTTP_200_OK,
+        )
+
+    def _audit_mutation(self, request, action):
+        membership = active_memberships_for_user(request.user).filter(role="admin").first()
+        record_security_event(
+            action=action,
+            actor=request.user,
+            organization=membership.organization if membership else None,
+            metadata={"resource": "product-demo-v1"},
         )
 
 

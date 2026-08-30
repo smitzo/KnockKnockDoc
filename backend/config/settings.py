@@ -109,6 +109,8 @@ REST_FRAMEWORK = {
         "user": "300/minute",
         "auth_csrf": "30/minute",
         "auth_login": "5/minute",
+        "admin_lab_read": "120/minute",
+        "admin_lab_mutation": "10/hour",
         "health": "120/minute",
         "network_directory": "120/minute",
         "network_connection": "30/minute",
