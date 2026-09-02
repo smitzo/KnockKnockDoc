@@ -5,7 +5,7 @@
 - [x] 1.1 Add secure session identities, profiles, organizations, memberships, CSRF, throttling, and security events.
 - [x] 1.2 Add case assignments, scoped grants, server-derived referrer identity, and deny-by-default queries.
 - [x] 1.3 Prove anonymous denial, revoked/expired/suspended denial, and Hospital A/Hospital B isolation in backend tests.
-- [ ] 1.4 Replace frontend role preview and fallback workspace with authenticated session UX.
+- [x] 1.4 Replace frontend role preview and fallback workspace with authenticated session UX.
 
 ## 2. Admin-only synthetic data lab
 
@@ -13,15 +13,17 @@
 - [x] 2.2 Seed at least 30 fictional doctors and 30 fictional patients plus useful organizations and account states.
 - [x] 2.3 Add deterministic local avatar keys and clear fictional-data labels.
 - [x] 2.4 Add platform-admin-only list/summary APIs and a negative permission matrix.
-- [ ] 2.5 Build the responsive admin data-lab route with search, filters, summaries, and flow inspection.
+- [x] 2.5 Build the responsive admin data-lab route with search, filters, summaries, and flow inspection.
+- [x] 2.6 Move all synthetic catalog/network/referral records into a versioned, validated JSON fixture collection without credentials.
+- [x] 2.7 Add an admin-only load/delete toggle, exact deletion confirmation, persistent admin bootstrap, mutation audit, and negative permission tests.
 
 ## 3. Education and visual onboarding
 
-- [ ] 3.1 Research current authoritative India medical-travel statistics and record direct source URLs and review dates.
-- [ ] 3.2 Publish at least five sourced articles with uncertainty and medical-advice boundaries.
+- [x] 3.1 Research current authoritative India medical-travel statistics and record direct source URLs and review dates.
+- [x] 3.2 Publish at least five sourced articles with uncertainty and medical-advice boundaries.
 - [x] 3.2a Move articles into a validated, file-backed content collection with reusable listing and reader components.
-- [ ] 3.3 Generate original local editorial imagery and label illustrative AI-generated scenes.
-- [ ] 3.4 Build an annotated how-to guide with arrows, route-specific actions, role expectations, and safety boundaries.
+- [x] 3.3 Generate original local editorial imagery and label illustrative AI-generated scenes.
+- [x] 3.4 Build an annotated how-to guide with arrows, route-specific actions, role expectations, and safety boundaries.
 
 ## 4. Runtime and documentation
 
