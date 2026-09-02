@@ -39,6 +39,9 @@ services:
       DATABASE_URL: postgresql://knocknockdoc:local-development-only@db:5432/knocknockdoc
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
+      DEMO_ADMIN_EMAIL: ${DEMO_ADMIN_EMAIL:-admin.demo@knocknockdoc.test}
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
+      DEMO_ACCOUNT_PASSWORD: ${DEMO_ACCOUNT_PASSWORD:-}
     depends_on:
       db:
         condition: service_healthy
