@@ -137,6 +137,8 @@ class ConnectionCreateSerializer(serializers.Serializer):
 class ConnectionSerializer(serializers.ModelSerializer):
     requester = serializers.SerializerMethodField()
     recipient = serializers.SerializerMethodField()
+    peer = serializers.SerializerMethodField()
+    viewer_relation = serializers.SerializerMethodField()
     purpose_label = serializers.CharField(source="get_purpose_display", read_only=True)
     status_label = serializers.CharField(source="get_status_display", read_only=True)
     conversation_id = serializers.SerializerMethodField()
@@ -147,6 +149,8 @@ class ConnectionSerializer(serializers.ModelSerializer):
             "id",
             "requester",
             "recipient",
+            "peer",
+            "viewer_relation",
             "purpose",
             "purpose_label",
             "note",
@@ -162,6 +166,19 @@ class ConnectionSerializer(serializers.ModelSerializer):
 
     def get_recipient(self, instance):
         return ProfessionalCardSerializer(instance.recipient.professional_directory_profile).data
+
+    def get_peer(self, instance):
+        request = self.context.get("request")
+        if request is None:
+            return None
+        peer = instance.recipient if instance.requester_id == request.user.id else instance.requester
+        return ProfessionalCardSerializer(peer.professional_directory_profile).data
+
+    def get_viewer_relation(self, instance):
+        request = self.context.get("request")
+        if request is None:
+            return None
+        return "requester" if instance.requester_id == request.user.id else "recipient"
 
     def get_conversation_id(self, instance):
         try:

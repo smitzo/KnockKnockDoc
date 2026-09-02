@@ -87,6 +87,11 @@ class ProfessionalNetworkApiTests(TestCase):
             format="json",
         )
         self.assertEqual(created.status_code, 201)
+        self.assertEqual(created.data["viewer_relation"], "requester")
+        self.assertEqual(
+            created.data["peer"]["display_name"],
+            self.doctor_two.identity_profile.display_name,
+        )
 
         self.client.force_authenticate(user=self.doctor_two)
         reversed_request = self.client.post(
@@ -120,6 +125,11 @@ class ProfessionalNetworkApiTests(TestCase):
         )
         self.assertEqual(accepted.status_code, 200)
         self.assertEqual(accepted.data["status"], ConnectionStatus.ACCEPTED)
+        self.assertEqual(accepted.data["viewer_relation"], "recipient")
+        self.assertEqual(
+            accepted.data["peer"]["display_name"],
+            self.doctor_one.identity_profile.display_name,
+        )
         self.assertIsNotNone(accepted.data["conversation_id"])
         self.assertEqual(ProfessionalConversation.objects.count(), 1)
 

@@ -79,7 +79,9 @@ class ConnectionListCreateView(NetworkPermissionMixin, APIView):
 
     def get(self, request):
         connections = connections_for_user(request.user)
-        return Response(ConnectionSerializer(connections, many=True).data)
+        return Response(
+            ConnectionSerializer(connections, many=True, context={"request": request}).data
+        )
 
     def post(self, request):
         serializer = ConnectionCreateSerializer(data=request.data)
@@ -93,7 +95,10 @@ class ConnectionListCreateView(NetworkPermissionMixin, APIView):
             ),
         )
         connection = connections_for_user(request.user).get(id=connection.id)
-        return Response(ConnectionSerializer(connection).data, status=status.HTTP_201_CREATED)
+        return Response(
+            ConnectionSerializer(connection, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class ConnectionTransitionView(NetworkPermissionMixin, APIView):
@@ -106,7 +111,7 @@ class ConnectionTransitionView(NetworkPermissionMixin, APIView):
             action=action,
         )
         connection = connections_for_user(request.user).get(id=connection.id)
-        return Response(ConnectionSerializer(connection).data)
+        return Response(ConnectionSerializer(connection, context={"request": request}).data)
 
 
 class ConversationListView(NetworkPermissionMixin, APIView):
@@ -114,7 +119,13 @@ class ConversationListView(NetworkPermissionMixin, APIView):
 
     def get(self, request):
         conversations = conversations_for_user(request.user)
-        return Response(ConversationSerializer(conversations, many=True).data)
+        return Response(
+            ConversationSerializer(
+                conversations,
+                many=True,
+                context={"request": request},
+            ).data
+        )
 
 
 class ConversationMessageView(NetworkPermissionMixin, APIView):
