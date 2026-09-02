@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import styles from "@/styles/site-shell.module.css";
+
 import { Icon } from "./icons";
 
 export function Brand() {
@@ -13,29 +15,79 @@ export function Brand() {
 
 export function SiteHeader() {
   return (
-    <header className="site-header">
-      <div className="site-header__inner page-shell">
+    <header className={styles.header}>
+      <div className={`${styles.headerInner} page-shell`}>
         <Brand />
-        <nav className="site-nav" aria-label="Main navigation">
-          <a href="#how-it-works">How it works</a>
-          <Link href="/how-to">Product guide</Link>
+        <nav className={styles.desktopNav} aria-label="Main navigation">
+          <Link href="/doctors">Doctors</Link>
+          <Link href="/hospitals">Hospitals</Link>
+          <Link href="/how-to">How it works</Link>
           <Link href="/blog">Insights</Link>
+          <Link href="/about">About</Link>
         </nav>
-        <div className="site-header__actions">
-          <Link className="text-link hide-mobile" href="/login">Sign in</Link>
-          <Link className="button button--small" href="/refer">
-            Start a referral <Icon name="arrow" />
+        <div className={styles.headerActions}>
+          <Link className={styles.signIn} href="/login">Sign in</Link>
+          <Link className="button button--small" href="/join">
+            Join the network <Icon name="arrow" />
           </Link>
         </div>
+        <details className={styles.mobileMenu}>
+          <summary>Menu</summary>
+          <nav aria-label="Mobile navigation">
+            <Link href="/doctors">Doctors</Link>
+            <Link href="/hospitals">Hospitals</Link>
+            <Link href="/how-to">How it works</Link>
+            <Link href="/blog">Insights</Link>
+            <Link href="/about">About</Link>
+            <Link href="/login">Sign in</Link>
+            <Link href="/join">Join the network</Link>
+          </nav>
+        </details>
       </div>
     </header>
   );
 }
 
+export function SiteFooter() {
+  return (
+    <footer className={styles.footer}>
+      <div className={`${styles.footerGrid} page-shell`}>
+        <div className={styles.footerBrand}>
+          <Brand />
+          <p>Doctor-to-doctor relationships for clearer cross-border referrals.</p>
+          <small>Prototype V0 · Fictional data only</small>
+        </div>
+        <div>
+          <strong>Explore</strong>
+          <Link href="/doctors">Doctors</Link>
+          <Link href="/hospitals">Hospitals</Link>
+          <Link href="/how-to">How it works</Link>
+        </div>
+        <div>
+          <strong>Company</strong>
+          <Link href="/about">About</Link>
+          <Link href="/blog">Insights</Link>
+          <Link href="/join">Join the network</Link>
+        </div>
+        <div>
+          <strong>Account</strong>
+          <Link href="/login">Sign in</Link>
+          <Link href="/register/doctor">Register as a doctor</Link>
+          <Link href="/register/hospital">Register a hospital</Link>
+        </div>
+      </div>
+      <div className={`${styles.footerBottom} page-shell`}>
+        <span>© 2026 Knock Knock Doc</span>
+        <span>Not medical advice · Not emergency support · No real health data</span>
+      </div>
+    </footer>
+  );
+}
+
 export function PrototypeBanner() {
   return (
-    <div className="prototype-banner" role="note">
-      <span className="prototype-banner__dot" aria-hidden="true" />
+    <div className={styles.banner} role="note">
+      <span aria-hidden="true" />
       Prototype V0 · Fictional data only · Not medical advice or emergency support
     </div>
   );

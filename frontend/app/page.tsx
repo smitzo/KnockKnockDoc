@@ -1,171 +1,144 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
-import { PrototypeBanner, SiteHeader } from "@/components/site-header";
+import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
+import { getBlogArticles } from "@/lib/blog-content";
+import styles from "@/styles/home.module.css";
 
-const referralSteps = [
-  ["1", "Your doctor prepares the referral", "One clear clinical question and an organized record summary."],
-  ["2", "You choose what is shared", "See the people, purpose, and information before the case moves."],
-  ["3", "A named specialist team responds", "Questions and responses stay attributable—never a mystery inbox."],
-  ["4", "Your home doctor stays connected", "The decision and later handback return to the care relationship you trust."],
+const networkSteps = [
+  { icon: "search" as const, title: "Discover", body: "Search by specialty, location, language, and professional focus." },
+  { icon: "shield" as const, title: "Compare", body: "Review verified facts and transparent peer-collaboration feedback." },
+  { icon: "people" as const, title: "Connect", body: "Send a purpose-bound request before any case or patient context is shared." },
+  { icon: "document" as const, title: "Refer", body: "Create a structured handoff only after the professional connection is accepted." },
 ];
 
 export default function HomePage() {
+  const articles = getBlogArticles().slice(0, 3);
+
   return (
     <>
       <PrototypeBanner />
       <SiteHeader />
-      <main>
-        <section className="hero page-shell">
-          <div className="hero__copy">
-            <div className="eyebrow"><Icon name="shield" /> Planned cross-border care, thoughtfully coordinated</div>
-            <h1>A safer handoff, from your doctor to the right hospital team.</h1>
-            <p className="hero__lead">
-              One calm, shared place for a referral, its records, the people involved,
-              and the next decision—without losing your home doctor along the way.
+      <main className={styles.page}>
+        <section className={`${styles.hero} page-shell`}>
+          <div className={styles.heroCopy}>
+            <span className={styles.eyebrow}><Icon name="people" /> Built for doctor-to-doctor referrals</span>
+            <h1>Find the right specialist before you refer.</h1>
+            <p>
+              Discover trusted clinicians, understand how they collaborate, connect with a clear
+              purpose, and keep the referral loop visible from first question to handback.
             </p>
-            <div className="hero__actions">
-              <Link className="button button--large" href="/workspace">
-                Explore the demo case <Icon name="arrow" />
-              </Link>
-              <Link className="button button--ghost button--large" href="/refer">
-                Rehearse a referral
-              </Link>
+            <div className={styles.heroActions}>
+              <Link className="button button--large" href="/doctors">Discover doctors <Icon name="arrow" /></Link>
+              <Link className="button button--ghost button--large" href="/how-to">See how it works</Link>
             </div>
-            <div className="hero__promise" aria-label="Product promises">
-              <span><Icon name="check" /> Named care team</span>
-              <span><Icon name="check" /> Visible sharing</span>
-              <span><Icon name="check" /> Clear next step</span>
-            </div>
+            <ul className={styles.heroAssurances}>
+              <li><Icon name="check" /> Verification before visibility</li>
+              <li><Icon name="check" /> Connection before referral</li>
+              <li><Icon name="check" /> No real health data in V0</li>
+            </ul>
           </div>
 
-          <div className="hero-card" aria-label="Synthetic referral preview">
-            <div className="hero-card__top">
+          <div className={styles.networkPreview} aria-label="Illustrative professional discovery interface">
+            <div className={styles.previewTop}>
+              <div><span>Professional network</span><strong>Find a specialist</strong></div>
+              <span className={styles.previewStatus}>Illustrative</span>
+            </div>
+            <div className={styles.searchMock}><Icon name="search" /><span>Specialty, city, or clinical focus</span></div>
+            <article className={styles.profileAnatomy}>
+              <span className={styles.avatar}><Icon name="people" /></span>
               <div>
-                <span className="hero-card__kicker">Referral journey</span>
-                <strong>Every handoff stays visible</strong>
+                <small>Verified profile anatomy</small>
+                <strong>Specialty and current designation</strong>
+                <p>Experience · affiliation · languages</p>
               </div>
-              <span className="status-pill status-pill--live"><span /> On track</span>
+              <span className={styles.verified}><Icon name="shield" /> Verified</span>
+            </article>
+            <div className={styles.feedbackMock}>
+              <div><strong>Peer collaboration</strong><span>Not a clinical outcome score</span></div>
+              <dl><div><dt>Communication</dt><dd>Transparent aggregate</dd></div><div><dt>Referral clarity</dt><dd>Count shown</dd></div></dl>
             </div>
-            <div className="care-path">
-              <article className="care-person care-person--complete">
-                <span className="care-person__avatar care-person__avatar--sage">LA</span>
-                <div><strong>Dr. Lena A.</strong><span>Home doctor · Referral sent</span></div>
-                <span className="care-person__check"><Icon name="check" /></span>
-              </article>
-              <div className="care-path__line"><span /></div>
-              <article className="care-person care-person--complete">
-                <span className="care-person__avatar care-person__avatar--blue">AM</span>
-                <div><strong>Ama K.</strong><span>Patient · Sharing approved</span></div>
-                <span className="care-person__check"><Icon name="check" /></span>
-              </article>
-              <div className="care-path__line"><span /></div>
-              <article className="care-person care-person--active">
-                <span className="care-person__avatar care-person__avatar--gold">AR</span>
-                <div><strong>Dr. Arun Mehta</strong><span>Receiving specialist · Responded</span></div>
-                <span className="care-person__pulse" />
-              </article>
-            </div>
-            <div className="hero-card__next">
-              <span className="icon-tile"><Icon name="spark" /></span>
-              <div><span>Next step</span><strong>Review the response together</strong></div>
-              <Icon name="chevron" />
-            </div>
-            <p className="synthetic-caption">Illustrative people and care only. No real health data.</p>
+            <div className={styles.previewAction}><Icon name="message" /><span><small>Next safe action</small><strong>Connect with a stated purpose</strong></span><Icon name="chevron" /></div>
           </div>
         </section>
 
-        <section className="trust-strip" aria-label="Core service boundaries">
-          <div className="page-shell trust-strip__inner">
-            <div><Icon name="lock" /><span><strong>Consent-led</strong>Nothing moves silently</span></div>
-            <div><Icon name="people" /><span><strong>Human-owned</strong>A named coordinator follows through</span></div>
-            <div><Icon name="document" /><span><strong>Attributable</strong>Every request and response has an author</span></div>
-            <div><Icon name="timeline" /><span><strong>Closed-loop</strong>Your home doctor remains informed</span></div>
+        <section className={styles.pathSection}>
+          <div className="page-shell">
+            <div className={styles.sectionHeading}>
+              <span>One understandable workflow</span>
+              <h2>Discover → Compare → Connect → Refer</h2>
+              <p>The relationship comes first. Patient context enters only after a trusted professional connection exists.</p>
+            </div>
+            <div className={styles.steps}>
+              {networkSteps.map((item, index) => (
+                <article key={item.title}>
+                  <span className={styles.stepIcon}><Icon name={item.icon} /></span>
+                  <small>0{index + 1}</small>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                  {index < networkSteps.length - 1 && <span className={styles.stepArrow} aria-hidden="true">→</span>}
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="section page-shell" id="how-it-works">
-          <div className="section-heading section-heading--center">
-            <span className="eyebrow eyebrow--quiet">A referral, not a maze</span>
-            <h2>Four moments. One accountable journey.</h2>
-            <p>Designed around what people need to understand when a healthcare decision crosses borders.</p>
+        <section className={`${styles.roles} page-shell`}>
+          <div className={styles.sectionHeading}>
+            <span>Useful on both sides of the introduction</span>
+            <h2>A professional network with a referral workflow—not a lead marketplace.</h2>
           </div>
-          <div className="steps-grid">
-            {referralSteps.map(([number, title, body]) => (
-              <article className="step-card" key={number}>
-                <span className="step-card__number">{number}</span>
-                <h3>{title}</h3>
-                <p>{body}</p>
+          <div className={styles.roleGrid}>
+            <article>
+              <span><Icon name="search" /></span>
+              <div><small>For referring doctors</small><h3>Make a confident first connection.</h3><p>Search a focused directory, understand credentials and collaboration signals, then contact a named peer with a bounded purpose.</p><Link href="/register/doctor">Join as a referring doctor <Icon name="arrow" /></Link></div>
+            </article>
+            <article>
+              <span><Icon name="message" /></span>
+              <div><small>For specialists and hospitals</small><h3>Receive clearer, more accountable referrals.</h3><p>Present verified professional facts, set collaboration expectations, and respond within an attributable conversation.</p><Link href="/join">See partner paths <Icon name="arrow" /></Link></div>
+            </article>
+          </div>
+        </section>
+
+        <section className={styles.trustSection}>
+          <div className={`${styles.trustGrid} page-shell`}>
+            <div>
+              <span className={styles.eyebrow}><Icon name="shield" /> Trust is a product surface</span>
+              <h2>Ratings describe collaboration—not medical quality or outcomes.</h2>
+              <p>Every published signal needs provenance, a visible count, a defined category, and a route to correction. Credentials need human verification before a profile becomes public.</p>
+              <Link className="button button--ghost" href="/about">Read our operating boundary</Link>
+            </div>
+            <ul>
+              <li><Icon name="check" /><span><strong>Identity before reach</strong>Applications remain inactive until a reviewer approves them.</span></li>
+              <li><Icon name="check" /><span><strong>Purpose before chat</strong>Connection requests state why one doctor wants to collaborate.</span></li>
+              <li><Icon name="check" /><span><strong>Consent before case access</strong>A connection never grants automatic access to a referral.</span></li>
+              <li><Icon name="check" /><span><strong>Clinical judgment stays human</strong>The product coordinates; licensed clinicians diagnose and treat.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section className={`${styles.insights} page-shell`}>
+          <div className={styles.insightsHeading}><div className={styles.sectionHeading}><span>Evidence and planning</span><h2>Useful context, with sources and uncertainty.</h2></div><Link href="/blog">View all insights <Icon name="arrow" /></Link></div>
+          <div className={styles.articleGrid}>
+            {articles.map((article) => (
+              <article key={article.slug}>
+                <span>{article.category} · {article.readMinutes} min</span>
+                <h3><Link href={`/blog/${article.slug}`}>{article.title}</Link></h3>
+                <p>{article.dek}</p>
+                <Link href={`/blog/${article.slug}`}>Read sourced article <Icon name="arrow" /></Link>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="care-section" id="built-for-care">
-          <div className="page-shell care-section__grid">
-            <div className="section-heading">
-              <span className="eyebrow eyebrow--quiet">Built around both sides of care</span>
-              <h2>Clear enough for a worried patient. Precise enough for a busy doctor.</h2>
-              <p>
-                The same referral is explained differently to each person, while its source,
-                scope, and ownership stay consistent.
-              </p>
-              <Link className="text-cta" href="/workspace">
-                See the role-aware workspace <Icon name="arrow" />
-              </Link>
-            </div>
-            <div className="perspective-stack">
-              <article className="perspective-card perspective-card--patient">
-                <span className="perspective-card__icon"><Icon name="heart" /></span>
-                <div>
-                  <span className="perspective-card__label">For the patient</span>
-                  <h3>“What happens next, and who can see my case?”</h3>
-                  <p>A single next action, plain-language response, and visible participant access.</p>
-                </div>
-              </article>
-              <article className="perspective-card perspective-card--doctor">
-                <span className="perspective-card__icon"><Icon name="document" /></span>
-                <div>
-                  <span className="perspective-card__label">For the doctor</span>
-                  <h3>“Was my question answered, and will the care loop return?”</h3>
-                  <p>Structured records, attributable specialist review, and a clear handback path.</p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section className="section page-shell" id="safety">
-          <div className="boundary-card">
-            <div className="boundary-card__mark"><Icon name="shield" /></div>
-            <div>
-              <span className="eyebrow eyebrow--quiet">An important boundary</span>
-              <h2>Coordination stays separate from clinical judgment.</h2>
-              <p>
-                Knock Knock Doc helps the right people receive, understand, and act on a referral.
-                Licensed clinicians remain responsible for diagnosis and treatment. This prototype
-                uses fictional data and is not an emergency, diagnostic, or medical-advice service.
-              </p>
-            </div>
-            <Link className="button button--ghost" href="/workspace">See it in the demo</Link>
-          </div>
-        </section>
-
-        <section className="closing-cta">
-          <div className="page-shell closing-cta__inner">
-            <div><span className="eyebrow">Prototype V0</span><h2>Walk through the first referral loop.</h2></div>
-            <Link className="button button--light button--large" href="/workspace">
-              Open the synthetic case <Icon name="arrow" />
-            </Link>
+        <section className={styles.closing}>
+          <div className="page-shell">
+            <div><small>Prototype partner applications</small><h2>Build a trusted referral network, one verified relationship at a time.</h2><p>Applications use fictional data in V0 and do not grant immediate access.</p></div>
+            <Link className="button button--light button--large" href="/join">Choose how to join <Icon name="arrow" /></Link>
           </div>
         </section>
       </main>
-      <footer className="site-footer">
-        <div className="page-shell site-footer__inner">
-          <div><strong>knock<span>knock</span>doc</strong><p>Care referrals, kept connected.</p></div>
-          <p>Prototype V0 · Fictional data only · © 2026</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

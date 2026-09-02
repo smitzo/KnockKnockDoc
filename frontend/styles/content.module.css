@@ -1,20 +1,20 @@
 .blogPage, .articlePage { background: var(--warm); }
 .blogPage :global(.blog-hero) { padding-block: 88px 56px; }
 .blogPage :global(.blog-hero > div) { max-width: 900px; }
-.blogPage :global(.blog-hero h1), .articlePage :global(.article-header h1) { margin: 16px 0 20px; color: var(--ink-deep); font-family: var(--serif); font-size: clamp(3rem, 5.6vw, 5.2rem); font-weight: 500; line-height: 1.02; letter-spacing: -.04em; }
+.blogPage :global(.blog-hero h1), .articlePage :global(.article-header h1) { margin: 16px 0 20px; color: var(--ink-deep); font-size: clamp(2.25rem, 4.8vw, 3.8rem); font-weight: 750; line-height: 1.08; letter-spacing: -.045em; }
 .blogPage :global(.blog-hero p) { max-width: 760px; margin: 0; color: var(--ink-muted); font-size: 1.03rem; line-height: 1.7; }
 .blogPage :global(.featured-article) { overflow: hidden; display: grid; grid-template-columns: 1.15fr .85fr; min-height: 500px; border: 1px solid var(--line); border-radius: 24px; background: white; box-shadow: var(--shadow-md); }
 .blogPage :global(.featured-article > img) { width: 100%; height: 100%; object-fit: cover; }
 .blogPage :global(.featured-article > div) { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 45px; }
 .blogPage :global(.featured-article > div > span), .blogPage :global(.article-grid article > span) { color: var(--brand); font-size: .67rem; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; }
-.blogPage :global(.featured-article h2) { margin: 10px 0 15px; color: var(--ink-deep); font-family: var(--serif); font-size: 2.2rem; font-weight: 600; line-height: 1.15; }
+.blogPage :global(.featured-article h2) { margin: 10px 0 15px; color: var(--ink-deep); font-size: 1.8rem; font-weight: 750; line-height: 1.2; letter-spacing: -.025em; }
 .blogPage :global(.featured-article p) { margin: 0; color: var(--ink-muted); line-height: 1.65; }
 .blogPage :global(.article-number) { display: grid; margin: 24px 0; padding-left: 15px; border-left: 3px solid var(--brand); }
-.blogPage :global(.article-number strong) { color: var(--ink-deep); font-family: var(--serif); font-size: 2.2rem; line-height: 1; }
+.blogPage :global(.article-number strong) { color: var(--ink-deep); font-size: 1.8rem; line-height: 1; }
 .blogPage :global(.article-number small) { max-width: 270px; color: var(--ink-muted); font-size: .63rem; }
 .blogPage :global(.article-grid) { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding-block: 60px 100px; }
 .blogPage :global(.article-grid article) { min-height: 270px; display: flex; flex-direction: column; padding: 30px; border: 1px solid var(--line); border-radius: 17px; background: white; }
-.blogPage :global(.article-grid h2) { margin: 12px 0; color: var(--ink-deep); font-family: var(--serif); font-size: 1.5rem; font-weight: 600; line-height: 1.2; }
+.blogPage :global(.article-grid h2) { margin: 12px 0; color: var(--ink-deep); font-size: 1.28rem; font-weight: 750; line-height: 1.28; }
 .blogPage :global(.article-grid p) { margin: 0; color: var(--ink-muted); font-size: .8rem; line-height: 1.65; }
 .blogPage :global(.article-grid article > div) { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 25px; }
 .blogPage :global(.article-grid small) { color: #83938f; font-size: .61rem; }
@@ -25,7 +25,7 @@
 .articlePage :global(.article-header > a) { display: inline-flex; align-items: center; gap: 7px; color: var(--brand); font-size: .72rem; font-weight: 800; }
 .articlePage :global(.article-header > a svg) { width: 15px; transform: rotate(180deg); }
 .articlePage :global(.article-header > span) { display: block; margin-top: 42px; color: var(--brand); font-size: .7rem; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; }
-.articlePage :global(.article-header h1) { max-width: 920px; font-size: clamp(3rem, 5vw, 4.8rem); }
+.articlePage :global(.article-header h1) { max-width: 920px; font-size: clamp(2.2rem, 4.5vw, 3.6rem); }
 .articlePage :global(.article-header > p) { max-width: 760px; margin: 0 0 20px; color: var(--ink-muted); font-size: 1.05rem; line-height: 1.7; }
 .articlePage :global(.article-header > small) { color: #7f918c; font-size: .67rem; }
 .articlePage :global(.article-image) { margin-bottom: 55px; }
@@ -34,18 +34,18 @@
 .articlePage :global(.article-layout) { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 80px; align-items: start; padding-bottom: 110px; }
 .articlePage :global(.article-body) { max-width: 760px; }
 .articlePage :global(.article-body section) { padding-block: 5px 35px; }
-.articlePage :global(.article-body h2) { margin: 0 0 16px; color: var(--ink-deep); font-family: var(--serif); font-size: 1.8rem; font-weight: 600; }
+.articlePage :global(.article-body h2) { margin: 0 0 16px; color: var(--ink-deep); font-size: 1.55rem; font-weight: 750; }
 .articlePage :global(.article-body p), .articlePage :global(.article-body li) { color: #4f6b66; font-size: .91rem; line-height: 1.8; }
 .articlePage :global(.article-body ul) { display: grid; gap: 8px; padding-left: 22px; }
 .articlePage :global(.article-key-number) { display: grid; margin-bottom: 42px; padding: 24px; border: 1px solid #cfe1d8; border-radius: 15px; background: #edf6f1; }
-.articlePage :global(.article-key-number strong) { color: var(--brand-dark); font-family: var(--serif); font-size: 3rem; line-height: 1; }
+.articlePage :global(.article-key-number strong) { color: var(--brand-dark); font-size: 2.4rem; font-weight: 800; line-height: 1; }
 .articlePage :global(.article-key-number span) { margin-top: 7px; color: var(--ink-muted); font-size: .75rem; }
 .articlePage :global(.article-disclaimer) { display: grid; grid-template-columns: 25px 1fr; gap: 11px; padding: 18px; border-radius: 12px; background: #f0f4f2; }
 .articlePage :global(.article-disclaimer svg) { color: var(--brand); }
 .articlePage :global(.article-disclaimer p) { margin: 0; font-size: .72rem; line-height: 1.6; }
 .articlePage :global(.article-disclaimer strong) { color: var(--ink); }
 .articlePage :global(.article-sources) { position: sticky; top: 120px; display: grid; padding: 27px; border: 1px solid var(--line); border-radius: 17px; background: white; box-shadow: var(--shadow-sm); }
-.articlePage :global(.article-sources h2) { margin: 5px 0 16px; color: var(--ink-deep); font-family: var(--serif); font-size: 1.45rem; }
+.articlePage :global(.article-sources h2) { margin: 5px 0 16px; color: var(--ink-deep); font-size: 1.25rem; }
 .articlePage :global(.article-sources > a) { display: grid; grid-template-columns: 28px 1fr 16px; gap: 9px; padding: 15px 0; border-top: 1px solid var(--line); }
 .articlePage :global(.article-sources > a > span) { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--mint); color: var(--brand); font-size: .57rem; font-weight: 850; }
 .articlePage :global(.article-sources a > div) { display: grid; }

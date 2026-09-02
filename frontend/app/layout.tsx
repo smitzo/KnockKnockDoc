@@ -5,11 +5,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Knock Knock Doc · Care referrals, kept connected",
+    default: "Knock Knock Doc · Doctor connections, clearer referrals",
     template: "%s · Knock Knock Doc",
   },
   description:
-    "A synthetic prototype of a consent-led cross-border healthcare referral workspace.",
+    "A doctor-first professional network for trusted cross-border referral relationships.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

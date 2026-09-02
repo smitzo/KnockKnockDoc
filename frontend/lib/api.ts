@@ -5,6 +5,8 @@ import type {
   DemoFixtureStatus,
   DemoWorkspaceResponse,
   PaginatedResponse,
+  PartnerApplicationPayload,
+  PartnerApplicationResponse,
   ReferralCase,
   SessionResponse,
   SyntheticDoctor,
@@ -172,6 +174,27 @@ export async function createSyntheticReferral(
     throw new Error(detail || "The synthetic referral could not be created.");
   }
   return body as ReferralCase;
+}
+
+export async function submitPartnerApplication(
+  payload: PartnerApplicationPayload,
+): Promise<PartnerApplicationResponse> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch("/api/backend/onboarding/applications/", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify(payload),
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The application could not be submitted.");
+  }
+  return body as PartnerApplicationResponse;
 }
 
 function flattenApiError(body: unknown): string {

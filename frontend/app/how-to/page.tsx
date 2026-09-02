@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
-import { PrototypeBanner, SiteHeader } from "@/components/site-header";
+import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
 import styles from "@/styles/guide.module.css";
 
 export const metadata: Metadata = { title: "How to use Knock Knock Doc" };
@@ -24,5 +24,5 @@ export default function HowToPage() {
     <section className="guide-steps page-shell" id="flow">{steps.map((step, index) => <article key={step.number}><span className="guide-step__number">{step.number}</span><div><small>{step.owner}</small><h2>{step.title}</h2><p>{step.copy}</p><Link href={step.href}>{step.action} <Icon name="arrow" /></Link></div>{index < steps.length - 1 && <span className="guide-step__arrow"><Icon name="arrow" /></span>}</article>)}</section>
     <section className="guide-boundaries page-shell" id="safety-boundary"><div><Icon name="shield" /><span>Safety and access boundary</span><h2>Authentication is working. Real health data is still not allowed.</h2></div><ul><li><strong>Case access is server-enforced.</strong> Active identity, organization membership, assignment, current grant and scope are all required.</li><li><strong>Records are metadata only.</strong> File upload stays disabled until private storage, scanning, category authorization and audit gates pass.</li><li><strong>No emergency or medical decision support.</strong> Urgent concerns belong with local emergency services and treating clinicians.</li><li><strong>No outcome or travel promise.</strong> Responses are bounded and visas, capacity, price and suitability remain independently confirmed.</li></ul></section>
     <section className="guide-cta"><div className="page-shell"><div><span className="eyebrow">Choose your next rehearsal</span><h2>Sign in with a fictional role and follow only what that role is allowed to see.</h2></div><Link className="button button--light button--large" href="/login">Sign in <Icon name="arrow" /></Link></div></section>
-  </main></>;
+  </main><SiteFooter /></>;
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArticleCard, FeaturedArticleCard } from "@/components/blog/article-cards";
-import { PrototypeBanner, SiteHeader } from "@/components/site-header";
+import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
 import { getBlogArticles } from "@/lib/blog-content";
 import styles from "@/styles/content.module.css";
 
@@ -16,5 +16,5 @@ export default function BlogPage() {
     <section className="blog-hero page-shell"><div><span className="eyebrow">Evidence, not destination hype</span><h1>Plan cross-border care with sources, uncertainty, and a trusted home-doctor loop.</h1><p>{blogArticles.length} editorial explainers reviewed on 11 August 2026. This content supports questions and planning; it is not medical, legal, visa, or financial advice.</p></div></section>
     <FeaturedArticleCard article={featured} />
     <section className="article-grid page-shell" aria-label="All insight articles">{articles.map((article) => <ArticleCard article={article} key={article.slug} />)}</section>
-  </main></>;
+  </main><SiteFooter /></>;
 }

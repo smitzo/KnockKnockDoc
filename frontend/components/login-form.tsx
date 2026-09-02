@@ -7,7 +7,7 @@ import { loginWithPassword } from "@/lib/api";
 
 import { Icon } from "./icons";
 
-const ALLOWED_NEXT_PATHS = new Set(["/workspace", "/refer", "/admin/lab"]);
+const ALLOWED_NEXT_PATHS = new Set(["/network", "/workspace", "/refer", "/admin/lab"]);
 
 export function LoginForm({ nextPath }: { nextPath: string }) {
   const router = useRouter();
@@ -23,7 +23,8 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
     try {
       const session = await loginWithPassword(email, password);
       const isAdmin = session.memberships.some((membership) => membership.role === "admin");
-      const safeNext = ALLOWED_NEXT_PATHS.has(nextPath) ? nextPath : "/workspace";
+      const roleHome = session.profile.account_type === "professional" ? "/network" : "/workspace";
+      const safeNext = ALLOWED_NEXT_PATHS.has(nextPath) ? nextPath : roleHome;
       router.replace(isAdmin ? "/admin/lab" : safeNext);
       router.refresh();
     } catch (loginError) {
@@ -37,9 +38,9 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
     <form className="login-card" onSubmit={handleSubmit}>
       <div className="login-card__heading">
         <span className="login-card__mark"><Icon name="lock" /></span>
-        <div><span>Authenticated prototype</span><h1>Sign in to your care workspace</h1></div>
+        <div><span>Authenticated prototype</span><h1>Sign in to Knock Knock Doc</h1></div>
       </div>
-      <p>Use only a locally seeded fictional account. Real patient or clinical data is still prohibited.</p>
+      <p>Use a locally seeded fictional account. New applications remain inactive until review.</p>
       <label>
         <span>Email</span>
         <input

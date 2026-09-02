@@ -205,3 +205,26 @@ export interface AdminLabData {
   doctors: SyntheticDoctor[];
   patients: SyntheticPatient[];
 }
+
+export interface PartnerApplicationPayload {
+  application_type: "doctor" | "hospital";
+  email: string;
+  password: string;
+  legal_name: string;
+  display_name: string;
+  country: string;
+  city: string;
+  timezone: string;
+  preferred_language: string;
+  organization_name: string;
+  professional_summary: string;
+  terms_version: "prototype-2026-08-11";
+  accepts_synthetic_only: true;
+  details: Record<string, string | number | string[]>;
+}
+
+export interface PartnerApplicationResponse {
+  accepted: true;
+  message: string;
+  next_step: string;
+}

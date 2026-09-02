@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/login-form";
-import { Brand, PrototypeBanner } from "@/components/site-header";
+import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
 import { getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
 import styles from "@/styles/login.module.css";
@@ -19,24 +19,26 @@ export default async function LoginPage({
   const session = await getServerSession(cookieHeader);
   if (session) {
     const isAdmin = session.memberships.some((membership) => membership.role === "admin");
-    redirect(isAdmin ? "/admin/lab" : "/workspace");
+    const isProfessional = session.profile.account_type === "professional";
+    redirect(isAdmin ? "/admin/lab" : isProfessional ? "/network" : "/workspace");
   }
-  const { next = "/workspace" } = await searchParams;
+  const { next = "" } = await searchParams;
   return (
     <>
       <PrototypeBanner />
+      <SiteHeader />
       <main className={styles.page}>
-        <div className="login-page__brand"><Brand /></div>
         <div className="login-layout page-shell">
           <section className="login-context">
-            <span className="eyebrow"><IconShield /> Case access, not role theatre</span>
-            <h2>Only the people assigned to a referral can open it.</h2>
-            <p>Your account, organization membership, exact case assignment, and current scoped grant are all checked by the server.</p>
-            <ul><li>HTTP-only session cookie</li><li>CSRF-protected changes</li><li>Hospital-to-hospital isolation</li><li>Fictional data only</li></ul>
+            <span className="eyebrow"><IconShield /> Secure professional access</span>
+            <h2>Sign in to your doctor network and assigned referrals.</h2>
+            <p>Every professional action is checked against your active identity, organization membership, and exact permission on the server.</p>
+            <ul><li>HTTP-only session cookie</li><li>CSRF-protected changes</li><li>Connection-scoped messages</li><li>Fictional data only in V0</li></ul>
           </section>
           <LoginForm nextPath={next} />
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }
