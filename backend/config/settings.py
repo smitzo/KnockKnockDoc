@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.demo_lab",
     "apps.identity",
+    "apps.partner_onboarding",
     "apps.professional_network",
     "apps.referrals",
 ]
@@ -115,6 +116,7 @@ REST_FRAMEWORK = {
         "network_directory": "120/minute",
         "network_connection": "30/minute",
         "network_message": "60/minute",
+        "partner_registration": "5/hour",
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,

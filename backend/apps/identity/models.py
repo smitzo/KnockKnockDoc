@@ -146,6 +146,10 @@ class SecurityAction(models.TextChoices):
     NETWORK_CONNECTION_REQUESTED = "network.connection_requested", "Connection requested"
     NETWORK_CONNECTION_RESPONDED = "network.connection_responded", "Connection responded"
     NETWORK_MESSAGE_SENT = "network.message_sent", "Professional message sent"
+    ONBOARDING_APPLICATION_SUBMITTED = (
+        "onboarding.application_submitted",
+        "Partner application submitted",
+    )
 
 
 class ImmutableSecurityEventQuerySet(models.QuerySet):

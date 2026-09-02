@@ -8,6 +8,7 @@ from .models import Organization, SecurityAction, SecurityEvent
 SAFE_METADATA_KEYS = frozenset(
     {
         "authentication_method",
+        "application_type",
         "connection_purpose",
         "membership_role",
         "resource",
