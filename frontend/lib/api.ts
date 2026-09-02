@@ -7,6 +7,11 @@ import type {
   PaginatedResponse,
   PartnerApplicationPayload,
   PartnerApplicationResponse,
+  ProfessionalCard,
+  ProfessionalConnection,
+  ProfessionalConversation,
+  ProfessionalMessage,
+  ProfessionalNetworkData,
   ReferralCase,
   SessionResponse,
   SyntheticDoctor,
@@ -73,6 +78,20 @@ export async function getAdminLab(cookieHeader: string): Promise<AdminLabData> {
     ),
   ]);
   return { summary, doctors: doctors.results, patients: patients.results };
+}
+
+export async function getProfessionalNetwork(
+  cookieHeader: string,
+): Promise<ProfessionalNetworkData> {
+  const [doctors, connections, conversations] = await Promise.all([
+    serverGet<PaginatedResponse<ProfessionalCard>>(
+      "/api/v1/network/doctors/?page_size=50",
+      cookieHeader,
+    ),
+    serverGet<ProfessionalConnection[]>("/api/v1/network/connections/", cookieHeader),
+    serverGet<ProfessionalConversation[]>("/api/v1/network/conversations/", cookieHeader),
+  ]);
+  return { doctors: doctors.results, connections, conversations };
 }
 
 export async function getCsrfToken(): Promise<string> {
@@ -195,6 +214,119 @@ export async function submitPartnerApplication(
     throw new Error(flattenApiError(body) || "The application could not be submitted.");
   }
   return body as PartnerApplicationResponse;
+}
+
+export async function searchProfessionalDoctors(query: string): Promise<ProfessionalCard[]> {
+  const params = new URLSearchParams({ page_size: "50" });
+  if (query.trim()) params.set("q", query.trim());
+  const response = await fetch(`/api/backend/network/doctors/?${params}`, {
+    credentials: "same-origin",
+    headers: { Accept: "application/json" },
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The doctor directory could not be loaded.");
+  }
+  return (body as PaginatedResponse<ProfessionalCard>).results;
+}
+
+export async function createProfessionalConnection(payload: {
+  recipient_profile_id: string;
+  purpose: string;
+  note: string;
+}): Promise<ProfessionalConnection> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch("/api/backend/network/connections/", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify({ ...payload, accepts_synthetic_only: true }),
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The connection request could not be sent.");
+  }
+  return body as ProfessionalConnection;
+}
+
+export async function transitionProfessionalConnection(
+  connectionId: string,
+  action: "accept" | "decline" | "withdraw",
+): Promise<ProfessionalConnection> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch(
+    `/api/backend/network/connections/${encodeURIComponent(connectionId)}/${action}/`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: "{}",
+    },
+  );
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The connection could not be updated.");
+  }
+  return body as ProfessionalConnection;
+}
+
+export async function getProfessionalConversations(): Promise<ProfessionalConversation[]> {
+  const response = await fetch("/api/backend/network/conversations/", {
+    credentials: "same-origin",
+    headers: { Accept: "application/json" },
+  });
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "Conversations could not be loaded.");
+  }
+  return body as ProfessionalConversation[];
+}
+
+export async function getProfessionalMessages(
+  conversationId: string,
+): Promise<ProfessionalMessage[]> {
+  const response = await fetch(
+    `/api/backend/network/conversations/${encodeURIComponent(conversationId)}/messages/`,
+    { credentials: "same-origin", headers: { Accept: "application/json" } },
+  );
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "Messages could not be loaded.");
+  }
+  return body as ProfessionalMessage[];
+}
+
+export async function sendProfessionalMessage(
+  conversationId: string,
+  message: string,
+): Promise<ProfessionalMessage> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch(
+    `/api/backend/network/conversations/${encodeURIComponent(conversationId)}/messages/`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify({ body: message, accepts_synthetic_only: true }),
+    },
+  );
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The message could not be sent.");
+  }
+  return body as ProfessionalMessage;
 }
 
 function flattenApiError(body: unknown): string {

@@ -228,3 +228,70 @@ export interface PartnerApplicationResponse {
   message: string;
   next_step: string;
 }
+
+export interface ProfessionalRatingBreakdown {
+  communication: number;
+  collaboration: number;
+  handback: number;
+  scope: "synthetic_peer_collaboration_not_clinical_quality";
+}
+
+export interface ProfessionalCard {
+  id: string;
+  display_name: string;
+  professional_role: "referrer" | "specialist";
+  professional_role_label: string;
+  specialty: string;
+  experience_years: number;
+  country: string;
+  city: string;
+  organization_name: string;
+  languages: string[];
+  professional_summary: string;
+  verification_state: "synthetic_verified";
+  verification_label: string;
+  avatar_url: string;
+  rating_average: number | null;
+  rating_count: number;
+  rating_breakdown: ProfessionalRatingBreakdown | null;
+  accepts_connections: boolean;
+  is_synthetic: true;
+}
+
+export interface ProfessionalConnection {
+  id: string;
+  requester: ProfessionalCard;
+  recipient: ProfessionalCard;
+  peer: ProfessionalCard;
+  viewer_relation: "requester" | "recipient";
+  purpose: string;
+  purpose_label: string;
+  note: string;
+  status: "pending" | "accepted" | "declined" | "withdrawn";
+  status_label: string;
+  conversation_id: string | null;
+  created_at: string;
+  responded_at: string | null;
+}
+
+export interface ProfessionalMessage {
+  id: string;
+  sender_name: string;
+  body: string;
+  created_at: string;
+  is_mine: boolean;
+}
+
+export interface ProfessionalConversation {
+  id: string;
+  connection: ProfessionalConnection;
+  last_message: ProfessionalMessage | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProfessionalNetworkData {
+  doctors: ProfessionalCard[];
+  connections: ProfessionalConnection[];
+  conversations: ProfessionalConversation[];
+}
