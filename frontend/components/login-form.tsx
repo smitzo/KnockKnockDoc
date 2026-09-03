@@ -9,7 +9,13 @@ import { Icon } from "./icons";
 
 const ALLOWED_NEXT_PATHS = new Set(["/network", "/workspace", "/refer", "/admin/lab"]);
 
-export function LoginForm({ nextPath }: { nextPath: string }) {
+export function LoginForm({
+  localAdminEnabled,
+  nextPath,
+}: {
+  localAdminEnabled: boolean;
+  nextPath: string;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,22 +40,28 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
     }
   }
 
+  function useLocalAdmin() {
+    setEmail("admin");
+    setPassword("admin");
+    setError("");
+  }
+
   return (
     <form className="login-card" onSubmit={handleSubmit}>
       <div className="login-card__heading">
         <span className="login-card__mark"><Icon name="lock" /></span>
-        <div><span>Authenticated prototype</span><h1>Sign in to Knock Knock Doc</h1></div>
+        <div><span>Account access</span><h1>Sign in to Knock Knock Doc</h1></div>
       </div>
-      <p>Use a locally seeded fictional account. New applications remain inactive until review.</p>
+      <p>Enter your account details to continue.</p>
+      {localAdminEnabled && <div className="login-demo"><div><span>Local admin demo</span><strong>Username: admin</strong><strong>Password: admin</strong></div><button onClick={useLocalAdmin} type="button">Use admin login</button></div>}
       <label>
-        <span>Email</span>
+        <span>Email or username</span>
         <input
           autoComplete="username"
-          inputMode="email"
           maxLength={254}
           onChange={(event) => setEmail(event.target.value)}
           required
-          type="email"
+          type="text"
           value={email}
         />
       </label>
@@ -68,7 +80,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
       <button className="button button--large" disabled={submitting} type="submit">
         {submitting ? "Signing in…" : "Sign in securely"} {!submitting && <Icon name="arrow" />}
       </button>
-      <small>Session cookies are HTTP-only. Passwords are never stored in this browser.</small>
+      <small>Secure session · Automatic sign-out after inactivity</small>
     </form>
   );
 }

@@ -2,8 +2,12 @@
 .page :global(.login-layout) { min-height: 650px; display: grid; grid-template-columns: 1fr 480px; gap: 90px; align-items: center; padding-block: 55px; }
 .page :global(.login-context h2) { max-width: 620px; margin: 18px 0; color: var(--ink-deep); font-size: clamp(2.1rem, 4vw, 3.4rem); font-weight: 750; line-height: 1.08; letter-spacing: -.04em; }
 .page :global(.login-context > p) { max-width: 590px; color: var(--ink-muted); line-height: 1.7; }
-.page :global(.login-context ul) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 30px; max-width: 560px; margin: 28px 0 0; padding: 0; list-style: none; color: #456760; font-size: .77rem; font-weight: 700; }
-.page :global(.login-context li::before) { content: "✓"; margin-right: 8px; color: var(--brand); }
+.page :global(.login-context ol) { display: grid; gap: 11px; max-width: 560px; margin: 28px 0 0; padding: 0; list-style: none; }
+.page :global(.login-context li) { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 11px; }
+.page :global(.login-context li > span) { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--brand); color: white; font-size: .7rem; font-weight: 800; }
+.page :global(.login-context li > div) { display: grid; }
+.page :global(.login-context li strong) { font-size: .78rem; }
+.page :global(.login-context li small) { color: var(--ink-muted); font-size: .67rem; }
 .page :global(.login-card) { display: grid; gap: 18px; padding: 38px; border: 1px solid var(--line); border-radius: 24px; background: white; box-shadow: var(--shadow-md); }
 .page :global(.login-card__heading) { display: grid; grid-template-columns: 48px 1fr; gap: 14px; align-items: center; }
 .page :global(.login-card__mark) { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: var(--brand); color: white; }
@@ -12,6 +16,11 @@
 .page :global(.login-card__heading span) { color: var(--brand); font-size: .64rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .page :global(.login-card h1) { margin: 2px 0 0; color: var(--ink-deep); font-size: 1.5rem; font-weight: 750; line-height: 1.16; letter-spacing: -.025em; }
 .page :global(.login-card > p) { margin: 0 0 4px; color: var(--ink-muted); font-size: .76rem; line-height: 1.6; }
+.page :global(.login-demo) { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 13px; border: 1px solid #c8ded3; border-radius: 10px; background: var(--mint); }
+.page :global(.login-demo > div) { display: grid; }
+.page :global(.login-demo span) { color: var(--brand); font-size: .57rem; font-weight: 800; text-transform: uppercase; }
+.page :global(.login-demo strong) { color: var(--ink); font-size: .66rem; }
+.page :global(.login-demo button) { min-height: 34px; padding: 7px 10px; border: 1px solid var(--brand); border-radius: 8px; background: white; color: var(--brand); font-size: .62rem; font-weight: 800; cursor: pointer; }
 .page :global(.login-card label) { display: grid; gap: 7px; }
 .page :global(.login-card label > span) { color: #385752; font-size: .7rem; font-weight: 800; }
 .page :global(.login-card input) { min-height: 48px; padding: 11px 13px; border: 1px solid var(--line-strong); border-radius: 10px; background: #fbfcfb; color: var(--ink-deep); outline: 0; }
@@ -24,6 +33,5 @@
 }
 
 @media (max-width: 560px) {
-  .page :global(.login-context ul) { grid-template-columns: 1fr; }
   .page :global(.login-card) { padding: 28px 22px; }
 }

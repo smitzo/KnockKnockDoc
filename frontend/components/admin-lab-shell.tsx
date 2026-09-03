@@ -82,7 +82,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
 
   return (
     <div className={styles.app}>
-      <div className="workspace-prototype-bar"><strong>Admin-only synthetic lab</strong><span>{data.summary.counts.doctors + data.summary.counts.patients} fictional people loaded · no real records</span></div>
+      <div className="workspace-prototype-bar"><strong>Admin demo control</strong><span>{data.summary.counts.doctors + data.summary.counts.patients} sample profiles loaded</span></div>
       <header className="lab-header">
         <Brand />
         <nav aria-label="Admin lab sections">
@@ -94,15 +94,15 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
       </header>
       <main className="lab-main page-shell">
         <section className="lab-heading">
-          <div><span className="eyebrow">Demo data controls</span><h1>Load the sample network when you need it.</h1><p>The records live in versioned JSON files. Only a platform admin can load, inspect, or delete the complete collection.</p></div>
-          <Link className="button button--ghost" href="/how-to">Open product guide <Icon name="arrow" /></Link>
+          <div><span className="eyebrow">Demo control center</span><h1>{fixtureLoaded ? "Explore the sample product data." : "Start by loading demo data."}</h1><p>This page is visible only to the administrator.</p></div>
+          <Link className="button button--ghost" href="/blog">View blogs <Icon name="arrow" /></Link>
         </section>
         <section className={`fixture-control fixture-control--${data.summary.fixture.state}`} aria-labelledby="fixture-control-title">
           <div>
             <span className="fixture-control__state">{fixtureLoaded ? "Demo data loaded" : data.summary.fixture.state === "partial" ? "Demo data needs repair" : "Demo data is empty"}</span>
-            <h2 id="fixture-control-title">{fixtureLoaded ? "Your full rehearsal dataset is ready." : "Create the full rehearsal dataset in one click."}</h2>
-            <p>{fixtureLoaded ? "Deleting removes synthetic accounts, directory cards, ratings, chats, and referral rehearsals. Your admin account stays active." : "Loading creates 30 fictional doctors, 30 fictional patients, professional ratings, illustrated avatars, and one complete referral flow."}</p>
-            <small>Fixture {data.summary.fixture.fixture.id} · schema {data.summary.fixture.fixture.schema_version} · credentials are never stored in JSON</small>
+            <h2 id="fixture-control-title">{fixtureLoaded ? "Demo data is ready." : "Load 30 doctors and 30 patients."}</h2>
+            <p>{fixtureLoaded ? "You can inspect profiles, ratings, connections, messages, and referral flows below." : "One click creates the complete sample dataset, including profile images and referral activity."}</p>
+            <small>Source: versioned JSON · {data.summary.fixture.fixture.id}</small>
           </div>
           <button className={`button ${fixtureLoaded ? "button--danger" : ""}`} disabled={fixtureBusy} onClick={toggleDemoFixtures} type="button">
             {fixtureBusy ? "Working…" : fixtureLoaded ? "Delete demo data" : "Load demo data"}
@@ -112,18 +112,18 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
           {fixtureNotice && <p className="fixture-feedback__success">{fixtureNotice}</p>}
           {fixtureError && <p className="fixture-feedback__error" role="alert">{fixtureError}</p>}
         </div>
-        <section className="lab-stats" aria-label="Synthetic lab summary">
-          <article><span>Fictional doctors</span><strong>{data.summary.counts.doctors}</strong><small>All have demo auth; none has a case grant</small></article>
-          <article><span>Fictional patients</span><strong>{data.summary.counts.patients}</strong><small>Distributed across seven journey stages</small></article>
-          <article><span>Specialties</span><strong>{data.summary.doctor_specialties.length}</strong><small>Balanced for filtering and flow rehearsal</small></article>
-          <article><span>Real people</span><strong>0</strong><small>Every name, account, and scenario is synthetic</small></article>
-        </section>
+        {fixtureLoaded && <section className="lab-stats" aria-label="Demo data summary">
+          <article><span>Doctors</span><strong>{data.summary.counts.doctors}</strong><small>Profiles with images and account details</small></article>
+          <article><span>Patients</span><strong>{data.summary.counts.patients}</strong><small>Sample journeys across seven stages</small></article>
+          <article><span>Specialties</span><strong>{data.summary.doctor_specialties.length}</strong><small>Ready for search and filtering</small></article>
+          <article><span>Real records</span><strong>0</strong><small>Demo information only</small></article>
+        </section>}
 
         {!fixtureLoaded && (
           <section className="lab-empty">
             <span><Icon name="people" /></span>
-            <h2>No demo profiles are loaded</h2>
-            <p>Use <strong>Load demo data</strong> above. The admin-only API validates the JSON manifest before creating anything.</p>
+            <h2>Your demo is empty</h2>
+            <p>Click <strong>Load demo data</strong> above to begin.</p>
           </section>
         )}
 

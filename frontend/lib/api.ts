@@ -106,6 +106,9 @@ export async function getCsrfToken(): Promise<string> {
 
 export async function loginWithPassword(email: string, password: string): Promise<SessionResponse> {
   const csrfToken = await getCsrfToken();
+  const normalizedLogin = email.trim().toLowerCase() === "admin"
+    ? "admin.demo@knocknockdoc.test"
+    : email;
   const response = await fetch("/api/backend/auth/login", {
     method: "POST",
     credentials: "same-origin",
@@ -114,7 +117,7 @@ export async function loginWithPassword(email: string, password: string): Promis
       Accept: "application/json",
       "X-CSRFToken": csrfToken,
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email: normalizedLogin, password }),
   });
   const body = (await response.json()) as unknown;
   if (!response.ok) {

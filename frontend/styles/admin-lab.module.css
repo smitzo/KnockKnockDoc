@@ -7,7 +7,7 @@
 .app :global(.lab-main) { padding-block: 58px 90px; }
 .app :global(.lab-heading) { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
 .app :global(.lab-heading > div) { max-width: 790px; }
-.app :global(.lab-heading h1) { margin: 11px 0 14px; color: var(--ink-deep); font-family: var(--serif); font-size: clamp(2.7rem, 4.5vw, 4rem); font-weight: 500; line-height: 1.05; }
+.app :global(.lab-heading h1) { margin: 11px 0 14px; color: var(--ink-deep); font-size: clamp(2rem, 3.8vw, 3rem); font-weight: 750; line-height: 1.1; letter-spacing: -.04em; }
 .app :global(.lab-heading p) { max-width: 720px; margin: 0; color: var(--ink-muted); line-height: 1.65; }
 .app :global(.fixture-control) { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 28px; margin-top: 30px; padding: 24px; border: 1px solid #b9d6cc; border-radius: 16px; background: #eff8f4; }
 .app :global(.fixture-control--empty) { border-color: #cfd9d5; background: white; }
@@ -16,7 +16,7 @@
 .app :global(.fixture-control h2) { margin: 5px 0 7px; color: var(--ink-deep); font-family: var(--sans); font-size: 1.25rem; }
 .app :global(.fixture-control p) { max-width: 760px; margin: 0 0 8px; color: var(--ink-muted); font-size: .88rem; line-height: 1.55; }
 .app :global(.fixture-control small) { color: #687b75; font-size: .7rem; }
-.app :global(.fixture-control .button) { min-width: 170px; }
+.app :global(.fixture-control .button) { min-width: 200px; min-height: 52px; font-size: .9rem; }
 .app :global(.button--danger) { border-color: #b94c4c; background: #a83f3f; color: white; }
 .app :global(.button--danger:hover) { background: #8f3232; }
 .app :global(.button:disabled) { cursor: wait; opacity: .65; }
@@ -32,7 +32,7 @@
 .app :global(.lab-stats) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-top: 38px; }
 .app :global(.lab-stats article) { display: grid; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: white; }
 .app :global(.lab-stats span) { color: var(--ink-muted); font-size: .65rem; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; }
-.app :global(.lab-stats strong) { margin-block: 4px; color: var(--ink-deep); font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.app :global(.lab-stats strong) { margin-block: 4px; color: var(--ink-deep); font-size: 1.8rem; font-weight: 800; }
 .app :global(.lab-stats small) { color: var(--ink-muted); font-size: .62rem; line-height: 1.45; }
 .app :global(.lab-toolbar) { display: grid; grid-template-columns: minmax(260px, 1fr) 230px auto; align-items: center; gap: 12px; margin: 32px 0 18px; }
 .app :global(.lab-toolbar label) { position: relative; }
@@ -46,7 +46,7 @@
 .app :global(.profile-card__avatar) { width: 72px; height: 72px; border: 1px solid var(--line); border-radius: 20px; background: var(--mint); }
 .app :global(.profile-card__identity) { min-width: 0; display: grid; align-content: center; }
 .app :global(.profile-card__identity > span) { color: var(--brand); font-size: .6rem; font-weight: 850; letter-spacing: .05em; text-transform: uppercase; }
-.app :global(.profile-card__identity h2) { overflow: hidden; margin: 3px 0; color: var(--ink-deep); font-family: var(--serif); font-size: 1.02rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.app :global(.profile-card__identity h2) { overflow: hidden; margin: 3px 0; color: var(--ink-deep); font-size: .95rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .app :global(.profile-card__identity p) { overflow: hidden; margin: 0; color: var(--ink-muted); font-size: .62rem; text-overflow: ellipsis; white-space: nowrap; }
 .app :global(.capacity) { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 4px 8px; border-radius: 999px; background: #eaf5ef; color: #24715d; font-size: .59rem; font-weight: 800; }
 .app :global(.capacity i) { width: 6px; height: 6px; border-radius: 50%; background: #3da77e; }
@@ -64,7 +64,7 @@
 .app :global(.profile-card > small) { grid-column: 1 / -1; overflow: hidden; color: #8a9995; font-size: .56rem; text-overflow: ellipsis; white-space: nowrap; }
 .app :global(.flow-map) { margin-top: 32px; padding: 36px; border: 1px solid var(--line); border-radius: 20px; background: white; box-shadow: var(--shadow-sm); }
 .app :global(.flow-map__heading) { max-width: 700px; }
-.app :global(.flow-map__heading h2) { margin: 8px 0; color: var(--ink-deep); font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.app :global(.flow-map__heading h2) { margin: 8px 0; color: var(--ink-deep); font-size: 1.7rem; font-weight: 750; }
 .app :global(.flow-map__heading p) { margin: 0; color: var(--ink-muted); }
 .app :global(.flow-map ol) { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 35px 0; padding: 0; list-style: none; }
 .app :global(.flow-map li) { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 8px; min-width: 0; }

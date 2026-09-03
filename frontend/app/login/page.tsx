@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/login-form";
-import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
+import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
 import styles from "@/styles/login.module.css";
@@ -23,19 +23,19 @@ export default async function LoginPage({
     redirect(isAdmin ? "/admin/lab" : isProfessional ? "/network" : "/workspace");
   }
   const { next = "" } = await searchParams;
+  const localAdminEnabled = process.env.LOCAL_DEMO_ADMIN_UI === "true";
   return (
     <>
-      <PrototypeBanner />
       <SiteHeader />
       <main className={styles.page}>
         <div className="login-layout page-shell">
           <section className="login-context">
-            <span className="eyebrow"><IconShield /> Secure professional access</span>
-            <h2>Sign in to your doctor network and assigned referrals.</h2>
-            <p>Every professional action is checked against your active identity, organization membership, and exact permission on the server.</p>
-            <ul><li>HTTP-only session cookie</li><li>CSRF-protected changes</li><li>Connection-scoped messages</li><li>Fictional data only in V0</li></ul>
+            <span className="eyebrow"><IconShield /> Product demo</span>
+            <h2>See the full product in three simple steps.</h2>
+            <p>Start as the administrator, load the sample data, then explore the doctor and patient flows.</p>
+            <ol><li><span>1</span><div><strong>Sign in as admin</strong><small>Use the local demo credentials.</small></div></li><li><span>2</span><div><strong>Load demo data</strong><small>Create 30 doctors and 30 patients.</small></div></li><li><span>3</span><div><strong>Explore the product</strong><small>Review profiles, connections, chat, and referrals.</small></div></li></ol>
           </section>
-          <LoginForm nextPath={next} />
+          <LoginForm localAdminEnabled={localAdminEnabled} nextPath={next} />
         </div>
       </main>
       <SiteFooter />
