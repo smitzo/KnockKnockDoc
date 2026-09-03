@@ -15,6 +15,16 @@ def env_list(name: str, default: str = "") -> list[str]:
     return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
 
 
+def loopback_frontend_origins(port_value: str) -> list[str]:
+    try:
+        port = int(port_value)
+    except ValueError as exc:
+        raise ImproperlyConfigured("KND_FRONTEND_PORT must be an integer.") from exc
+    if not 1 <= port <= 65_535:
+        raise ImproperlyConfigured("KND_FRONTEND_PORT must be between 1 and 65535.")
+    return [f"http://localhost:{port}", f"http://127.0.0.1:{port}"]
+
+
 PROTOTYPE_MODE = env_bool("PROTOTYPE_MODE", True)
 DEBUG = env_bool("DJANGO_DEBUG", False)
 ALLOW_INSECURE_LOCAL_DEMO_ADMIN = env_bool("ALLOW_INSECURE_LOCAL_DEMO_ADMIN", False)
@@ -33,6 +43,12 @@ if not PROTOTYPE_MODE and (len(SECRET_KEY) < 50 or SECRET_KEY == _prototype_secr
     )
 
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,backend")
+
+_default_csrf_origins: list[str] = []
+if PROTOTYPE_MODE and DEBUG:
+    _default_csrf_origins = loopback_frontend_origins(
+        os.environ.get("KND_FRONTEND_PORT", "3000")
+    )
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -150,7 +166,7 @@ CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_NAME = "knd_csrftoken"
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Strict"
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS") or _default_csrf_origins
 X_FRAME_OPTIONS = "DENY"
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://redis:6379/0")
