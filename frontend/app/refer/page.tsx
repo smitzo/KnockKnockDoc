@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { ReferralComposer } from "@/components/referral-composer";
-import { PrototypeBanner, SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "@/components/site-header";
 import { getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
 import accessStyles from "@/styles/access.module.css";
@@ -15,7 +15,6 @@ export default async function ReferPage() {
   const referrer = session.memberships.find((membership) => membership.role === "referrer");
   return (
     <>
-      <PrototypeBanner />
       <SiteHeader />
       <main className="refer-page">
         {referrer ? (

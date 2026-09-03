@@ -22,25 +22,26 @@ export function SiteHeader() {
           <Link href="/doctors">Doctors</Link>
           <Link href="/hospitals">Hospitals</Link>
           <Link href="/how-to">How it works</Link>
-          <Link href="/blog">Insights</Link>
+          <Link href="/blog">Blogs</Link>
           <Link href="/about">About</Link>
         </nav>
         <div className={styles.headerActions}>
           <Link className={styles.signIn} href="/login">Sign in</Link>
           <Link className="button button--small" href="/join">
-            Join the network <Icon name="arrow" />
+            Join network <Icon name="arrow" />
           </Link>
         </div>
+        <Link className={styles.mobileJoin} href="/join">Join</Link>
         <details className={styles.mobileMenu}>
           <summary>Menu</summary>
           <nav aria-label="Mobile navigation">
             <Link href="/doctors">Doctors</Link>
             <Link href="/hospitals">Hospitals</Link>
             <Link href="/how-to">How it works</Link>
-            <Link href="/blog">Insights</Link>
+            <Link href="/blog">Blogs</Link>
             <Link href="/about">About</Link>
             <Link href="/login">Sign in</Link>
-            <Link href="/join">Join the network</Link>
+            <Link href="/join">Join network</Link>
           </nav>
         </details>
       </div>
@@ -55,7 +56,7 @@ export function SiteFooter() {
         <div className={styles.footerBrand}>
           <Brand />
           <p>Doctor-to-doctor relationships for clearer cross-border referrals.</p>
-          <small>Prototype V0 · Fictional data only</small>
+          <small>Built for trusted professional collaboration.</small>
         </div>
         <div>
           <strong>Explore</strong>
@@ -66,8 +67,8 @@ export function SiteFooter() {
         <div>
           <strong>Company</strong>
           <Link href="/about">About</Link>
-          <Link href="/blog">Insights</Link>
-          <Link href="/join">Join the network</Link>
+          <Link href="/blog">Blogs</Link>
+          <Link href="/join">Join network</Link>
         </div>
         <div>
           <strong>Account</strong>
@@ -78,17 +79,8 @@ export function SiteFooter() {
       </div>
       <div className={`${styles.footerBottom} page-shell`}>
         <span>© 2026 Knock Knock Doc</span>
-        <span>Not medical advice · Not emergency support · No real health data</span>
+        <span>Professional coordination only · Not emergency support</span>
       </div>
     </footer>
-  );
-}
-
-export function PrototypeBanner() {
-  return (
-    <div className={styles.banner} role="note">
-      <span aria-hidden="true" />
-      Prototype V0 · Fictional data only · Not medical advice or emergency support
-    </div>
   );
 }

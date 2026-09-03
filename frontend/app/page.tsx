@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
-import { PrototypeBanner, SiteFooter, SiteHeader } from "@/components/site-header";
+import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { getBlogArticles } from "@/lib/blog-content";
 import styles from "@/styles/home.module.css";
 
@@ -17,7 +17,6 @@ export default function HomePage() {
 
   return (
     <>
-      <PrototypeBanner />
       <SiteHeader />
       <main className={styles.page}>
         <section className={`${styles.hero} page-shell`}>
@@ -35,14 +34,14 @@ export default function HomePage() {
             <ul className={styles.heroAssurances}>
               <li><Icon name="check" /> Verification before visibility</li>
               <li><Icon name="check" /> Connection before referral</li>
-              <li><Icon name="check" /> No real health data in V0</li>
+              <li><Icon name="check" /> Referral access stays separate</li>
             </ul>
           </div>
 
           <div className={styles.networkPreview} aria-label="Illustrative professional discovery interface">
             <div className={styles.previewTop}>
               <div><span>Professional network</span><strong>Find a specialist</strong></div>
-              <span className={styles.previewStatus}>Illustrative</span>
+              <span className={styles.previewStatus}>Profile preview</span>
             </div>
             <div className={styles.searchMock}><Icon name="search" /><span>Specialty, city, or clinical focus</span></div>
             <article className={styles.profileAnatomy}>
@@ -118,14 +117,14 @@ export default function HomePage() {
         </section>
 
         <section className={`${styles.insights} page-shell`}>
-          <div className={styles.insightsHeading}><div className={styles.sectionHeading}><span>Evidence and planning</span><h2>Useful context, with sources and uncertainty.</h2></div><Link href="/blog">View all insights <Icon name="arrow" /></Link></div>
+          <div className={styles.insightsHeading}><div className={styles.sectionHeading}><span>From the blog</span><h2>Practical guides for referrals and medical travel.</h2></div><Link href="/blog">View all blogs <Icon name="arrow" /></Link></div>
           <div className={styles.articleGrid}>
             {articles.map((article) => (
               <article key={article.slug}>
                 <span>{article.category} · {article.readMinutes} min</span>
                 <h3><Link href={`/blog/${article.slug}`}>{article.title}</Link></h3>
                 <p>{article.dek}</p>
-                <Link href={`/blog/${article.slug}`}>Read sourced article <Icon name="arrow" /></Link>
+                <Link href={`/blog/${article.slug}`}>Read blog <Icon name="arrow" /></Link>
               </article>
             ))}
           </div>
@@ -133,7 +132,7 @@ export default function HomePage() {
 
         <section className={styles.closing}>
           <div className="page-shell">
-            <div><small>Prototype partner applications</small><h2>Build a trusted referral network, one verified relationship at a time.</h2><p>Applications use fictional data in V0 and do not grant immediate access.</p></div>
+            <div><small>Join the network</small><h2>Build trusted referral relationships, one connection at a time.</h2><p>Doctor and hospital profiles are reviewed before they become active.</p></div>
             <Link className="button button--light button--large" href="/join">Choose how to join <Icon name="arrow" /></Link>
           </div>
         </section>

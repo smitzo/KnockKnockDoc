@@ -1,5 +1,5 @@
-.app { min-height: calc(100vh - 34px); display: grid; grid-template-columns: 250px minmax(0, 1fr); background: #f5f8f6; }
-.sidebar { position: sticky; top: 0; height: calc(100vh - 34px); display: flex; flex-direction: column; padding: 26px 20px 20px; border-right: 1px solid var(--line); background: #fff; }
+.app { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(0, 1fr); background: #f5f8f6; }
+.sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 26px 20px 20px; border-right: 1px solid var(--line); background: #fff; }
 .sidebar nav { display: grid; gap: 5px; margin-top: 37px; }
 .sidebar nav button { min-height: 45px; display: flex; align-items: center; gap: 11px; padding: 10px 12px; border: 0; border-radius: 9px; background: transparent; color: #5b716d; font-size: .78rem; font-weight: 700; text-align: left; cursor: pointer; }
 .sidebar nav button svg { width: 18px; }

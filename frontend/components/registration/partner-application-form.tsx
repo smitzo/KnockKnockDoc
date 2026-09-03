@@ -151,7 +151,7 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
       <section className={styles.success} aria-live="polite">
         <span><Icon name="check" /></span>
         <p className={styles.kicker}>Application received</p>
-        <h1>Your fictional profile is waiting for review.</h1>
+        <h1>Your application is waiting for review.</h1>
         <p>
           The account is inactive. It cannot sign in, appear in search, message a doctor,
           or open a referral until a platform reviewer verifies and approves it.
@@ -170,7 +170,7 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
         <div>
           <span className={styles.kicker}>Step {step} of 3</span>
           <h1>{isDoctor ? "Create your doctor application" : "Register a hospital representative"}</h1>
-          <p>No access is granted until verification. Use fictional prototype details only.</p>
+          <p>Complete each step with sample information for this local demo.</p>
         </div>
         <ol className={styles.progress} aria-label="Application progress">
           {["Account", "Profile", "Review"].map((label, index) => (
@@ -183,11 +183,11 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
 
       <fieldset data-step="1" hidden={step !== 1}>
         <legend>Secure account</legend>
-        <p className={styles.sectionHelp}>Use a made-up <strong>.test</strong> email. Real identities are rejected in V0.</p>
+        <p className={styles.sectionHelp}>For this local demo, use an email ending in <strong>.test</strong>.</p>
         <div className={styles.grid}>
-          <Field autoComplete="email" label="Fictional email" name="email" placeholder="arun@care-network.test" required type="email" />
+          <Field autoComplete="email" label="Demo email" name="email" placeholder="arun@care-network.test" required type="email" />
           <Field autoComplete="new-password" label="Password (14+ characters)" minLength={14} name="password" required type="password" />
-          <Field autoComplete="name" label="Fictional legal name" maxLength={120} minLength={2} name="legal_name" required />
+          <Field autoComplete="name" label="Legal name" maxLength={120} minLength={2} name="legal_name" required />
           <Field autoComplete="nickname" label="Public display name" maxLength={120} minLength={2} name="display_name" required />
         </div>
         <div className={styles.notice}><Icon name="lock" /><p>The password is hashed by the backend. The application creates an inactive account with no product permissions.</p></div>
@@ -225,14 +225,14 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
           )}
           <label className={`${styles.field} ${styles.fullWidth}`}>
             <span>Professional summary</span>
-            <textarea maxLength={500} minLength={30} name="professional_summary" placeholder="Describe a fictional practice focus, collaboration style, and referral interests." required rows={4} />
+            <textarea maxLength={500} minLength={30} name="professional_summary" placeholder="Describe your practice focus, collaboration style, and referral interests." required rows={4} />
             <small>30–500 characters. Do not include patient information.</small>
           </label>
         </div>
       </fieldset>
 
       <fieldset data-step="3" hidden={step !== 3}>
-        <legend>{isDoctor ? "Credentials for prototype review" : "Hospital details for prototype review"}</legend>
+        <legend>{isDoctor ? "Credentials for review" : "Hospital details for review"}</legend>
         <p className={styles.sectionHelp}>These values remain private application data and do not become a public listing.</p>
         <div className={styles.grid}>
           {isDoctor ? (
@@ -242,14 +242,14 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
               <ListField example="Interventional cardiology, Heart failure" label="Subspecialties (comma separated)" name="subspecialties" />
               <Field label="Experience start year" max={2026} min={1950} name="experience_start_year" placeholder="2012" required type="number" />
               <Field label="Council jurisdiction" maxLength={100} minLength={2} name="council_jurisdiction" placeholder="Synthetic Medical Council" required />
-              <Field label="Fictional registration ID" name="synthetic_registration_number" pattern="SYN-[A-Za-z0-9-]{4,40}" placeholder="SYN-KKD-2048" required />
+              <Field label="Demo registration ID" name="synthetic_registration_number" pattern="SYN-[A-Za-z0-9-]{4,40}" placeholder="SYN-KKD-2048" required />
               <ListField example="MBBS, MD Cardiology" label="Qualifications (comma separated)" name="qualifications" />
               <ListField example="English, Hindi" label="Languages (comma separated)" name="languages" />
             </>
           ) : (
             <>
               <Field label="Representative title" maxLength={100} minLength={2} name="representative_title" placeholder="Clinical partnerships lead" required />
-              <Field label="Fictional website" name="website_url" placeholder="https://hospital.example" required type="url" />
+              <Field label="Demo website" name="website_url" placeholder="https://hospital.example" required type="url" />
               <Field label="Establishment year" max={2026} min={1900} name="establishment_year" required type="number" />
               <Field label="Bed count" max={10000} min={1} name="bed_count" required type="number" />
               <Field label="Capacity data as of" max="2026-08-11" name="capacity_as_of" required type="date" />
@@ -262,7 +262,7 @@ export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }
         </div>
         <label className={styles.confirmation}>
           <input name="synthetic_confirmation" required type="checkbox" />
-          <span><strong>I confirm every value is fictional.</strong> I understand submission grants no access and is governed by prototype terms {TERMS_VERSION}.</span>
+          <span><strong>I confirm this is sample demo information.</strong> I understand submission does not grant immediate access.</span>
         </label>
       </fieldset>
 
