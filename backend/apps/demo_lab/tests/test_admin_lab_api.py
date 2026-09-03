@@ -100,6 +100,26 @@ class AdminSyntheticLabApiTests(TestCase):
             with self.assertRaises(CommandError):
                 call_command("seed_product_demo", verbosity=0)
 
+    @override_settings(
+        ALLOW_INSECURE_LOCAL_DEMO_ADMIN=True,
+        PROTOTYPE_MODE=True,
+        DEBUG=True,
+    )
+    def test_explicit_local_only_mode_allows_admin_password(self):
+        with patch.dict(
+            os.environ,
+            {
+                "DEMO_ACCOUNT_PASSWORD": ACCOUNT_PASSWORD,
+                "DEMO_ADMIN_PASSWORD": "admin",
+            },
+        ):
+            call_command("ensure_demo_admin", verbosity=0)
+
+        admin = get_user_model().objects.get(
+            username="admin.demo@knocknockdoc.test"
+        )
+        self.assertTrue(admin.check_password("admin"))
+
     def test_non_admins_cannot_load_or_delete_fixture_data(self):
         initial_doctors = SyntheticDoctorProfile.objects.count()
         for user in [None, self.patient, self.doctor, self.referrer]:

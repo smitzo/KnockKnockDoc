@@ -17,7 +17,13 @@ def env_list(name: str, default: str = "") -> list[str]:
 
 PROTOTYPE_MODE = env_bool("PROTOTYPE_MODE", True)
 DEBUG = env_bool("DJANGO_DEBUG", False)
+ALLOW_INSECURE_LOCAL_DEMO_ADMIN = env_bool("ALLOW_INSECURE_LOCAL_DEMO_ADMIN", False)
 APP_VERSION = os.environ.get("APP_VERSION", "0.1.0")
+
+if ALLOW_INSECURE_LOCAL_DEMO_ADMIN and not (PROTOTYPE_MODE and DEBUG):
+    raise ImproperlyConfigured(
+        "ALLOW_INSECURE_LOCAL_DEMO_ADMIN requires both PROTOTYPE_MODE and DJANGO_DEBUG."
+    )
 
 _prototype_secret = "prototype-only-not-for-real-data-change-before-deployment"
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", _prototype_secret if PROTOTYPE_MODE else "")

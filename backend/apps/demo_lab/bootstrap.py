@@ -28,6 +28,14 @@ class DemoCredentialError(ValueError):
 
 def require_demo_password(name: str) -> str:
     password = os.environ.get(name, "")
+    if (
+        name == "DEMO_ADMIN_PASSWORD"
+        and password == "admin"
+        and settings.ALLOW_INSECURE_LOCAL_DEMO_ADMIN
+        and settings.PROTOTYPE_MODE
+        and settings.DEBUG
+    ):
+        return password
     if len(password) < 14:
         raise DemoCredentialError(f"{name} must be set locally to at least 14 characters.")
     if password.lower() in {"admin", "adminadmin", "password", "password123"}:
@@ -42,6 +50,7 @@ def upsert_synthetic_account(
     account_type: str,
     password: str,
     verified_at,
+    allow_insecure_local_password: bool = False,
 ):
     normalized_email = normalize_login_email(email)
     user_model = get_user_model()
@@ -51,10 +60,13 @@ def upsert_synthetic_account(
     )
     user.email = normalized_email
     user.is_active = True
-    try:
-        validate_password(password, user=user)
-    except ValidationError as exc:
-        raise DemoCredentialError("A local demo password does not meet Django validators.") from exc
+    if not allow_insecure_local_password:
+        try:
+            validate_password(password, user=user)
+        except ValidationError as exc:
+            raise DemoCredentialError(
+                "A local demo password does not meet Django validators."
+            ) from exc
     if not user.check_password(password):
         user.set_password(password)
     user.save(update_fields=["email", "is_active", "password"])
@@ -98,6 +110,9 @@ def ensure_demo_admin():
         account_type=AccountType.COORDINATOR,
         password=password,
         verified_at=now,
+        allow_insecure_local_password=(
+            settings.ALLOW_INSECURE_LOCAL_DEMO_ADMIN and password == "admin"
+        ),
     )
     OrganizationMembership.objects.update_or_create(
         user=admin,
