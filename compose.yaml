@@ -42,6 +42,7 @@ services:
       DEMO_ADMIN_EMAIL: ${DEMO_ADMIN_EMAIL:-admin.demo@knocknockdoc.test}
       DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
       DEMO_ACCOUNT_PASSWORD: ${DEMO_ACCOUNT_PASSWORD:-}
+      ALLOW_INSECURE_LOCAL_DEMO_ADMIN: ${ALLOW_INSECURE_LOCAL_DEMO_ADMIN:-false}
     depends_on:
       db:
         condition: service_healthy
@@ -87,6 +88,7 @@ services:
     environment:
       BACKEND_INTERNAL_URL: http://backend:8000
       NEXT_TELEMETRY_DISABLED: "1"
+      LOCAL_DEMO_ADMIN_UI: ${ALLOW_INSECURE_LOCAL_DEMO_ADMIN:-false}
     depends_on:
       backend:
         condition: service_healthy
