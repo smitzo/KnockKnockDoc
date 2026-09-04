@@ -238,6 +238,30 @@ class PartnerApplicationReviewSerializer(serializers.ModelSerializer):
         }
 
 
+class PartnerApplicationReviewListSerializer(serializers.ModelSerializer):
+    application_type_label = serializers.CharField(
+        source="get_application_type_display", read_only=True
+    )
+    status_label = serializers.CharField(source="get_status_display", read_only=True)
+
+    class Meta:
+        model = PartnerApplication
+        fields = [
+            "id",
+            "application_type",
+            "application_type_label",
+            "status",
+            "status_label",
+            "display_name",
+            "organization_name",
+            "country",
+            "city",
+            "reviewed_at",
+            "created_at",
+            "updated_at",
+        ]
+
+
 class ApplicationReviewActionSerializer(serializers.Serializer):
     reason_code = serializers.ChoiceField(
         choices=ReviewReason.choices,

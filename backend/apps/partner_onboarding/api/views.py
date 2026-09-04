@@ -26,6 +26,7 @@ from ..services import (
 )
 from .serializers import (
     ApplicationReviewActionSerializer,
+    PartnerApplicationReviewListSerializer,
     PartnerApplicationReviewSerializer,
     PartnerApplicationSerializer,
 )
@@ -118,7 +119,7 @@ class ApplicationReviewMixin:
 
 
 class ApplicationReviewListView(ApplicationReviewMixin, ListAPIView):
-    serializer_class = PartnerApplicationReviewSerializer
+    serializer_class = PartnerApplicationReviewListSerializer
     pagination_class = ApplicationReviewPagination
 
     def list(self, request, *args, **kwargs):
