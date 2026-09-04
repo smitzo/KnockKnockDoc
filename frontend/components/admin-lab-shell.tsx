@@ -22,7 +22,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
   const [fixtureBusy, setFixtureBusy] = useState(false);
   const [fixtureNotice, setFixtureNotice] = useState("");
   const [fixtureError, setFixtureError] = useState("");
-  const fixtureLoaded = data.summary.fixture.loaded;
+  const fixtureLoaded = data.summary.fixture.enabled;
   const normalizedQuery = query.trim().toLowerCase();
   const doctors = useMemo(
     () => data.doctors.filter((doctor) => {
@@ -95,7 +95,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
       <main className="lab-main page-shell">
         <section className="lab-heading">
           <div><span className="eyebrow">Demo control center</span><h1>{fixtureLoaded ? "Explore the sample product data." : "Start by loading demo data."}</h1><p>This page is visible only to the administrator.</p></div>
-          <Link className="button button--ghost" href="/blog">View blogs <Icon name="arrow" /></Link>
+          <div className="lab-heading__actions"><Link className="button button--ghost" href="/network">Preview doctor network <Icon name="arrow" /></Link><Link className="button button--ghost" href="/blog">View blogs</Link></div>
         </section>
         <section className={`fixture-control fixture-control--${data.summary.fixture.state}`} aria-labelledby="fixture-control-title">
           <div>
@@ -115,8 +115,12 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
         {fixtureLoaded && <section className="lab-stats" aria-label="Demo data summary">
           <article><span>Doctors</span><strong>{data.summary.counts.doctors}</strong><small>Profiles with images and account details</small></article>
           <article><span>Patients</span><strong>{data.summary.counts.patients}</strong><small>Sample journeys across seven stages</small></article>
-          <article><span>Specialties</span><strong>{data.summary.doctor_specialties.length}</strong><small>Ready for search and filtering</small></article>
-          <article><span>Real records</span><strong>0</strong><small>Demo information only</small></article>
+          <article><span>Hospitals</span><strong>{data.summary.coverage.hospitals}</strong><small>Provider organizations in the demo network</small></article>
+          <article><span>Directory cards</span><strong>{data.summary.coverage.directory_profiles}</strong><small>Visible only through authorized product views</small></article>
+          <article><span>Ratings</span><strong>{data.summary.coverage.ratings}</strong><small>Professional collaboration signals</small></article>
+          <article><span>Connections</span><strong>{data.summary.coverage.connections}</strong><small>Purpose-bound doctor relationships</small></article>
+          <article><span>Messages</span><strong>{data.summary.coverage.messages}</strong><small>Body content remains participant-only</small></article>
+          <article><span>Referrals</span><strong>{data.summary.coverage.referrals}</strong><small>Scoped workflow rehearsals</small></article>
         </section>}
 
         {!fixtureLoaded && (
@@ -182,6 +186,8 @@ function FlowMap({ data }: { data: AdminLabData }) {
         <li key={item.journey_stage}><span>{index + 1}</span><div><strong>{stageLabel(item.journey_stage)}</strong><small>{item.count} fictional patients</small><i><b style={{ width: `${(item.count / total) * 100 * 5}%` }} /></i></div>{index < data.summary.patient_stages.length - 1 && <Icon name="arrow" />}</li>
       ))}</ol>
       <div className="flow-map__boundary"><Icon name="shield" /><p><strong>Catalog row ≠ care authorization.</strong> A real workspace query still requires active account, membership, assignment, grant, and scope. This lab can inspect catalog state only.</p></div>
+      <div className="flow-map__hospitals"><span className="eyebrow">Demo hospitals</span><ul>{data.summary.hospitals.map((hospital) => <li key={hospital.id}><Icon name="home" /><span><strong>{hospital.name}</strong><small>{hospital.slug}</small></span></li>)}</ul></div>
+      <div className="flow-map__boundary"><Icon name="lock" /><p><strong>Admin visibility is bounded.</strong> Counts help inspect demo coverage, but platform administration does not grant access to participant-only message bodies or scoped case contents.</p></div>
     </section>
   );
 }

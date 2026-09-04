@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/login-form";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
-import { getServerSession } from "@/lib/api";
+import { getProductMode, getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
 import styles from "@/styles/login.module.css";
 
@@ -16,7 +16,10 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const cookieHeader = await getServerCookieHeader();
-  const session = await getServerSession(cookieHeader);
+  const [session, productMode] = await Promise.all([
+    getServerSession(cookieHeader),
+    getProductMode(),
+  ]);
   if (session) {
     const isAdmin = session.memberships.some((membership) => membership.role === "admin");
     const isProfessional = session.profile.account_type === "professional";
@@ -30,10 +33,8 @@ export default async function LoginPage({
       <main className={styles.page}>
         <div className="login-layout page-shell">
           <section className="login-context">
-            <span className="eyebrow"><IconShield /> Product demo</span>
-            <h2>See the full product in three simple steps.</h2>
-            <p>Start as the administrator, load the sample data, then explore the doctor and patient flows.</p>
-            <ol><li><span>1</span><div><strong>Sign in as admin</strong><small>Use the local demo credentials.</small></div></li><li><span>2</span><div><strong>Load demo data</strong><small>Create 30 doctors and 30 patients.</small></div></li><li><span>3</span><div><strong>Explore the product</strong><small>Review profiles, connections, chat, and referrals.</small></div></li></ol>
+            <span className="eyebrow"><IconShield /> Account access</span>
+            {productMode.demo_data_enabled ? <><h2>Demo data is active.</h2><p>Sign in to explore doctor profiles, connections, messages, and referrals.</p><ol><li><span>1</span><div><strong>Sign in</strong><small>Use an account created for this demo.</small></div></li><li><span>2</span><div><strong>Explore the network</strong><small>Compare doctors and professional signals.</small></div></li><li><span>3</span><div><strong>Follow a referral</strong><small>Review the connected workflow.</small></div></li></ol></> : <><h2>Welcome back.</h2><p>Sign in to manage professional connections, referrals, and hospital collaboration.</p></>}
           </section>
           <LoginForm localAdminEnabled={localAdminEnabled} nextPath={next} />
         </div>

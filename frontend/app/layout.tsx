@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { DemoModeBanner, ProductModeProvider } from "@/components/product-mode-provider";
+import { getProductMode } from "@/lib/api";
+
 import "./tailwind.css";
 import "./globals.css";
 
@@ -12,10 +15,16 @@ export const metadata: Metadata = {
     "A doctor-first professional network for trusted cross-border referral relationships.",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const productMode = await getProductMode();
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body data-product-mode={productMode.mode}>
+        <ProductModeProvider value={productMode}>
+          <DemoModeBanner />
+          {children}
+        </ProductModeProvider>
+      </body>
     </html>
   );
 }

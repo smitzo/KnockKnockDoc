@@ -4,6 +4,7 @@ import { FormEvent, useRef, useState } from "react";
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
+import { useProductMode } from "@/components/product-mode-provider";
 import { submitPartnerApplication } from "@/lib/api";
 import type { PartnerApplicationPayload } from "@/lib/types";
 import styles from "@/styles/registration.module.css";
@@ -47,12 +48,31 @@ function ListField({ label, name, example }: { label: string; name: string; exam
 }
 
 export function PartnerApplicationForm({ kind }: { kind: "doctor" | "hospital" }) {
+  const productMode = useProductMode();
   const formRef = useRef<HTMLFormElement>(null);
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const isDoctor = kind === "doctor";
+
+  if (!productMode.demo_data_enabled) {
+    return (
+      <section className={styles.success}>
+        <span><Icon name="lock" /></span>
+        <p className={styles.kicker}>Applications</p>
+        <h1>Applications are not open in this environment yet.</h1>
+        <p>
+          You can explore the network, hospital model, articles, and referral process now.
+          Account applications will open after the review and verification operations are ready.
+        </p>
+        <div className={styles.successActions}>
+          <Link className="button" href="/doctors">Explore doctors</Link>
+          <Link className="button button--ghost" href="/how-to">How it works</Link>
+        </div>
+      </section>
+    );
+  }
 
   function validateCurrentStep() {
     const fieldset = formRef.current?.querySelector<HTMLFieldSetElement>(

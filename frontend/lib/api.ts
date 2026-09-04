@@ -12,6 +12,7 @@ import type {
   ProfessionalConversation,
   ProfessionalMessage,
   ProfessionalNetworkData,
+  ProductModeResponse,
   ReferralCase,
   SessionResponse,
   SyntheticDoctor,
@@ -50,6 +51,21 @@ export async function getServerSession(cookieHeader: string): Promise<SessionRes
   }
 }
 
+export async function getProductMode(): Promise<ProductModeResponse> {
+  try {
+    const mode = await serverGet<ProductModeResponse>("/api/v1/product-mode/", "");
+    if (
+      !["standard", "demo"].includes(mode.mode) ||
+      mode.demo_data_enabled !== (mode.mode === "demo")
+    ) {
+      throw new ApiRequestError("Product mode response did not validate", 502);
+    }
+    return mode;
+  } catch {
+    return { mode: "standard", demo_data_enabled: false };
+  }
+}
+
 export async function getDemoWorkspace(cookieHeader: string): Promise<DemoWorkspaceResponse> {
   const data = await serverGet<DemoWorkspaceResponse>(
     "/api/v1/demo/workspace/",
@@ -82,12 +98,16 @@ export async function getAdminLab(cookieHeader: string): Promise<AdminLabData> {
 
 export async function getProfessionalNetwork(
   cookieHeader: string,
+  directoryOnly = false,
 ): Promise<ProfessionalNetworkData> {
-  const [doctors, connections, conversations] = await Promise.all([
-    serverGet<PaginatedResponse<ProfessionalCard>>(
-      "/api/v1/network/doctors/?page_size=50",
-      cookieHeader,
-    ),
+  const doctors = await serverGet<PaginatedResponse<ProfessionalCard>>(
+    "/api/v1/network/doctors/?page_size=50",
+    cookieHeader,
+  );
+  if (directoryOnly) {
+    return { doctors: doctors.results, connections: [], conversations: [] };
+  }
+  const [connections, conversations] = await Promise.all([
     serverGet<ProfessionalConnection[]>("/api/v1/network/connections/", cookieHeader),
     serverGet<ProfessionalConversation[]>("/api/v1/network/conversations/", cookieHeader),
   ]);

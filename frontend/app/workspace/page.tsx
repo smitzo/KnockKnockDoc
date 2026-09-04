@@ -4,17 +4,29 @@ import { redirect } from "next/navigation";
 
 import { Brand } from "@/components/site-header";
 import { WorkspaceShell } from "@/components/workspace-shell";
-import { ApiRequestError, getDemoWorkspace, getServerSession } from "@/lib/api";
+import { ApiRequestError, getDemoWorkspace, getProductMode, getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
 import accessStyles from "@/styles/access.module.css";
 
-export const metadata: Metadata = { title: "Synthetic case workspace" };
+export const metadata: Metadata = { title: "Referral workspace" };
 export const dynamic = "force-dynamic";
 
 export default async function WorkspacePage() {
   const cookieHeader = await getServerCookieHeader();
-  const session = await getServerSession(cookieHeader);
+  const [session, productMode] = await Promise.all([
+    getServerSession(cookieHeader),
+    getProductMode(),
+  ]);
   if (!session) redirect("/login?next=/workspace");
+  if (!productMode.demo_data_enabled) return (
+    <main className={`${accessStyles.page} page-shell`}>
+      <Brand />
+      <span className={accessStyles.code}>Referral workspace</span>
+      <h1>No referrals are assigned to you yet.</h1>
+      <p>New referrals will appear here after the patient sharing decision and your organization assignment are complete.</p>
+      <div><Link className="button" href="/network">Open doctor network</Link><Link className="button button--ghost" href="/how-to">How referrals work</Link></div>
+    </main>
+  );
   let workspace = null;
   let accessDenied = false;
   try {

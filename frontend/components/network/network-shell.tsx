@@ -56,10 +56,14 @@ function DoctorAvatar({ doctor }: { doctor: ProfessionalCard }) {
 }
 
 export function NetworkShell({
+  adminPreview,
   data,
+  demoModeEnabled,
   session,
 }: {
+  adminPreview: boolean;
   data: ProfessionalNetworkData;
+  demoModeEnabled: boolean;
   session: SessionResponse;
 }) {
   const router = useRouter();
@@ -81,6 +85,7 @@ export function NetworkShell({
   const [signingOut, setSigningOut] = useState(false);
 
   const membership = session.memberships[0];
+  const visibleTabs = adminPreview ? tabs.filter((tab) => tab.id === "discover") : tabs;
   const connectionByPeer = useMemo(
     () => new Map(connections.map((connection) => [connection.peer.id, connection])),
     [connections],
@@ -185,22 +190,23 @@ export function NetworkShell({
         <aside className={styles.sidebar}>
           <Brand />
           <nav aria-label="Doctor workspace">
-            {tabs.map((tab) => <button aria-current={activeTab === tab.id ? "page" : undefined} key={tab.id} onClick={() => setActiveTab(tab.id)} type="button"><Icon name={tab.icon} />{tab.label}{tab.id === "messages" && conversations.length > 0 && <span>{conversations.length}</span>}</button>)}
+            {visibleTabs.map((tab) => <button aria-current={activeTab === tab.id ? "page" : undefined} key={tab.id} onClick={() => setActiveTab(tab.id)} type="button"><Icon name={tab.icon} />{tab.label}{tab.id === "messages" && conversations.length > 0 && <span>{conversations.length}</span>}</button>)}
           </nav>
-          <div className={styles.sidebarBoundary}><Icon name="shield" /><p><strong>Demo workspace</strong>Use sample information only. Keep patient details inside an approved referral.</p></div>
+          <div className={styles.sidebarBoundary}><Icon name="shield" /><p><strong>{demoModeEnabled ? "Demo data active" : "Professional privacy"}</strong>{demoModeEnabled ? "Profiles and activity on this screen are sample data." : "Keep patient details inside an authorized referral."}</p></div>
           <div className={styles.sidebarAccount}><span>{session.profile.display_name.slice(0, 2).toUpperCase()}</span><div><strong>{session.profile.display_name}</strong><small>{membership?.organization.name ?? "Professional account"}</small></div><button aria-label="Sign out" disabled={signingOut} onClick={signOut} type="button">{signingOut ? "…" : "↗"}</button></div>
         </aside>
 
         <main className={styles.main}>
           <header className={styles.mobileHeader}><Brand /><button onClick={signOut} type="button">Sign out</button></header>
-          <nav className={styles.mobileTabs} aria-label="Doctor workspace sections">{tabs.map((tab) => <button aria-current={activeTab === tab.id ? "page" : undefined} key={tab.id} onClick={() => setActiveTab(tab.id)} type="button"><Icon name={tab.icon} /><span>{tab.label}</span></button>)}</nav>
+          <nav className={styles.mobileTabs} aria-label="Doctor workspace sections">{visibleTabs.map((tab) => <button aria-current={activeTab === tab.id ? "page" : undefined} key={tab.id} onClick={() => setActiveTab(tab.id)} type="button"><Icon name={tab.icon} /><span>{tab.label}</span></button>)}</nav>
           {error && <div className={styles.error} role="alert"><Icon name="shield" /><span><strong>That action did not complete.</strong>{error}</span><button aria-label="Dismiss error" onClick={() => setError("")} type="button">×</button></div>}
 
           {activeTab === "discover" && <section className={styles.view}>
+            {adminPreview && <div className={styles.ratingBoundary}><Icon name="lock" /><p><strong>Read-only administrator preview.</strong> You can inspect demo doctor cards, but administrator status does not let you connect, read conversations, or open referral contents.</p></div>}
             <div className={styles.viewHeading}><div><span>Professional discovery</span><h1>Find a specialist</h1><p>Compare specialties, experience, locations, and peer-collaboration feedback before you connect.</p></div><span className={styles.resultCount}>{doctors.length} profiles</span></div>
             <form className={styles.search} onSubmit={searchDoctors}><Icon name="search" /><label><span className={styles.srOnly}>Search professionals</span><input maxLength={80} onChange={(event) => setQuery(event.target.value)} placeholder="Search specialty, doctor, city, or hospital" type="search" value={query} /></label><button className="button" disabled={searching} type="submit">{searching ? "Searching…" : "Search"}</button></form>
-            <div className={styles.ratingBoundary}><Icon name="shield" /><p><strong>Collaboration ratings are not clinical quality scores.</strong> They summarize fictional peer feedback about communication, collaboration, and handback. Always verify suitability independently.</p></div>
-            {doctors.length === 0 ? <div className={styles.empty}><Icon name="search" /><h2>No matching professionals</h2><p>Try a specialty, location, hospital, or a shorter search.</p></div> : <div className={styles.doctorGrid}>{doctors.map((doctor) => {
+            <div className={styles.ratingBoundary}><Icon name="shield" /><p><strong>Collaboration ratings are not clinical quality scores.</strong> {demoModeEnabled ? "Demo ratings summarize sample peer feedback about communication, collaboration, and handback." : "They cover professional communication, collaboration, and handback only."} Always verify suitability independently.</p></div>
+            {doctors.length === 0 ? <div className={styles.empty}><Icon name="search" /><h2>{demoModeEnabled ? "No matching professionals" : "No doctor profiles are published yet"}</h2><p>{demoModeEnabled ? "Try a specialty, location, hospital, or a shorter search." : "Reviewed professional profiles will appear here when the network opens in your corridor."}</p></div> : <div className={styles.doctorGrid}>{doctors.map((doctor) => {
               const connection = connectionByPeer.get(doctor.id);
               const isSelected = selectedDoctor === doctor.id;
               return <article className={styles.doctorCard} key={doctor.id}>
@@ -208,8 +214,8 @@ export function NetworkShell({
                 <p className={styles.summary}>{doctor.professional_summary}</p>
                 <dl className={styles.doctorFacts}><div><dt>Works at</dt><dd>{doctor.organization_name}</dd></div><div><dt>Location</dt><dd>{doctor.city}, {doctor.country}</dd></div><div><dt>Languages</dt><dd>{doctor.languages.join(", ")}</dd></div></dl>
                 <div className={styles.rating}><div><strong>{doctor.rating_average ?? "—"}<small>/5</small></strong><span>{doctor.rating_count} peer reviews</span></div><dl><div><dt>Communication</dt><dd>{doctor.rating_breakdown?.communication ?? "—"}</dd></div><div><dt>Collaboration</dt><dd>{doctor.rating_breakdown?.collaboration ?? "—"}</dd></div><div><dt>Handback</dt><dd>{doctor.rating_breakdown?.handback ?? "—"}</dd></div></dl></div>
-                {connection ? <div className={styles.connectionState}><Icon name={connection.status === "accepted" ? "check" : "timeline"} /><span><strong>{connection.status_label}</strong>{connection.purpose_label}</span>{connection.status === "accepted" && <button onClick={() => setActiveTab("messages")} type="button">Message</button>}</div> : <button className="button button--ghost" disabled={!doctor.accepts_connections} onClick={() => setSelectedDoctor(isSelected ? null : doctor.id)} type="button">{isSelected ? "Cancel" : "Connect"} {!isSelected && <Icon name="plus" />}</button>}
-                {isSelected && !connection && <form className={styles.connectForm} onSubmit={(event) => requestConnection(event, doctor)}><h3>Why do you want to connect?</h3><label><span>Purpose</span><select defaultValue="referral_collaboration" name="purpose">{purposes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label><span>Short introduction <small>(optional)</small></span><textarea maxLength={400} name="note" placeholder="Introduce your professional collaboration interest." rows={3} /></label><p><Icon name="lock" /> Keep patient details inside an approved referral.</p><button className="button" disabled={connectionBusy === doctor.id} type="submit">{connectionBusy === doctor.id ? "Sending…" : "Send request"}</button></form>}
+                {adminPreview ? <span className={styles.verified}><Icon name="lock" /> Preview only</span> : connection ? <div className={styles.connectionState}><Icon name={connection.status === "accepted" ? "check" : "timeline"} /><span><strong>{connection.status_label}</strong>{connection.purpose_label}</span>{connection.status === "accepted" && <button onClick={() => setActiveTab("messages")} type="button">Message</button>}</div> : <button className="button button--ghost" disabled={!doctor.accepts_connections} onClick={() => setSelectedDoctor(isSelected ? null : doctor.id)} type="button">{isSelected ? "Cancel" : "Connect"} {!isSelected && <Icon name="plus" />}</button>}
+                {!adminPreview && isSelected && !connection && <form className={styles.connectForm} onSubmit={(event) => requestConnection(event, doctor)}><h3>Why do you want to connect?</h3><label><span>Purpose</span><select defaultValue="referral_collaboration" name="purpose">{purposes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label><span>Short introduction <small>(optional)</small></span><textarea maxLength={400} name="note" placeholder="Introduce your professional collaboration interest." rows={3} /></label><p><Icon name="lock" /> Keep patient details inside an approved referral.</p><button className="button" disabled={connectionBusy === doctor.id} type="submit">{connectionBusy === doctor.id ? "Sending…" : "Send request"}</button></form>}
               </article>;
             })}</div>}
           </section>}
@@ -230,7 +236,7 @@ export function NetworkShell({
           {activeTab === "referrals" && <section className={styles.view}>
             <div className={styles.viewHeading}><div><span>Relationship to handoff</span><h1>Start from an accepted connection</h1><p>Only accepted peers are shown here. A professional connection never grants case access by itself.</p></div></div>
             <div className={styles.referralBoundary}><Icon name="shield" /><div><strong>Connections and case access are separate</strong><p>Starting a referral does not automatically share it. The patient and each care-team member receive their own approved access.</p></div></div>
-            {acceptedConnections.length === 0 ? <div className={styles.empty}><Icon name="document" /><h2>No accepted specialist connection</h2><p>Connect with a doctor and wait for acceptance before rehearsing a referral.</p><button className="button" onClick={() => setActiveTab("discover")} type="button">Find a specialist</button></div> : <div className={styles.referralList}>{acceptedConnections.map((connection) => <article key={connection.id}><DoctorAvatar doctor={connection.peer} /><div><span>Accepted connection</span><h2>{connection.peer.display_name}</h2><p>{connection.peer.specialty} · {connection.purpose_label}</p></div><Link className="button" href="/refer">Rehearse referral <Icon name="arrow" /></Link></article>)}</div>}
+            {acceptedConnections.length === 0 ? <div className={styles.empty}><Icon name="document" /><h2>No accepted specialist connection</h2><p>Connect with a doctor and wait for acceptance before starting a referral.</p><button className="button" onClick={() => setActiveTab("discover")} type="button">Find a specialist</button></div> : <div className={styles.referralList}>{acceptedConnections.map((connection) => <article key={connection.id}><DoctorAvatar doctor={connection.peer} /><div><span>Accepted connection</span><h2>{connection.peer.display_name}</h2><p>{connection.peer.specialty} · {connection.purpose_label}</p></div><Link className="button" href="/refer">Create referral <Icon name="arrow" /></Link></article>)}</div>}
           </section>}
         </main>
       </div>

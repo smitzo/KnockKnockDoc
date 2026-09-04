@@ -132,6 +132,11 @@ export interface DemoWorkspaceResponse {
   case: ReferralCase;
 }
 
+export interface ProductModeResponse {
+  mode: "standard" | "demo";
+  demo_data_enabled: boolean;
+}
+
 export interface SyntheticDoctor {
   id: string;
   fixture_key: string;
@@ -178,6 +183,16 @@ export interface PaginatedResponse<T> {
 export interface AdminLabSummary {
   prototype: { mode: "synthetic-only"; real_people: false; admin_only: true };
   counts: { doctors: number; patients: number };
+  coverage: {
+    hospitals: number;
+    directory_profiles: number;
+    ratings: number;
+    connections: number;
+    conversations: number;
+    messages: number;
+    referrals: number;
+  };
+  hospitals: { id: string; name: string; slug: string }[];
   fixture: DemoFixtureStatus;
   doctor_specialties: { specialty: string; count: number }[];
   patient_stages: { journey_stage: string; count: number }[];
@@ -192,6 +207,7 @@ export interface DemoFixtureStatus {
   };
   state: "empty" | "partial" | "loaded";
   loaded: boolean;
+  enabled: boolean;
   counts: Record<string, { actual: number; expected: number }>;
 }
 
