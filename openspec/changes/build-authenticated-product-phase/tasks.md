@@ -16,6 +16,7 @@
 - [x] 2.5 Build the responsive admin data-lab route with search, filters, summaries, and flow inspection.
 - [x] 2.6 Move all synthetic catalog/network/referral records into a versioned, validated JSON fixture collection without credentials.
 - [x] 2.7 Add an admin-only load/delete toggle, exact deletion confirmation, persistent admin bootstrap, mutation audit, and negative permission tests.
+- [ ] 2.8 Persist standard/demo mode, gate every synthetic product selector, keep normal feature shells/blogs available, and add a privacy-bounded admin coverage preview.
 
 ## 3. Education and visual onboarding
 

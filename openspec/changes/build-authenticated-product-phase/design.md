@@ -16,6 +16,12 @@ Every case query requires active user and profile state, verified email, active 
 
 Synthetic doctor and patient catalog rows are not referral participants and do not imply case access. Only an active platform-admin membership can call the lab API or render its route. Non-admin users receive `403`; anonymous users receive an authentication failure. The lab exposes fictional operational fields only and no passwords.
 
+### Make demo state an explicit data switch
+
+Prototype/debug configuration describes the deployment safety boundary; it must not make fixtures visible. A persisted single product-mode record starts in `standard`. The fixture load transaction flips it to `demo` only after manifest/count verification, and confirmed deletion flips it back to `standard` while removing fixture-owned records. Normal routes remain present in both modes. Product selectors return synthetic rows only in demo mode; standard mode renders honest empty/live-ready states and omits demo-specific copy.
+
+The admin control center may show bounded demo coverage across providers, hospitals, connections, referrals, and messages. It does not inherit participant access: no generic admin message-body reading, case content access, or role impersonation is introduced.
+
 ### Use local fictional visual assets
 
 Generated editorial images are stored in the repository and carry descriptive alt text. Directory avatars are deterministic local synthetic visuals, not photos scraped from real people. The UI labels all people and metrics as fictional.
@@ -38,11 +44,12 @@ Business hypotheses, economics, outreach material, and private founder questions
 
 ## Risks and controls
 
-- Large synthetic fixtures may look real: every API envelope, route, card, and profile states that it is fictional.
+- Large synthetic fixtures may look real: fixture data is absent in standard mode and every fixture-backed API/card labels demo provenance after explicit activation.
 - Admin directory leakage: permission checks are enforced at the API queryset and page gate, with negative tests for patient, doctor, hospital, and anonymous sessions.
 - Editorial claims may drift: articles display “last reviewed” dates and direct sources; they avoid superlatives not supported by evidence.
 - Generated imagery may imply a real endorsement: captions state that people/scenes are illustrative and AI-generated.
 - Session auth introduces CSRF: Django CSRF middleware, same-origin proxying, masked token retrieval, SameSite cookies, and mutation tests are mandatory.
+- Mode/data drift may leak partial fixtures: mode changes share the fixture transaction, selectors require `demo`, and expected-count verification precedes activation.
 
 ## Rollback
 
