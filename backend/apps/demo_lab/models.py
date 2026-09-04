@@ -5,6 +5,29 @@ from django.db.models import Q
 from apps.core.models import UUIDTimeStampedModel
 
 
+class ProductMode(models.TextChoices):
+    STANDARD = "standard", "Standard"
+    DEMO = "demo", "Demo"
+
+
+class ProductModeState(models.Model):
+    key = models.CharField(primary_key=True, max_length=40, default="primary")
+    mode = models.CharField(
+        max_length=16,
+        choices=ProductMode.choices,
+        default=ProductMode.STANDARD,
+    )
+    fixture_id = models.CharField(max_length=80, blank=True)
+    changed_at = models.DateTimeField(auto_now=True)
+    changed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="product_mode_changes",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+
 class DoctorAvailability(models.TextChoices):
     ACCEPTING = "accepting", "Accepting synthetic reviews"
     LIMITED = "limited", "Limited synthetic capacity"

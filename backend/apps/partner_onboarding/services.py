@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
 
+from apps.demo_lab.selectors import lock_demo_mode_enabled
 from apps.identity.models import SecurityAction
 from apps.identity.services import normalize_login_email, record_security_event
 
@@ -25,8 +26,14 @@ class ApplicationPasswordError(ValueError):
     pass
 
 
+class ApplicationDemoModeError(ValueError):
+    pass
+
+
 @transaction.atomic
 def submit_partner_application(*, validated_data: dict) -> ApplicationSubmissionResult:
+    if not lock_demo_mode_enabled():
+        raise ApplicationDemoModeError("Demo data is not enabled.")
     password = validated_data.pop("password")
     details = validated_data.pop("details")
     email = normalize_login_email(validated_data.pop("email"))

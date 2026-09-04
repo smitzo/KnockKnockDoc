@@ -20,7 +20,13 @@ from apps.referrals.models import (
 )
 
 from .fixtures import ProductDemoFixture, load_product_demo_fixture
-from .models import SyntheticDoctorProfile, SyntheticPatientProfile
+from .models import (
+    ProductMode,
+    ProductModeState,
+    SyntheticDoctorProfile,
+    SyntheticPatientProfile,
+)
+from .selectors import PRODUCT_MODE_KEY, is_demo_mode_enabled
 
 
 DELETE_CONFIRMATION = "DELETE SYNTHETIC DEMO DATA"
@@ -97,6 +103,7 @@ def get_demo_fixture_status() -> dict:
         },
         "state": "loaded" if loaded else "partial" if populated else "empty",
         "loaded": loaded,
+        "enabled": is_demo_mode_enabled(),
         "counts": {
             key: {"actual": actual[key], "expected": value}
             for key, value in expected.items()
@@ -105,7 +112,7 @@ def get_demo_fixture_status() -> dict:
 
 
 @transaction.atomic
-def load_demo_data() -> dict:
+def load_demo_data(*, actor=None) -> dict:
     _lock_fixture_namespace()
     try:
         call_command("seed_product_demo", verbosity=0)
@@ -114,13 +121,29 @@ def load_demo_data() -> dict:
     status = get_demo_fixture_status()
     if not status["loaded"]:
         raise DemoFixtureOperationError("The demo fixture did not reach its expected loaded state.")
-    return status
+    ProductModeState.objects.update_or_create(
+        key=PRODUCT_MODE_KEY,
+        defaults={
+            "mode": ProductMode.DEMO,
+            "fixture_id": status["fixture"]["id"],
+            "changed_by": actor,
+        },
+    )
+    return get_demo_fixture_status()
 
 
 @transaction.atomic
-def delete_demo_data() -> tuple[dict, dict]:
+def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
     fixture = load_product_demo_fixture()
     _lock_fixture_namespace()
+    ProductModeState.objects.update_or_create(
+        key=PRODUCT_MODE_KEY,
+        defaults={
+            "mode": ProductMode.STANDARD,
+            "fixture_id": "",
+            "changed_by": actor,
+        },
+    )
     user_model = get_user_model()
     fixture_users = user_model.objects.filter(username__in=fixture.participant_emails)
     fixture_user_ids = list(fixture_users.values_list("id", flat=True))

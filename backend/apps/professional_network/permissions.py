@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from apps.identity.models import MembershipRole
+from apps.identity.models import MembershipRole, OrganizationType
 from apps.identity.selectors import active_memberships_for_user
 
 
@@ -21,4 +21,16 @@ class IsVerifiedProfessional(BasePermission):
             return False
         return active_memberships_for_user(request.user).filter(
             role__in=ELIGIBLE_NETWORK_ROLES
+        ).exists()
+
+
+class IsVerifiedProfessionalOrPlatformAdmin(IsVerifiedProfessional):
+    message = "An active professional or platform administrator membership is required."
+
+    def has_permission(self, request, view):
+        if super().has_permission(request, view):
+            return True
+        return active_memberships_for_user(request.user).filter(
+            role=MembershipRole.ADMIN,
+            organization__organization_type=OrganizationType.PLATFORM,
         ).exists()

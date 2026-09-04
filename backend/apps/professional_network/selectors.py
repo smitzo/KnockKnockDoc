@@ -1,9 +1,13 @@
 from django.db.models import Q
 
+from apps.demo_lab.selectors import is_demo_mode_enabled
+
 from .models import ConnectionStatus, ProfessionalConnection, ProfessionalConversation
 
 
 def connections_for_user(user):
+    if not is_demo_mode_enabled():
+        return ProfessionalConnection.objects.none()
     return ProfessionalConnection.objects.filter(
         Q(requester=user) | Q(recipient=user)
     ).select_related(
@@ -15,6 +19,8 @@ def connections_for_user(user):
 
 
 def conversations_for_user(user):
+    if not is_demo_mode_enabled():
+        return ProfessionalConversation.objects.none()
     return ProfessionalConversation.objects.filter(
         Q(connection__requester=user) | Q(connection__recipient=user),
         connection__status=ConnectionStatus.ACCEPTED,

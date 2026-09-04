@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
+from apps.demo_lab.selectors import current_product_mode
+
 
 class HealthView(APIView):
     authentication_classes = []
@@ -33,4 +35,20 @@ class HealthView(APIView):
                 "data_policy": "synthetic-only" if settings.PROTOTYPE_MODE else "configured",
             },
             status=status_code,
+        )
+
+
+class ProductModeView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "health"
+
+    def get(self, request):
+        mode = current_product_mode()
+        return Response(
+            {
+                "mode": mode,
+                "demo_data_enabled": mode == "demo",
+            }
         )

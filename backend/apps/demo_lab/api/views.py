@@ -7,13 +7,23 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
-from apps.identity.models import SecurityAction
+from apps.identity.models import Organization, OrganizationType, SecurityAction
 from apps.identity.permissions import HasActiveIdentity
 from apps.identity.selectors import active_memberships_for_user
 from apps.identity.services import record_security_event
+from apps.professional_network.models import (
+    ProfessionalConnection,
+    ProfessionalConversation,
+    ProfessionalDirectoryProfile,
+    ProfessionalMessage,
+    ProfessionalRating,
+)
+from apps.referrals.models import ReferralCase
 
+from ..fixtures import load_product_demo_fixture
 from ..models import SyntheticDoctorProfile, SyntheticPatientProfile
 from ..permissions import IsPlatformAdmin
+from ..selectors import is_demo_mode_enabled
 from ..services import (
     DemoFixtureOperationError,
     delete_demo_data,
@@ -49,6 +59,34 @@ class AdminLabMixin:
 class AdminLabSummaryView(AdminLabMixin, APIView):
     def get(self, request):
         self.audit_read(request, "summary")
+        demo_enabled = is_demo_mode_enabled()
+        doctors = (
+            SyntheticDoctorProfile.objects.all()
+            if demo_enabled
+            else SyntheticDoctorProfile.objects.none()
+        )
+        patients = (
+            SyntheticPatientProfile.objects.all()
+            if demo_enabled
+            else SyntheticPatientProfile.objects.none()
+        )
+        demo_hospital_slugs = (
+            [
+                item["slug"]
+                for item in load_product_demo_fixture().organizations
+                if item["organization_type"] == OrganizationType.HOSPITAL
+            ]
+            if demo_enabled
+            else []
+        )
+        hospitals = (
+            Organization.objects.filter(
+                organization_type=OrganizationType.HOSPITAL,
+                slug__in=demo_hospital_slugs,
+            )
+            if demo_enabled
+            else Organization.objects.none()
+        )
         return Response(
             {
                 "prototype": {
@@ -57,17 +95,31 @@ class AdminLabSummaryView(AdminLabMixin, APIView):
                     "admin_only": True,
                 },
                 "counts": {
-                    "doctors": SyntheticDoctorProfile.objects.count(),
-                    "patients": SyntheticPatientProfile.objects.count(),
+                    "doctors": doctors.count(),
+                    "patients": patients.count(),
                 },
+                "coverage": {
+                    "hospitals": hospitals.count(),
+                    "directory_profiles": (
+                        ProfessionalDirectoryProfile.objects.count() if demo_enabled else 0
+                    ),
+                    "ratings": ProfessionalRating.objects.count() if demo_enabled else 0,
+                    "connections": ProfessionalConnection.objects.count() if demo_enabled else 0,
+                    "conversations": (
+                        ProfessionalConversation.objects.count() if demo_enabled else 0
+                    ),
+                    "messages": ProfessionalMessage._base_manager.count() if demo_enabled else 0,
+                    "referrals": ReferralCase.objects.count() if demo_enabled else 0,
+                },
+                "hospitals": list(hospitals.values("id", "name", "slug").order_by("name")),
                 "fixture": get_demo_fixture_status(),
                 "doctor_specialties": list(
-                    SyntheticDoctorProfile.objects.values("specialty")
+                    doctors.values("specialty")
                     .annotate(count=Count("id"))
                     .order_by("-count", "specialty")
                 ),
                 "patient_stages": list(
-                    SyntheticPatientProfile.objects.values("journey_stage")
+                    patients.values("journey_stage")
                     .annotate(count=Count("id"))
                     .order_by("journey_stage")
                 ),
@@ -90,7 +142,7 @@ class AdminLabFixtureView(AdminLabMixin, APIView):
 
     def post(self, request):
         try:
-            fixture_status = load_demo_data()
+            fixture_status = load_demo_data(actor=request.user)
         except DemoFixtureOperationError as exc:
             raise ValidationError({"detail": str(exc)}) from exc
         self._audit_mutation(request, SecurityAction.ADMIN_LAB_LOADED)
@@ -100,7 +152,7 @@ class AdminLabFixtureView(AdminLabMixin, APIView):
         serializer = DeleteDemoFixtureSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            fixture_status, removed = delete_demo_data()
+            fixture_status, removed = delete_demo_data(actor=request.user)
         except DemoFixtureOperationError as exc:
             raise ValidationError({"detail": str(exc)}) from exc
         self._audit_mutation(request, SecurityAction.ADMIN_LAB_DELETED)
@@ -124,6 +176,8 @@ class SyntheticDoctorListView(AdminLabMixin, ListAPIView):
     pagination_class = AdminLabPagination
 
     def get_queryset(self):
+        if not is_demo_mode_enabled():
+            return SyntheticDoctorProfile.objects.none()
         query = self.request.query_params.get("q", "").strip()[:80]
         queryset = SyntheticDoctorProfile.objects.select_related("user__identity_profile")
         if query:
@@ -145,6 +199,8 @@ class SyntheticPatientListView(AdminLabMixin, ListAPIView):
     pagination_class = AdminLabPagination
 
     def get_queryset(self):
+        if not is_demo_mode_enabled():
+            return SyntheticPatientProfile.objects.none()
         query = self.request.query_params.get("q", "").strip()[:80]
         queryset = SyntheticPatientProfile.objects.select_related("user__identity_profile")
         if query:

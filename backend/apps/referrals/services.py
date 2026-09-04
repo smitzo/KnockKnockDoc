@@ -7,6 +7,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 
+from apps.demo_lab.selectors import lock_demo_mode_enabled
 from apps.identity.models import (
     IdentityStatus,
     MembershipRole,
@@ -77,6 +78,8 @@ def create_referral_case(
     *,
     referrer_membership: OrganizationMembership,
 ) -> ReferralCase:
+    if not lock_demo_mode_enabled():
+        raise PermissionDenied("Demo data is not enabled.")
     referrer_membership = _lock_active_referrer_membership(referrer_membership)
     referrer_profile = referrer_membership.user.identity_profile
     reference = _new_reference()

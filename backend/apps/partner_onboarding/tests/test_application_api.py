@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
+from apps.demo_lab.models import ProductMode, ProductModeState
 from apps.identity.models import IdentityProfile, SecurityAction, SecurityEvent
 from apps.partner_onboarding.models import (
     ApplicationStatus,
@@ -20,6 +21,7 @@ class PartnerApplicationApiTests(TestCase):
     def setUp(self):
         cache.clear()
         self.client = APIClient(enforce_csrf_checks=True)
+        ProductModeState.objects.create(mode=ProductMode.DEMO, fixture_id="product-demo-v1")
 
     def test_doctor_application_creates_only_an_inactive_hashed_applicant(self):
         response = self._post_with_csrf(self._doctor_payload())
@@ -107,6 +109,14 @@ class PartnerApplicationApiTests(TestCase):
 
         self.assertEqual(login.status_code, 400)
         self.assertNotIn("profile", login.data)
+
+    def test_standard_mode_does_not_accept_synthetic_applications(self):
+        ProductModeState.objects.filter(key="primary").update(mode=ProductMode.STANDARD)
+
+        response = self._post_with_csrf(self._doctor_payload())
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(PartnerApplication.objects.count(), 0)
 
     def _post_with_csrf(self, payload):
         csrf_response = self.client.get("/api/v1/auth/csrf/")

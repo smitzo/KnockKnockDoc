@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APIClient
 
+from apps.demo_lab.models import ProductMode, ProductModeState
 from apps.identity.models import MembershipRole, MembershipStatus, SecurityAction, SecurityEvent
 from apps.referrals.models import (
     AccessScope,
@@ -35,6 +36,7 @@ class ReferralAuthorizationApiTests(TestCase):
         cls.specialist = user_model.objects.get(username="specialist.demo@knocknockdoc.test")
         cls.coordinator = user_model.objects.get(username="coordinator.demo@knocknockdoc.test")
         cls.hospital_b = user_model.objects.get(username="hospitalb.demo@knocknockdoc.test")
+        ProductModeState.objects.create(mode=ProductMode.DEMO, fixture_id="product-demo-v1")
 
     def setUp(self):
         cache.clear()
@@ -75,6 +77,20 @@ class ReferralAuthorizationApiTests(TestCase):
     def test_case_endpoints_require_authentication(self):
         self.assertEqual(self.client.get("/api/v1/cases/").status_code, 403)
         self.assertEqual(self.client.get("/api/v1/demo/workspace/").status_code, 403)
+
+    def test_standard_mode_hides_seeded_cases_and_blocks_synthetic_creation(self):
+        ProductModeState.objects.filter(key="primary").update(mode=ProductMode.STANDARD)
+        self.authenticate(self.referrer)
+
+        case_list = self.client.get("/api/v1/cases/")
+        detail = self.client.get(f"/api/v1/cases/{self.referral.id}/")
+        created = self.client.post("/api/v1/cases/", self.payload(), format="json")
+
+        self.assertEqual(case_list.status_code, 200)
+        self.assertEqual(case_list.data["count"], 0)
+        self.assertEqual(detail.status_code, 404)
+        self.assertEqual(created.status_code, 403)
+        self.assertEqual(ReferralCase.objects.count(), 1)
 
     def test_assigned_patient_receives_the_authorized_workspace(self):
         self.authenticate(self.patient)

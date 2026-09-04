@@ -7,7 +7,12 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
-from apps.demo_lab.models import SyntheticDoctorProfile, SyntheticPatientProfile
+from apps.demo_lab.models import (
+    ProductMode,
+    ProductModeState,
+    SyntheticDoctorProfile,
+    SyntheticPatientProfile,
+)
 from apps.demo_lab.fixtures import load_product_demo_fixture
 from apps.identity.models import SecurityAction, SecurityEvent
 from apps.professional_network.models import (
@@ -43,6 +48,7 @@ class AdminSyntheticLabApiTests(TestCase):
         cls.doctor = users.get(username="doctor01.demo@knocknockdoc.test")
         cls.patient = users.get(username="patient01.demo@knocknockdoc.test")
         cls.referrer = users.get(username="referrer.demo@knocknockdoc.test")
+        ProductModeState.objects.create(mode=ProductMode.DEMO, fixture_id="product-demo-v1")
 
     def setUp(self):
         self.client = APIClient()
@@ -67,6 +73,11 @@ class AdminSyntheticLabApiTests(TestCase):
 
         self.assertEqual(summary.status_code, 200)
         self.assertEqual(summary.data["counts"], {"doctors": 30, "patients": 30})
+        self.assertEqual(summary.data["coverage"]["hospitals"], 8)
+        self.assertEqual(len(summary.data["hospitals"]), 8)
+        self.assertTrue(
+            all(hospital["name"].endswith("· fictional") for hospital in summary.data["hospitals"])
+        )
         self.assertEqual(doctors.status_code, 200)
         self.assertEqual(doctors.data["count"], 30)
         self.assertEqual(len(doctors.data["results"]), 30)
@@ -180,10 +191,14 @@ class AdminDemoFixtureLifecycleTests(TestCase):
         self.assertEqual(empty.status_code, 200)
         self.assertEqual(empty.data["state"], "empty")
         self.assertFalse(empty.data["loaded"])
+        self.assertFalse(empty.data["enabled"])
+        mode = self.client.get("/api/v1/product-mode/")
+        self.assertEqual(mode.data, {"mode": "standard", "demo_data_enabled": False})
 
         first_load = self._load()
         self.assertEqual(first_load.status_code, 200)
         self.assertTrue(first_load.data["loaded"])
+        self.assertTrue(first_load.data["enabled"])
         self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
         self.assertEqual(SyntheticPatientProfile.objects.count(), 30)
         self.assertEqual(ProfessionalDirectoryProfile.objects.count(), 32)
@@ -211,6 +226,7 @@ class AdminDemoFixtureLifecycleTests(TestCase):
         )
         self.assertEqual(deleted.status_code, 200)
         self.assertEqual(deleted.data["fixture_status"]["state"], "empty")
+        self.assertFalse(deleted.data["fixture_status"]["enabled"])
         self.assertEqual(SyntheticDoctorProfile.objects.count(), 0)
         self.assertEqual(SyntheticPatientProfile.objects.count(), 0)
         self.assertEqual(ProfessionalDirectoryProfile.objects.count(), 0)
@@ -224,12 +240,34 @@ class AdminDemoFixtureLifecycleTests(TestCase):
         reloaded = self._load()
         self.assertEqual(reloaded.status_code, 200)
         self.assertTrue(reloaded.data["loaded"])
+        self.assertTrue(reloaded.data["enabled"])
         self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
         self.assertTrue(
             SecurityEvent.objects.filter(
                 action=SecurityAction.ADMIN_LAB_DELETED,
                 actor=self.admin,
             ).exists()
+        )
+
+    def test_seeded_rows_stay_hidden_until_demo_mode_is_enabled(self):
+        with patch.dict(
+            os.environ,
+            {
+                "DEMO_ACCOUNT_PASSWORD": ACCOUNT_PASSWORD,
+                "DEMO_ADMIN_PASSWORD": ADMIN_PASSWORD,
+            },
+        ):
+            call_command("seed_product_demo", verbosity=0)
+
+        summary = self.client.get("/api/v1/admin/lab/summary/")
+        doctors = self.client.get("/api/v1/admin/lab/doctors/")
+
+        self.assertEqual(SyntheticDoctorProfile.objects.count(), 30)
+        self.assertEqual(summary.data["counts"], {"doctors": 0, "patients": 0})
+        self.assertEqual(doctors.data["count"], 0)
+        self.assertEqual(
+            self.client.get("/api/v1/product-mode/").data,
+            {"mode": "standard", "demo_data_enabled": False},
         )
 
     def _load(self):

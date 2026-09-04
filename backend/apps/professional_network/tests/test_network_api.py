@@ -7,6 +7,7 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
+from apps.demo_lab.models import ProductMode, ProductModeState
 from apps.identity.models import SecurityAction, SecurityEvent
 from apps.professional_network.models import (
     ConnectionStatus,
@@ -41,6 +42,8 @@ class ProfessionalNetworkApiTests(TestCase):
         cls.referrer = users.get(username="referrer.demo@knocknockdoc.test")
         cls.patient = users.get(username="patient01.demo@knocknockdoc.test")
         cls.coordinator = users.get(username="coordinator.demo@knocknockdoc.test")
+        cls.admin = users.get(username="admin.demo@knocknockdoc.test")
+        ProductModeState.objects.create(mode=ProductMode.DEMO, fixture_id="product-demo-v1")
 
     def setUp(self):
         self.client = APIClient()
@@ -72,6 +75,43 @@ class ProfessionalNetworkApiTests(TestCase):
             response = self.client.get("/api/v1/network/doctors/")
             self.assertEqual(response.status_code, 403)
             self.assertNotIn("results", response.data)
+
+    def test_standard_mode_hides_all_seeded_network_records(self):
+        ProductModeState.objects.filter(key="primary").update(mode=ProductMode.STANDARD)
+        self.client.force_authenticate(user=self.referrer)
+
+        directory = self.client.get("/api/v1/network/doctors/")
+        connections = self.client.get("/api/v1/network/connections/")
+        create = self.client.post(
+            "/api/v1/network/connections/",
+            {
+                "recipient_profile_id": str(
+                    self.doctor_two.professional_directory_profile.id
+                ),
+                "purpose": "referral_collaboration",
+                "note": "A hidden demo request.",
+                "accepts_synthetic_only": True,
+            },
+            format="json",
+        )
+
+        self.assertEqual(directory.status_code, 200)
+        self.assertEqual(directory.data["count"], 0)
+        self.assertEqual(connections.data, [])
+        self.assertEqual(create.status_code, 403)
+        self.assertEqual(ProfessionalConnection.objects.count(), 0)
+
+    def test_platform_admin_gets_directory_preview_but_not_participant_endpoints(self):
+        self.client.force_authenticate(user=self.admin)
+
+        directory = self.client.get("/api/v1/network/doctors/")
+        connections = self.client.get("/api/v1/network/connections/")
+        conversations = self.client.get("/api/v1/network/conversations/")
+
+        self.assertEqual(directory.status_code, 200)
+        self.assertEqual(directory.data["count"], 32)
+        self.assertEqual(connections.status_code, 403)
+        self.assertEqual(conversations.status_code, 403)
 
     def test_connection_pair_is_unique_in_both_directions(self):
         recipient = self.doctor_two.professional_directory_profile

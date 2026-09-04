@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.demo_lab.selectors import is_demo_mode_enabled
 from apps.identity.models import SecurityAction
 from apps.identity.permissions import HasActiveIdentity
 from apps.identity.services import record_security_event
@@ -32,6 +33,8 @@ class ReferralCaseViewSet(
     permission_classes = [IsAuthenticated, HasActiveIdentity]
 
     def get_queryset(self):
+        if not is_demo_mode_enabled():
+            return authorized_referral_workspace_queryset(self.request.user).none()
         return authorized_referral_workspace_queryset(self.request.user).filter(is_synthetic=True)
 
     def get_serializer_class(self):
@@ -55,6 +58,8 @@ class ReferralCaseViewSet(
         return Response(ReferralCaseDetailSerializer(instance).data)
 
     def create(self, request, *args, **kwargs):
+        if not is_demo_mode_enabled():
+            raise PermissionDenied("Demo data is not enabled.")
         memberships = list(active_referrer_memberships(request.user)[:2])
         if not memberships:
             raise PermissionDenied("An active verified referrer membership is required.")
@@ -73,6 +78,8 @@ class DemoWorkspaceView(APIView):
     permission_classes = [IsAuthenticated, HasActiveIdentity]
 
     def get(self, request):
+        if not is_demo_mode_enabled():
+            raise PermissionDenied("Demo data is not enabled.")
         referral = get_object_or_404(
             authorized_referral_workspace_queryset(request.user),
             reference="KND-DEMO-001",

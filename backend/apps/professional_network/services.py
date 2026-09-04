@@ -4,6 +4,7 @@ from django.db import IntegrityError, transaction
 from django.utils import timezone
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 
+from apps.demo_lab.selectors import lock_demo_mode_enabled
 from apps.identity.models import SecurityAction
 from apps.identity.services import record_security_event
 
@@ -25,6 +26,8 @@ class ConnectionRequestCommand:
 
 @transaction.atomic
 def request_connection(*, actor, command: ConnectionRequestCommand):
+    if not lock_demo_mode_enabled():
+        raise PermissionDenied("Demo data is not enabled.")
     actor_profile = ProfessionalDirectoryProfile.objects.filter(
         user=actor,
         is_discoverable=True,
@@ -65,6 +68,8 @@ def request_connection(*, actor, command: ConnectionRequestCommand):
 
 @transaction.atomic
 def transition_connection(*, actor, connection_id, action):
+    if not lock_demo_mode_enabled():
+        raise NotFound("Connection not found.")
     connection = ProfessionalConnection.objects.select_for_update().filter(id=connection_id).first()
     if connection is None:
         raise NotFound("Connection not found.")
@@ -101,6 +106,8 @@ def transition_connection(*, actor, connection_id, action):
 
 @transaction.atomic
 def append_message(*, actor, conversation, body):
+    if not lock_demo_mode_enabled():
+        raise PermissionDenied("Conversation not found.")
     if actor.id not in {conversation.connection.requester_id, conversation.connection.recipient_id}:
         raise PermissionDenied("Conversation not found.")
     if conversation.connection.status != ConnectionStatus.ACCEPTED:

@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
+from apps.demo_lab.selectors import is_demo_mode_enabled
 from apps.identity.permissions import HasActiveIdentity
 
 from ..models import ProfessionalDirectoryProfile
-from ..permissions import IsVerifiedProfessional
+from ..permissions import IsVerifiedProfessional, IsVerifiedProfessionalOrPlatformAdmin
 from ..selectors import connections_for_user, conversations_for_user
 from ..services import (
     ConnectionRequestCommand,
@@ -40,11 +41,14 @@ class NetworkPermissionMixin:
 
 
 class ProfessionalDirectoryListView(NetworkPermissionMixin, ListAPIView):
+    permission_classes = [HasActiveIdentity, IsVerifiedProfessionalOrPlatformAdmin]
     serializer_class = ProfessionalCardSerializer
     pagination_class = NetworkPagination
     throttle_scope = "network_directory"
 
     def get_queryset(self):
+        if not is_demo_mode_enabled():
+            return ProfessionalDirectoryProfile.objects.none()
         queryset = ProfessionalDirectoryProfile.objects.select_related(
             "user__identity_profile"
         ).annotate(
