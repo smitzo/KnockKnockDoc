@@ -6,6 +6,7 @@ from .models import (
     MembershipStatus,
     OrganizationMembership,
     OrganizationStatus,
+    VerificationBasis,
 )
 
 
@@ -24,6 +25,11 @@ def active_memberships_for_user(user) -> QuerySet[OrganizationMembership]:
         starts_at__lte=now,
         user__identity_profile__status=IdentityStatus.ACTIVE,
         user__identity_profile__email_verified_at__isnull=False,
+        user__identity_profile__verification_basis__in=[
+            VerificationBasis.SYNTHETIC_FIXTURE,
+            VerificationBasis.SYNTHETIC_ADMIN_REVIEW,
+            VerificationBasis.EMAIL_TOKEN,
+        ],
     ).filter(Q(ends_at__isnull=True) | Q(ends_at__gt=now))
 
 

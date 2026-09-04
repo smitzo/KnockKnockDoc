@@ -15,6 +15,7 @@ from apps.identity.models import (
     OrganizationMembership,
     OrganizationStatus,
     SecurityAction,
+    VerificationBasis,
 )
 from apps.identity.services import record_security_event
 
@@ -66,6 +67,7 @@ def _lock_active_referrer_membership(
                 & Q(organization__status=OrganizationStatus.ACTIVE)
                 & Q(user__identity_profile__status=IdentityStatus.ACTIVE)
                 & Q(user__identity_profile__email_verified_at__isnull=False)
+                & ~Q(user__identity_profile__verification_basis=VerificationBasis.UNVERIFIED)
             )
         )
     except OrganizationMembership.DoesNotExist as exc:

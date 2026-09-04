@@ -20,6 +20,16 @@ class ApplicationStatus(models.TextChoices):
     WITHDRAWN = "withdrawn", "Withdrawn"
 
 
+class ReviewReason(models.TextChoices):
+    IDENTITY_CLARIFICATION = "identity_clarification", "Identity clarification"
+    CREDENTIAL_EVIDENCE = "credential_evidence", "Credential evidence"
+    ORGANIZATION_AUTHORITY = "organization_authority", "Organization authority"
+    PROFILE_CORRECTION = "profile_correction", "Profile correction"
+    NOT_ELIGIBLE = "not_eligible", "Not eligible"
+    DUPLICATE = "duplicate", "Duplicate application"
+    OTHER = "other", "Other"
+
+
 class PartnerApplication(UUIDTimeStampedModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -44,6 +54,28 @@ class PartnerApplication(UUIDTimeStampedModel):
     terms_version = models.CharField(max_length=40)
     terms_accepted_at = models.DateTimeField(default=django_timezone.now, editable=False)
     is_synthetic = models.BooleanField(default=True)
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="reviewed_partner_applications",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    review_reason_code = models.CharField(
+        max_length=40,
+        choices=ReviewReason.choices,
+        blank=True,
+    )
+    reviewer_note = models.CharField(max_length=500, blank=True)
+    activated_at = models.DateTimeField(null=True, blank=True)
+    activated_organization = models.ForeignKey(
+        "identity.Organization",
+        related_name="activated_partner_applications",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
 
     class Meta:
         ordering = ["-created_at"]
@@ -51,7 +83,27 @@ class PartnerApplication(UUIDTimeStampedModel):
             models.CheckConstraint(
                 condition=Q(is_synthetic=True),
                 name="onboarding_application_synthetic",
-            )
+            ),
+            models.CheckConstraint(
+                condition=(
+                    ~Q(status=ApplicationStatus.APPROVED)
+                    | (
+                        Q(activated_at__isnull=False)
+                        & Q(activated_organization__isnull=False)
+                    )
+                ),
+                name="onboarding_approved_is_activated",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    Q(status=ApplicationStatus.APPROVED)
+                    | (
+                        Q(activated_at__isnull=True)
+                        & Q(activated_organization__isnull=True)
+                    )
+                ),
+                name="onboarding_activation_only_when_approved",
+            ),
         ]
         indexes = [
             models.Index(

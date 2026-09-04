@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from .models import IdentityProfile, IdentityStatus
+from .models import IdentityProfile, IdentityStatus, VerificationBasis
 
 
 class HasActiveIdentity(BasePermission):
@@ -14,4 +14,8 @@ class HasActiveIdentity(BasePermission):
             profile = user.identity_profile
         except (AttributeError, IdentityProfile.DoesNotExist):
             return False
-        return profile.status == IdentityStatus.ACTIVE and profile.email_verified_at is not None
+        return (
+            profile.status == IdentityStatus.ACTIVE
+            and profile.email_verified_at is not None
+            and profile.verification_basis != VerificationBasis.UNVERIFIED
+        )

@@ -11,6 +11,7 @@ SAFE_METADATA_KEYS = frozenset(
         "application_type",
         "connection_purpose",
         "membership_role",
+        "reason_code",
         "resource",
         "scope",
         "transition_result",

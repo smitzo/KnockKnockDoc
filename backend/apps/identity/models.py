@@ -48,6 +48,13 @@ class IdentityStatus(models.TextChoices):
     SUSPENDED = "suspended", "Suspended"
 
 
+class VerificationBasis(models.TextChoices):
+    UNVERIFIED = "unverified", "Unverified"
+    SYNTHETIC_FIXTURE = "synthetic_fixture", "Synthetic fixture"
+    SYNTHETIC_ADMIN_REVIEW = "synthetic_admin_review", "Synthetic admin review"
+    EMAIL_TOKEN = "email_token", "Email token"
+
+
 class IdentityProfile(UUIDTimeStampedModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -55,7 +62,7 @@ class IdentityProfile(UUIDTimeStampedModel):
         on_delete=models.PROTECT,
     )
     normalized_email = models.EmailField(max_length=254, unique=True)
-    display_name = models.CharField(max_length=100)
+    display_name = models.CharField(max_length=120)
     account_type = models.CharField(max_length=20, choices=AccountType.choices)
     status = models.CharField(
         max_length=16,
@@ -63,6 +70,11 @@ class IdentityProfile(UUIDTimeStampedModel):
         default=IdentityStatus.ACTIVE,
     )
     email_verified_at = models.DateTimeField(null=True, blank=True)
+    verification_basis = models.CharField(
+        max_length=32,
+        choices=VerificationBasis.choices,
+        default=VerificationBasis.UNVERIFIED,
+    )
 
     class Meta:
         ordering = ["normalized_email"]
@@ -73,6 +85,7 @@ class IdentityProfile(UUIDTimeStampedModel):
             self.user.is_active
             and self.status == IdentityStatus.ACTIVE
             and self.email_verified_at is not None
+            and self.verification_basis != VerificationBasis.UNVERIFIED
         )
 
     def __str__(self) -> str:
@@ -149,6 +162,20 @@ class SecurityAction(models.TextChoices):
     ONBOARDING_APPLICATION_SUBMITTED = (
         "onboarding.application_submitted",
         "Partner application submitted",
+    )
+    ONBOARDING_REVIEW_VIEWED = "onboarding.review_viewed", "Application review viewed"
+    ONBOARDING_REVIEW_STARTED = "onboarding.review_started", "Application review started"
+    ONBOARDING_CHANGES_REQUESTED = (
+        "onboarding.changes_requested",
+        "Application changes requested",
+    )
+    ONBOARDING_APPLICATION_APPROVED = (
+        "onboarding.application_approved",
+        "Application approved",
+    )
+    ONBOARDING_APPLICATION_REJECTED = (
+        "onboarding.application_rejected",
+        "Application rejected",
     )
 
 

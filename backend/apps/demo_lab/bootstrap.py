@@ -16,6 +16,7 @@ from apps.identity.models import (
     Organization,
     OrganizationMembership,
     OrganizationStatus,
+    VerificationBasis,
 )
 from apps.identity.services import normalize_login_email
 
@@ -78,6 +79,7 @@ def upsert_synthetic_account(
             "account_type": account_type,
             "status": IdentityStatus.ACTIVE,
             "email_verified_at": verified_at,
+            "verification_basis": VerificationBasis.SYNTHETIC_FIXTURE,
         },
     )
     return user

@@ -139,6 +139,8 @@ REST_FRAMEWORK = {
         "network_connection": "30/minute",
         "network_message": "60/minute",
         "partner_registration": "5/hour",
+        "onboarding_review": "120/minute",
+        "onboarding_review_mutation": "30/hour",
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,

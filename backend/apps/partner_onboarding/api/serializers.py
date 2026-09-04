@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 from rest_framework import serializers
 
-from ..models import ApplicationType
+from ..models import ApplicationStatus, ApplicationType, PartnerApplication, ReviewReason
 
 
 TERMS_VERSION = "prototype-2026-08-11"
@@ -147,3 +147,116 @@ class HospitalDetailsSerializer(serializers.Serializer):
         if value > date.today():
             raise serializers.ValidationError("Capacity date cannot be in the future.")
         return value
+
+
+class PartnerApplicationReviewSerializer(serializers.ModelSerializer):
+    application_type_label = serializers.CharField(
+        source="get_application_type_display", read_only=True
+    )
+    status_label = serializers.CharField(source="get_status_display", read_only=True)
+    review_reason_label = serializers.CharField(
+        source="get_review_reason_code_display", read_only=True
+    )
+    reviewer_name = serializers.SerializerMethodField()
+    activated_organization = serializers.SerializerMethodField()
+    details = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PartnerApplication
+        fields = [
+            "id",
+            "application_type",
+            "application_type_label",
+            "status",
+            "status_label",
+            "normalized_email",
+            "legal_name",
+            "display_name",
+            "country",
+            "city",
+            "timezone",
+            "preferred_language",
+            "organization_name",
+            "professional_summary",
+            "terms_version",
+            "terms_accepted_at",
+            "is_synthetic",
+            "reviewer_name",
+            "reviewed_at",
+            "review_reason_code",
+            "review_reason_label",
+            "reviewer_note",
+            "activated_at",
+            "activated_organization",
+            "details",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_reviewer_name(self, instance):
+        if instance.reviewer_id is None:
+            return None
+        profile = getattr(instance.reviewer, "identity_profile", None)
+        return profile.display_name if profile else "Platform reviewer"
+
+    def get_activated_organization(self, instance):
+        if instance.activated_organization_id is None:
+            return None
+        return {
+            "id": str(instance.activated_organization_id),
+            "name": instance.activated_organization.name,
+            "slug": instance.activated_organization.slug,
+            "type": instance.activated_organization.organization_type,
+        }
+
+    def get_details(self, instance):
+        if instance.application_type == ApplicationType.DOCTOR:
+            details = instance.doctor_details
+            return {
+                "professional_role": details.professional_role,
+                "primary_specialty": details.primary_specialty,
+                "subspecialties": details.subspecialties,
+                "current_designation": details.current_designation,
+                "experience_start_year": details.experience_start_year,
+                "council_jurisdiction": details.council_jurisdiction,
+                "synthetic_registration_number": details.synthetic_registration_number,
+                "qualifications": details.qualifications,
+                "languages": details.languages,
+            }
+        details = instance.hospital_details
+        return {
+            "organization_type": details.organization_type,
+            "representative_title": details.representative_title,
+            "website_url": details.website_url,
+            "establishment_year": details.establishment_year,
+            "departments": details.departments,
+            "accreditation_labels": details.accreditation_labels,
+            "bed_count": details.bed_count,
+            "capacity_as_of": details.capacity_as_of,
+            "international_patient_services": details.international_patient_services,
+            "languages": details.languages,
+        }
+
+
+class ApplicationReviewActionSerializer(serializers.Serializer):
+    reason_code = serializers.ChoiceField(
+        choices=ReviewReason.choices,
+        required=False,
+        allow_blank=True,
+    )
+    reviewer_note = serializers.CharField(
+        max_length=500,
+        required=False,
+        allow_blank=True,
+        trim_whitespace=True,
+    )
+
+    def validate(self, attrs):
+        action = self.context["action"]
+        if action in {"request_changes", "reject"} and not attrs.get("reason_code"):
+            raise serializers.ValidationError(
+                {"reason_code": "Choose a bounded reason before this action."}
+            )
+        if action not in {"request_changes", "reject"}:
+            attrs["reason_code"] = ""
+        return attrs

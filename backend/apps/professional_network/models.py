@@ -16,6 +16,7 @@ class ProfessionalRole(models.TextChoices):
 
 class VerificationState(models.TextChoices):
     SYNTHETIC_VERIFIED = "synthetic_verified", "Synthetic verified"
+    SYNTHETIC_ADMIN_REVIEW = "synthetic_admin_review", "Synthetic admin review"
 
 
 class ProfessionalDirectoryProfile(UUIDTimeStampedModel):
@@ -31,7 +32,7 @@ class ProfessionalDirectoryProfile(UUIDTimeStampedModel):
     city = models.CharField(max_length=80)
     organization_name = models.CharField(max_length=140)
     languages = models.JSONField(default=list)
-    professional_summary = models.CharField(max_length=320)
+    professional_summary = models.CharField(max_length=500)
     avatar_key = models.CharField(max_length=40)
     verification_state = models.CharField(
         max_length=32,

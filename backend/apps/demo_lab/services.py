@@ -5,6 +5,7 @@ from django.db import transaction
 from django.db.models import Q
 
 from apps.identity.models import IdentityProfile, Organization, OrganizationMembership
+from apps.partner_onboarding.models import PartnerApplication
 from apps.professional_network.models import (
     ProfessionalConnection,
     ProfessionalConversation,
@@ -146,11 +147,19 @@ def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
     )
     user_model = get_user_model()
     fixture_users = user_model.objects.filter(username__in=fixture.participant_emails)
+    application_queryset = PartnerApplication.objects.filter(is_synthetic=True)
+    application_user_ids = list(application_queryset.values_list("user_id", flat=True))
+    application_organization_ids = list(
+        application_queryset.filter(activated_organization__isnull=False).values_list(
+            "activated_organization_id", flat=True
+        )
+    )
     fixture_user_ids = list(fixture_users.values_list("id", flat=True))
+    demo_user_ids = list({*fixture_user_ids, *application_user_ids})
 
     connection_ids = list(
         ProfessionalConnection.objects.filter(
-            Q(requester_id__in=fixture_user_ids) | Q(recipient_id__in=fixture_user_ids)
+            Q(requester_id__in=demo_user_ids) | Q(recipient_id__in=demo_user_ids)
         ).values_list("id", flat=True)
     )
     conversation_ids = list(
@@ -169,11 +178,11 @@ def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
     ).delete()
 
     directory_profiles = ProfessionalDirectoryProfile.objects.filter(
-        user_id__in=fixture_user_ids
+        user_id__in=demo_user_ids
     )
     directory_profile_ids = list(directory_profiles.values_list("id", flat=True))
     removed_ratings, _details = ProfessionalRating.objects.filter(
-        Q(reviewer_id__in=fixture_user_ids) | Q(subject_id__in=directory_profile_ids)
+        Q(reviewer_id__in=demo_user_ids) | Q(subject_id__in=directory_profile_ids)
     ).delete()
     removed_directory_profiles, _details = directory_profiles.delete()
     removed_doctors, _details = SyntheticDoctorProfile.objects.filter(
@@ -184,7 +193,7 @@ def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
     ).delete()
 
     case_ids = set(
-        CaseAssignment.objects.filter(membership__user_id__in=fixture_user_ids).values_list(
+        CaseAssignment.objects.filter(membership__user_id__in=demo_user_ids).values_list(
             "case_id", flat=True
         )
     )
@@ -207,16 +216,20 @@ def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
     CaseAssignment.objects.filter(id__in=assignment_ids).delete()
     removed_cases, _details = ReferralCase.objects.filter(id__in=case_ids).delete()
 
-    OrganizationMembership.objects.filter(user_id__in=fixture_user_ids).delete()
-    IdentityProfile.objects.filter(user_id__in=fixture_user_ids).delete()
-    removed_users, _details = fixture_users.delete()
+    removed_applications, _details = application_queryset.delete()
+    OrganizationMembership.objects.filter(user_id__in=demo_user_ids).delete()
+    IdentityProfile.objects.filter(user_id__in=demo_user_ids).delete()
+    removed_users, _details = user_model.objects.filter(id__in=demo_user_ids).delete()
 
     removable_organizations = Organization.objects.filter(
-        slug__in=[
-            item["slug"]
-            for item in fixture.organizations
-            if item["fixture_key"] != "platform"
-        ],
+        Q(
+            slug__in=[
+                item["slug"]
+                for item in fixture.organizations
+                if item["fixture_key"] != "platform"
+            ]
+        )
+        | Q(id__in=application_organization_ids),
         memberships__isnull=True,
     )
     removed_organizations, _details = removable_organizations.delete()
@@ -229,6 +242,7 @@ def delete_demo_data(*, actor=None) -> tuple[dict, dict]:
         "doctors": removed_doctors,
         "patients": removed_patients,
         "referral_graph_records": removed_cases,
+        "applications": removed_applications,
         "users_and_identity_records": removed_users,
         "organizations": removed_organizations,
     }
