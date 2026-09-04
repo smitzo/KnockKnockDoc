@@ -75,6 +75,14 @@ Publication: `private -> approved_unpublished -> published -> suspended | archiv
 
 Identity access is separate. Email verification proves mailbox control, not professional credentials. An approved application may create or activate the correct membership only through a server-side reviewer action. Hospital applicants cannot self-create an active hospital or assign themselves admin privileges.
 
+### Prototype review projection
+
+The V0 reviewer queue is platform-admin-only. `start_review`, `request_changes`, `approve`, and `reject` are explicit service commands over a row-locked application; the browser never submits reviewer identity or target membership. Request-changes/reject store a bounded private reason and note, while the append-only security event records only action, application type, and reason code.
+
+Approval is one transaction. A synthetic doctor application creates/activates its identity, a dedicated organization, the role-specific membership, and one discoverable synthetic professional card. A synthetic hospital application creates/activates its identity, hospital organization, and hospital-coordinator membership but no doctor card. No approval creates referral assignments, grants, patient access, ratings, connections, or public publication.
+
+Because V0 has no outbound email provider, local `.test` activation records `synthetic_admin_review` as a distinct identity verification basis. This is a labelled rehearsal exception, allowed only for synthetic applications in prototype mode. It must not be reused as evidence of mailbox control or credentials; hashed email-token verification remains a real-launch requirement.
+
 ## Registration fields
 
 Shared fields: account path, legal name, preferred display name, work email, password/passphrase, country, timezone, preferred language, terms/privacy acknowledgement versions, and email verification.

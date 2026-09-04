@@ -27,8 +27,10 @@
 - [ ] 4.1 Add doctor and hospital application models, state machines, immutable acknowledgement evidence, and migrations.
 - [ ] 4.2 Add normalized-email registration, password validation, generic responses, throttling, and hashed single-use email verification.
 - [ ] 4.3 Add role-specific multi-step forms, accessible validation, resume-safe drafts, and clear review expectations.
-- [ ] 4.4 Add platform-admin review/change-request/approve/reject actions with security events and no self-assigned privileges.
-- [ ] 4.5 Prove duplicate/race handling, applicant isolation, field-level privacy, invalid token denial, and reviewer-only transitions.
+- [ ] 4.4a Add a bounded platform-admin application review list/detail API and frontend queue.
+- [ ] 4.4b Add row-locked start-review/change-request/approve/reject services with safe security events.
+- [ ] 4.4c Atomically project approved synthetic doctors/hospitals into only their eligible identity, organization, membership, and directory boundaries.
+- [ ] 4.5 Prove duplicate/race handling, applicant isolation, field-level privacy, invalid transition denial, activation rollback, and reviewer-only access.
 
 ## 5. Documentation, validation, and commits
 
