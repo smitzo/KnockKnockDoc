@@ -1,26 +1,26 @@
-# Knock Knock Doc — Prototype V0
+# Knock Knock Doc — Doctor Referral Network Prototype
 
-A light-mode, synthetic-only prototype of a consent-led cross-border healthcare referral network. It demonstrates the closed referral loop shared by a patient, a referring doctor, a receiving hospital team, and a human coordinator.
+Knock Knock Doc is a light-mode, doctor-first product prototype for discovering trusted professional peers, connecting with them, discussing a potential collaboration, and opening a structured cross-border referral. It combines a public product website, an authenticated professional network, an admin-controlled synthetic demo, and a consent-shaped referral workspace.
 
-> **Do not use real personal or health data.** V0 has no authentication or enforceable role authorization. It is not a medical, diagnostic, triage, emergency, or production record service.
+> **Synthetic data only.** Do not enter real identities, patient information, clinical records, or medical files. This prototype does not diagnose, prescribe, triage emergencies, verify real credentials, or make treatment-quality claims.
 
-## What is implemented
+## What works now
 
-- Next.js 16.3 / React 19.2 public landing page.
-- Role-preview referral case workspace for patient, referrer, hospital, and coordinator perspectives.
-- Synthetic referral creation rehearsal with urgent-care and direct-identifier guards.
-- Django 5.2 LTS + DRF JSON API.
-- PostgreSQL case aggregate and committed migrations.
-- Append-only material case timeline.
-- Celery/Redis task boundary using opaque UUIDs only.
-- Docker Compose development stack with unexposed PostgreSQL/Redis services.
-- Accessibility, security, performance, architecture, and agent documentation.
+- Public website: Home, Doctors, Hospitals, How it works, Blogs, About, Join, and Sign in.
+- Five reusable, file-backed, sourced articles with stable detail routes.
+- Doctor and hospital application forms with strict fictional `.test` / `.example` inputs and review-gated inactive accounts.
+- Django session authentication, CSRF protection, throttling, and append-only security events.
+- Doctor-only professional discovery with specialty/location search and fictional collaboration ratings.
+- Purpose-bound connection requests, accept/decline/withdraw transitions, and participant-only messaging.
+- Structured synthetic referral creation with assignment and scoped-grant authorization.
+- Platform-admin-only demo controls for loading or deleting 30 fictional doctors, 30 fictional patients, network records, ratings, and a referral workspace.
+- Django/DRF modular monolith, PostgreSQL, Celery/Redis, and a Next.js 16 / React 19 frontend using the Tailwind build pipeline, route-level CSS Modules, and a legacy global shell being migrated.
 
-The exact product scope comes from [the refined product specification](docs/REFINED_PRODUCT_BUSINESS_SPECIFICATION.md). Technical decisions are summarized in [the high-level design](docs/HIGH_LEVEL_DESIGN.md) and [low-level design](docs/LOW_LEVEL_DESIGN.md).
+The active product and safety boundary is described in [the refined specification](docs/REFINED_PRODUCT_BUSINESS_SPECIFICATION.md). Architecture details live in [the high-level design](docs/HIGH_LEVEL_DESIGN.md), [low-level design](docs/LOW_LEVEL_DESIGN.md), and [security document](docs/PERFORMANCE_AND_SECURITY.md).
 
-Every commit must follow the fixed [repository commit convention](docs/COMMIT_CONVENTION.md): Conventional Commit type and scope, an imperative lowercase summary, and one coherent reviewable outcome.
+Every commit follows [the repository commit convention](docs/COMMIT_CONVENTION.md): Conventional Commit type and scope, imperative lowercase summary, and one coherent reviewable outcome.
 
-## Run the complete stack
+## Start the complete stack
 
 Requirements: Docker with Compose.
 
@@ -28,30 +28,39 @@ Requirements: Docker with Compose.
 docker compose up --build
 ```
 
-If ports 3000 or 8000 are already occupied, choose alternate localhost ports without changing container networking:
+The default local URLs are:
 
-```bash
-KND_FRONTEND_PORT=3011 KND_BACKEND_PORT=8011 docker compose up --build
-```
-
-Then open:
-
-- Product UI: <http://localhost:3000>
-- Synthetic workspace: <http://localhost:3000/workspace>
-- Referral rehearsal: <http://localhost:3000/refer>
+- Website: <http://localhost:3000>
+- Sign in: <http://localhost:3000/login>
+- Blogs: <http://localhost:3000/blog>
+- Join the network: <http://localhost:3000/join>
 - API health: <http://localhost:8000/api/v1/health/>
 
-The API container applies migrations and idempotently seeds `KND-DEMO-001` before serving. PostgreSQL and Redis bind only inside the Compose network. Host UI/API ports bind to `127.0.0.1`.
+This checkout uses ignored local environment values for ports `3011` and `8011`, so its active sign-in URL is <http://localhost:3011/login>. Host ports bind to `127.0.0.1`; PostgreSQL and Redis are not exposed to the host.
 
-Stop services with:
+### Local admin demo
+
+Demo records are never loaded automatically. The intended flow is:
+
+1. Open `/login` and sign in as the platform administrator.
+2. Land on `/admin/lab`.
+3. Select **Load demo data** to create the complete fictional dataset.
+4. Explore the doctor network, messages, referrals, and admin-only patient catalog.
+5. Select **Delete demo data** to remove only fixture-owned records while preserving the administrator.
+
+This working tree has an ignored local-only opt-in for `admin` / `admin`. The shortcut is accepted only when `PROTOTYPE_MODE=true`, `DJANGO_DEBUG=true`, and `ALLOW_INSECURE_LOCAL_DEMO_ADMIN=true`; startup refuses that flag outside prototype debug mode. Never use it in shared, hosted, staging, or production environments.
+
+For another checkout, copy `.env.example` to `.env`, provide a strong `DEMO_ACCOUNT_PASSWORD`, and normally use a strong `DEMO_ADMIN_PASSWORD`. Do not commit `.env`.
+
+Stop the stack with:
 
 ```bash
 docker compose down
 ```
 
-This retains the prototype PostgreSQL volume. If a developer intentionally wants a fresh synthetic database, they can explicitly remove the named volume after confirming it contains no needed work.
+The PostgreSQL volume is retained. Removing it is an explicit destructive operation and is not part of normal demo reset; use the admin fixture delete control instead.
 
-## Run frontend locally
+## Run the frontend locally
 
 Requires Node.js 20.9 or newer.
 
@@ -61,7 +70,7 @@ npm install
 npm run dev
 ```
 
-The frontend reads the API from `BACKEND_INTERNAL_URL` and falls back to a clearly labelled built-in synthetic case when the API is unavailable. Browser mutations use the same-origin `/api/backend/` rewrite.
+The browser uses same-origin `/api/backend/` rewrites. Server components use `BACKEND_INTERNAL_URL`. There is no synthetic fallback when the API or session is unavailable; the UI shows an honest sign-in, empty, or error state.
 
 Validation:
 
@@ -69,52 +78,71 @@ Validation:
 cd frontend
 npm run lint
 npm run typecheck
-npm run build
+npm run build -- --webpack
+npm audit --audit-level=high
 ```
 
-## Run backend tests locally
+## Run the backend in a venv
 
-The normal runtime uses PostgreSQL. Fast unit tests can explicitly use the SQLite adapter:
+PostgreSQL is the runtime database. SQLite is an explicit fast-test adapter only.
 
 ```bash
 cd backend
 python -m venv .venv
 .venv/bin/pip install -r requirements.txt
-DATABASE_ENGINE=sqlite SQLITE_PATH=:memory: CELERY_TASK_ALWAYS_EAGER=true .venv/bin/python manage.py test
+DATABASE_ENGINE=sqlite SQLITE_PATH=:memory: CELERY_TASK_ALWAYS_EAGER=true \
+  .venv/bin/python manage.py test \
+  apps.demo_lab.tests apps.identity.tests apps.partner_onboarding.tests \
+  apps.professional_network.tests apps.referrals.tests
 ```
 
-Runtime checks against PostgreSQL should also be run through Compose before a pilot rehearsal:
+Run migration and configuration checks as separate gates:
 
 ```bash
-docker compose run --rm backend python manage.py check --deploy
-docker compose run --rm backend python manage.py test
+cd backend
+DATABASE_ENGINE=sqlite SQLITE_PATH=:memory: .venv/bin/python manage.py check
+DATABASE_ENGINE=sqlite SQLITE_PATH=:memory: .venv/bin/python manage.py makemigrations --check --dry-run
 ```
+
+Compose smoke tests are still required because SQLite cannot prove PostgreSQL constraints, transaction behavior, Redis/Celery wiring, or browser-origin CSRF behavior.
 
 ## API surface
 
-| Method | Path | Purpose |
+| Method | Path | Access and purpose |
 |---|---|---|
-| `GET` | `/api/v1/health/` | Database readiness and explicit prototype boundary |
-| `GET` | `/api/v1/demo/workspace/` | Stable synthetic case aggregate |
-| `GET` | `/api/v1/cases/` | Paginated synthetic case list |
-| `POST` | `/api/v1/cases/` | Create a fictional planned-care rehearsal |
-| `GET` | `/api/v1/cases/{uuid}/` | Synthetic case detail |
-
-All V0 endpoints are anonymous and throttled. That is compatible only with fictional data in a controlled demonstration.
+| `GET` | `/api/v1/health/` | Anonymous bounded readiness response |
+| `GET` | `/api/v1/auth/csrf/` | Anonymous throttled CSRF token issue |
+| `POST` | `/api/v1/auth/login/` | CSRF-protected session login |
+| `GET` | `/api/v1/auth/session/` | Active authenticated identity and memberships |
+| `POST` | `/api/v1/auth/logout/` | CSRF-protected session flush |
+| `POST` | `/api/v1/onboarding/applications/` | Fictional doctor/hospital application submission |
+| `GET` | `/api/v1/network/doctors/` | Eligible verified professional directory |
+| `GET/POST` | `/api/v1/network/connections/` | Participant-visible connections / request creation |
+| `POST` | `/api/v1/network/connections/{uuid}/{action}/` | Authorized accept, decline, or withdraw transition |
+| `GET` | `/api/v1/network/conversations/` | Accepted-connection conversations for the participant |
+| `GET/POST` | `/api/v1/network/conversations/{uuid}/messages/` | Participant-only append/read messages |
+| `GET/POST` | `/api/v1/cases/` | Authorized case list / verified-referrer creation |
+| `GET` | `/api/v1/cases/{uuid}/` | Scoped synthetic case detail or concealed `404` |
+| `GET` | `/api/v1/demo/workspace/` | Authorized seeded referral workspace |
+| `GET` | `/api/v1/admin/lab/summary/` | Platform-admin-only fixture summary |
+| `POST/DELETE` | `/api/v1/admin/lab/fixtures/` | Platform-admin-only load / confirmed delete |
+| `GET` | `/api/v1/admin/lab/doctors/` | Platform-admin-only full synthetic doctor catalog |
+| `GET` | `/api/v1/admin/lab/patients/` | Platform-admin-only synthetic patient catalog |
 
 ## Repository guide
 
 ```text
-backend/        Django/DRF modular monolith and Celery tasks
-frontend/       Next.js App Router experience
+backend/        Django/DRF modular monolith and Celery worker tasks
+frontend/       Next.js App Router website and authenticated product
 docs/           Product, architecture, flow, security, and agent context
-openspec/       Original product-definition change
+openspec/       Checkpointed proposals, specifications, designs, and tasks
 worklog/        Append-only implementation history
+business/       Local founder strategy workspace; permanently git-ignored
 compose.yaml    PostgreSQL + Redis + API + worker + frontend
 ```
 
-## Required gates before real use
+## Real-launch stop gates
 
-Do not add a “production” environment variable and call the product ready. [Performance and security](docs/PERFORMANCE_AND_SECURITY.md) defines the full gate, including authentication, server-enforced case/document authorization, consent/grants, credential verification, private quarantined uploads, malware scanning, audited access, incident response, restore tests, role-isolation tests, and corridor-specific legal/clinical review.
+This is production-shaped software, not a production medical system. Real identities or health data remain blocked until credential verification, MFA/recovery, enforceable consent and document-category authorization, private quarantined uploads, malware scanning, audited object access, moderation/reporting, incident response, backup/restore exercises, retention/deletion, accessibility testing, independent security assessment, and corridor-specific legal/clinical review are complete.
 
-AWS RDS and S3 remain future decisions. The application is shaped so managed PostgreSQL and a private object-storage adapter can be evaluated later without making AWS part of local development.
+AWS RDS and S3 remain future architecture decisions. Local development does not depend on AWS.

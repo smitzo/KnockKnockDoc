@@ -4,136 +4,179 @@
 
 ```text
 backend/
-  config/                 Django settings, URL routing, Celery wiring
-  apps/core/              Shared UUID/timestamp model and health endpoint
-  apps/identity/          Profiles, organizations, memberships, sessions, security events
-  apps/referrals/         Referral aggregate, API, services, tasks, tests
+  config/                       Settings, URL routing, ASGI/WSGI, Celery
+  apps/core/                    Shared model base, health, middleware, exceptions
+  apps/identity/                Sessions, profiles, organizations, memberships, events
+  apps/partner_onboarding/      Doctor/hospital application aggregate
+  apps/professional_network/    Directory, ratings, connections, conversations, messages
+  apps/referrals/               Referral aggregate, authorization, services, tasks
+  apps/demo_lab/                Validated fixture loader and admin-only API
+  fixtures/product_demo/v1/     Versioned credential-free JSON collections
   manage.py
 frontend/
-  app/                    Next.js App Router routes and global styles
-  components/             Accessible product and workspace components
-  lib/                    Typed API client and domain contracts
-infra/                    Container entry points when needed
-docs/                     Product and engineering documentation
-worklog/                  Numbered immutable Markdown entries
+  app/                          Next.js App Router pages and metadata
+  components/                   Product, network, admin, registration, referral UI
+  content/blog/                 Validated reusable article JSON
+  lib/                          Typed API client, content loader, contracts
+  styles/                       Route/component CSS modules
+  public/images/                Local editorial and interface assets
+docs/                           Product and engineering documentation
+openspec/                       Proposals, specs, designs, adversarial reviews, tasks
+worklog/                        Numbered append-only Markdown history
+business/                       Local ignored founder analysis
 ```
+
+Tailwind CSS v4 supplies the CSS pipeline/base layer. New route systems use CSS Modules; the original V0 workspace and shared tokens still use `app/globals.css` and should be migrated incrementally without visual regressions.
+
+## Identity model
+
+The project retains Django's migrated default `User`. Login usernames are normalized lowercase emails; the frontend maps the explicit local alias `admin` to the configured demo-admin email.
+
+| Entity | Key responsibility | Invariant |
+|---|---|---|
+| `IdentityProfile` | Display identity, normalized email, account type, verification/account state | One per user; normalized email unique |
+| `Organization` | Platform, hospital, or referring-practice boundary | Suspended organization cannot authorize membership |
+| `OrganizationMembership` | Explicit role for a user in one organization | Only active membership participates in authorization |
+| `SecurityEvent` | Authentication, access, admin fixture, and network evidence | Append-only; allowlisted metadata only |
+
+Passwords use Django hashers and validators. Partner submission creates an inactive user and profile. It does not create an active organization membership or discoverable professional profile.
+
+## Professional network aggregate
+
+| Entity | Important fields | Invariant |
+|---|---|---|
+| `ProfessionalDirectoryProfile` | User, role, specialty, experience, country/city, organization, languages, summary, avatar key, verification/discoverability | V0 row is synthetic; one card per user |
+| `ProfessionalRating` | Reviewer, subject, communication/collaboration/handback scores, bounded comment | Scores 1–5; unique reviewer/subject; synthetic only |
+| `ProfessionalConnection` | Requester, recipient, canonical pair key, purpose, note, state, response time | Distinct users; one unordered pair; actor-specific transitions |
+| `ProfessionalConversation` | One-to-one accepted connection | Created only on acceptance |
+| `ProfessionalMessage` | Conversation, server-derived sender, bounded body, timestamp | Append-only; participant-only; no attachments |
+
+Connection state machine:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending: professional requests connection
+    Pending --> Accepted: recipient accepts
+    Pending --> Declined: recipient declines
+    Pending --> Withdrawn: requester withdraws
+    Accepted --> Conversation: create one conversation atomically
+```
+
+Service rules:
+
+- `request_connection()` locks/validates the actor, rejects self/duplicate pairs, derives requester, creates the pending row, and records a safe event.
+- `transition_connection()` locks the row, authorizes the requester or recipient for that action, persists the terminal state, and creates the conversation only for acceptance.
+- `append_message()` verifies accepted connection and exact participation, rejects sensitive/direct-contact patterns, derives the sender, and appends one message.
+- Directory, connection, and conversation selectors always start from the active session user; the client cannot submit an actor ID.
+
+HTTP polling is intentional for V0. WebSockets remain deferred until delivery semantics, authorization refresh, blocking/reporting, presence, scale, and measured user need are defined.
 
 ## Referral aggregate
 
 `ReferralCase` is the aggregate root. Related records cannot exist without a case.
 
-| Entity | Key fields | Important invariant |
+| Entity | Key fields | Invariant |
 |---|---|---|
-| `ReferralCase` | UUID, human reference, specialty, sourced summary, clinical question, status, consent status, next action/owner/due date | V0 rows are always marked synthetic; planned care must be confirmed |
-| `CaseParticipant` | case, display name, role, organization, access scope/state | Unique active presentation identity per case/role/name |
-| `RecordItem` | case, label, category, clinical date, source, readiness state | Metadata only in V0; never contains an object URL or raw file |
-| `InformationRequest` | case, requested item, requester, reason, state, due date | Requester and reason are attributable |
-| `ProviderResponse` | case, author, organization, response type, summary, limitations, issued time | Clinical and commercial authorship remain separate |
-| `CaseEvent` | case, event type, actor label/role, safe summary, occurred time | Append-only through application services |
-| `CaseAssignment` | case, organization membership, purpose, active interval | The exact membership, not only its role or organization, is assigned |
-| `CaseAccessGrant` | case, organization membership, assignment, grant/revoke/expiry facts | One current grant per case membership; revocation does not delete history |
-| `GrantScope` | grant, scope | Normalized and unique; the authorization query requires the requested scope |
+| `ReferralCase` | UUID, reference, specialty, fictional summary/question, status, consent state, next action/owner/date | V0 is synthetic and planned-care confirmed |
+| `CaseAssignment` | Case, exact organization membership, purpose, active interval | Role or organization alone is insufficient |
+| `CaseAccessGrant` | Case, assignment/membership, issue/revoke/expiry facts | One current grant per case membership; history retained |
+| `GrantScope` | Grant, normalized scope | Unique within a grant |
+| `CaseParticipant` | Case presentation identity and access label | Presentation row does not authorize access |
+| `RecordItem` | Fictional metadata label, category, source, readiness | No object URL or file payload |
+| `InformationRequest` | Requested item, requester, reason, state, date | Attribution required |
+| `ProviderResponse` | Author, organization, type, summary, limitations, date | Clinical and commercial authorship remain separate |
+| `CaseEvent` | Event type, safe actor label/role, bounded summary, time | Append-only through application services |
 
-All identifiers exposed outside the service are UUIDs or non-sequential references. Human references are not authorization tokens.
+Case list/detail selectors require the conjunction of active identity, organization, membership, assignment interval, grant state/expiry, and requested scope. Inaccessible UUIDs return `404` to conceal existence.
 
-## Case state model
+Create-case command:
 
-```mermaid
-stateDiagram-v2
-    [*] --> Draft
-    Draft --> AwaitingConsent
-    AwaitingConsent --> CompletenessReview: consent granted
-    CompletenessReview --> ReadyToRoute: required packet complete
-    ReadyToRoute --> ProviderReview: explicit case share accepted
-    ProviderReview --> InformationRequired: attributed request
-    InformationRequired --> ProviderReview: item answered
-    ProviderReview --> ResponseReady: opinion/proposal issued
-    ResponseReady --> PatientDecision
-    PatientDecision --> PreparingTravel: proceed
-    PatientDecision --> Closed: decline / stop
-    PreparingTravel --> Treatment
-    Treatment --> Handback
-    Handback --> Closed
-    AwaitingConsent --> Closed: declined / withdrawn
-    CompletenessReview --> Closed: out of scope
-```
+1. DRF session authentication resolves an active verified referrer membership.
+2. Serializer validates shape, enums, lengths, planned-care confirmation, emergency wording, and fictional patient label.
+3. `create_referral_case()` opens a transaction and locks the current membership.
+4. It creates the case, assignment, scoped grant, participant, and initial append-only events atomically.
+5. `transaction.on_commit()` enqueues only the case UUID.
+6. Celery performs idempotent operational follow-up without logging clinical text.
 
-V0 displays these stages but exposes only the safe creation command. Later mutation endpoints must use an explicit transition function with actor, preconditions, event creation, and `select_for_update()`.
+The emergency phrase check is a product-boundary guard, not medical triage.
 
-## Identity model
+## Partner application aggregate
 
-The project retains Django's default `User` because its migrations already exist. Login usernames are normalized lowercase synthetic email addresses. Domain identity data is kept in explicit UUID entities:
+`PartnerApplication` owns immutable submission facts and exactly one subtype detail row (`DoctorApplicationDetails` or `HospitalApplicationDetails`).
 
-| Entity | Purpose | Invariant |
-|---|---|---|
-| `IdentityProfile` | Display name, normalized email, account type, verification and account state | One profile per user; normalized email is unique |
-| `Organization` | Platform, hospital, or referring-practice boundary | Stable unique slug; suspension blocks its memberships |
-| `OrganizationMembership` | A user's role in one organization | Role is explicit; only active rows authorize |
-| `SecurityEvent` | Authentication and case-access evidence | Append-only through the model/manager; metadata is allowlisted and contains no clinical text |
+V0 request rules:
 
-Demo identities are created only when a long password is supplied through local environment configuration. No password is committed, logged, or returned by the seed command.
+- JSON only; bounded field/list lengths.
+- `.test` email required, normalized before lookup.
+- minimum 14-character password plus Django validators.
+- fictional doctor registration begins `SYN-`.
+- hospital website is under `.example`.
+- current terms version and synthetic-only acknowledgement are mandatory.
+- generic accepted response avoids revealing whether an account already exists.
+- transaction creates an inactive account/profile and application.
 
-## Authorization model
+Implemented state is `submitted` pending review. Resume-safe drafts, hashed email-verification tokens, reviewer UI/transitions, evidence-file upload, publication, appeals, and reverification are future gates.
 
-Scopes are namespaced strings such as `case:view` and `case:create`. A selector evaluates active profile, verified email, active organization, active membership, active assignment interval, active grant, grant expiry/revocation, and normalized scope in one filtered queryset. Detail endpoints query only this authorized queryset, so an inaccessible UUID produces `404`.
+## Demo fixture contract
 
-Creation is a separate capability: it requires an active verified `referrer` membership. The service derives the referrer's presentation identity from that membership; it never trusts a submitted referrer name or organization.
+`fixtures/product_demo/v1/manifest.json` declares fixture identity, schema version, disclosure, filenames, and expected counts. `load_product_demo_fixture()`:
+
+1. reads only known local files;
+2. validates collection shapes and exact expected counts;
+3. validates cross-file references;
+4. recursively rejects secret-like keys; and
+5. returns a typed in-memory fixture contract.
+
+`load_demo_data()` acquires a database lock on the persistent platform organization and runs the idempotent seed command inside a transaction. It verifies actual counts against the manifest before reporting `loaded`.
+
+`delete_demo_data()` resolves records only through fixture keys/emails, removes dependent messages/conversations/connections/ratings/grants/assignments first, then profiles/accounts and unused fixture organizations. The platform administrator is not part of the fixture participant set and survives deletion.
+
+The API requires a platform-admin membership for summary, list, load, and delete. Delete additionally requires the exact confirmation phrase `DELETE SYNTHETIC DEMO DATA`.
 
 ## API contract
 
-| Method and path | Purpose | V0 access |
-|---|---|---|
-| `GET /api/v1/health/` | Liveness/readiness summary without secrets | Anonymous |
-| `GET /api/v1/auth/csrf/` | Issue a masked CSRF token and CSRF cookie | Anonymous, throttled |
-| `POST /api/v1/auth/login/` | Establish a rotated server-side session | Anonymous, CSRF-protected, tightly throttled |
-| `GET /api/v1/auth/session/` | Return the active profile and memberships | Authenticated |
-| `POST /api/v1/auth/logout/` | Flush the current session | Authenticated, CSRF-protected |
-| `GET /api/v1/cases/` | List only authorized synthetic rehearsal cases | Authenticated and case-scoped |
-| `POST /api/v1/cases/` | Create a synthetic planned-care referral rehearsal | Active verified referrer membership, CSRF-protected |
-| `GET /api/v1/cases/{uuid}/` | Complete synthetic case workspace | Authenticated `case:view` grant or `404` |
-| `GET /api/v1/demo/workspace/` | Stable seeded workspace for the frontend | Authenticated `case:view` grant or `404` |
+| Method and path | Permission |
+|---|---|
+| `GET /api/v1/health/` | Anonymous, throttled |
+| `GET /api/v1/auth/csrf/` | Anonymous, throttled |
+| `POST /api/v1/auth/login/` | Anonymous, CSRF, login throttle |
+| `GET /api/v1/auth/session/` | Authenticated active identity |
+| `POST /api/v1/auth/logout/` | Authenticated active identity, CSRF |
+| `POST /api/v1/onboarding/applications/` | Anonymous, throttled, fictional-only |
+| `GET /api/v1/network/doctors/` | Eligible verified professional |
+| `GET/POST /api/v1/network/connections/` | Eligible professional; participant-shaped read |
+| `POST /api/v1/network/connections/{id}/{action}/` | Action-specific requester/recipient permission |
+| `GET /api/v1/network/conversations/` | Participant-only |
+| `GET/POST /api/v1/network/conversations/{id}/messages/` | Accepted participant-only; CSRF on write |
+| `GET/POST /api/v1/cases/` | Authorized read / active verified referrer write |
+| `GET /api/v1/cases/{id}/` | Scoped case grant or concealed `404` |
+| `GET /api/v1/demo/workspace/` | Scoped case grant |
+| `GET /api/v1/admin/lab/summary/` | Platform admin |
+| `POST/DELETE /api/v1/admin/lab/fixtures/` | Platform admin, CSRF, mutation throttle |
+| `GET /api/v1/admin/lab/doctors/` | Platform admin |
+| `GET /api/v1/admin/lab/patients/` | Platform admin |
 
-The API never returns stack traces, environment variables, database details, storage paths, or raw exception text. V0 parsers accept JSON only. Request size and list/page sizes are bounded.
+All unsafe session requests require Django CSRF validation. Prototype debug mode derives trusted origins only for `localhost` and `127.0.0.1` on `KND_FRONTEND_PORT`; a deployment can supply an explicit allowlist. Request bodies, pages, text, and task batches are bounded.
 
-## Create-case command
+## Frontend structure
 
-1. DRF authenticates the session and resolves an active verified referrer membership.
-2. DRF validates length, enum, date, and planned-care confirmation.
-3. Serializer rejects emergency wording and likely direct identifiers in the synthetic patient label.
-4. `create_referral_case()` opens a database transaction and derives the referrer identity from the membership.
-5. A `ReferralCase`, assignment, scoped grant, and initial `CaseEvent` are written atomically.
-6. `transaction.on_commit()` sends only the case UUID to Celery.
-7. The worker records operational metrics without logging clinical text.
+- Server route components own metadata, session checks, redirects, and initial data reads.
+- Client components are limited to authentication, application steps, network interactions, admin fixture mutations, referral composition, and workspace tabs.
+- `lib/api.ts` centralizes typed same-origin requests, CSRF acquisition, response errors, and server API calls.
+- `lib/blog.ts` validates file-backed article content once and powers listing, home cards, and slug pages.
+- Protected routes redirect unauthenticated users to `/login`; admin and professional routes also render explicit role-denial states.
+- Public navigation uses the exact labels `Doctors`, `Hospitals`, `How it works`, `Blogs`, `About`, `Join`, and `Sign in`.
+- No patient-sensitive value enters URLs, analytics, local storage, or session storage.
 
-The emergency keyword check is a prototype safety guard, not clinical triage. It redirects the user to local emergency services and must never claim to determine urgency.
+## Database and task behavior
 
-## Database behavior
+- PostgreSQL owns runtime constraints and indexes; SQLite is for fast explicit tests only.
+- UUIDs reduce enumeration but never replace authorization.
+- `select_related()` / `prefetch_related()` bound aggregate reads and avoid N+1 behavior.
+- Mutating services use `transaction.atomic()` and row locks where competing transitions matter.
+- Celery tasks accept UUID strings only, use finite retry/backoff, and avoid free-text logs.
+- Deadline scans read indexed due dates in bounded batches.
 
-- PostgreSQL is the runtime database and owns constraints/indexes.
-- UUID primary keys reduce enumeration risk but do not replace authorization.
-- Case status, consent status, due date, and update time are indexed for queues.
-- Related rows use explicit `PROTECT` or `CASCADE` according to aggregate ownership.
-- Querysets for workspace responses use `select_related`/`prefetch_related` to bound query count.
-- Migrations are committed and run before application start.
-- SQLite is permitted only through `DATABASE_ENGINE=sqlite` for fast unit tests; PostgreSQL integration tests remain a release requirement.
+## Future private storage interface
 
-## Frontend component model
-
-- Server routes own metadata and initial data boundaries.
-- Client components are limited to session actions, workspace tabs, and the referral composer.
-- The typed API client validates response shape defensively and uses an HTTP-only same-origin session cookie, never browser token storage.
-- The workspace role comes from the active membership returned by the server; the V0 presentation-only role switch is removed.
-- Loading, empty, and unavailable states use plain language and a recoverable action.
-- No patient-sensitive value appears in URLs, analytics, or browser persistence.
-
-## Celery behavior
-
-- Redis is broker/result transport for V0.
-- Tasks accept UUIDs, not serialized models or health information.
-- Tasks are idempotent and have finite retry/backoff policies.
-- The periodic deadline scan reads indexed due dates in bounded batches.
-- Worker logs include task and case IDs, never clinical questions, names, or documents.
-
-## Future storage interface
-
-When secure record upload is authorized, application code will depend on a storage service with `create_upload_intent`, `finalize_after_scan`, `create_view_intent`, and `restrict_object` operations. The adapter may use S3, but database rows remain authoritative for consent scope, scan state, retention, and audit. Direct public bucket URLs are forbidden.
+If real records are authorized later, domain code will depend on `create_upload_intent`, `finalize_after_scan`, `create_view_intent`, and `restrict_object`. A private S3-compatible adapter may implement those operations, but PostgreSQL remains authoritative for consent scope, scan state, grants, retention, and audit. Public bucket URLs are forbidden.
