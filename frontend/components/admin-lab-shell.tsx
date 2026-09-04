@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { ApplicationReviewQueue } from "@/components/admin/application-review-queue";
 import type { AdminLabData } from "@/lib/types";
 import { deleteDemoFixtures, loadDemoFixtures, logoutSession } from "@/lib/api";
 import styles from "@/styles/admin-lab.module.css";
@@ -12,7 +13,7 @@ import styles from "@/styles/admin-lab.module.css";
 import { Icon } from "./icons";
 import { Brand } from "./site-header";
 
-type LabTab = "doctors" | "patients" | "flow";
+type LabTab = "applications" | "doctors" | "patients" | "flow";
 
 export function AdminLabShell({ data }: { data: AdminLabData }) {
   const router = useRouter();
@@ -86,6 +87,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
       <header className="lab-header">
         <Brand />
         <nav aria-label="Admin lab sections">
+          {fixtureLoaded && <button className={tab === "applications" ? "is-active" : ""} onClick={() => chooseTab("applications")} type="button">Applications <span>{data.applications.length}</span></button>}
           <button className={tab === "doctors" ? "is-active" : ""} onClick={() => chooseTab("doctors")} type="button">Doctors <span>{data.summary.counts.doctors}</span></button>
           <button className={tab === "patients" ? "is-active" : ""} onClick={() => chooseTab("patients")} type="button">Patients <span>{data.summary.counts.patients}</span></button>
           <button className={tab === "flow" ? "is-active" : ""} onClick={() => chooseTab("flow")} type="button">Flow map</button>
@@ -131,7 +133,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
           </section>
         )}
 
-        {fixtureLoaded && tab !== "flow" && (
+        {fixtureLoaded && ["doctors", "patients"].includes(tab) && (
           <section className="lab-toolbar" aria-label="Directory controls">
             <label><Icon name="search" /><span className="sr-only">Search profiles</span><input onChange={(event) => setQuery(event.target.value)} placeholder={tab === "doctors" ? "Search doctor, specialty, city…" : "Search alias, country, specialty…"} type="search" value={query} /></label>
             <select aria-label={tab === "doctors" ? "Filter by specialty" : "Filter by journey stage"} onChange={(event) => setFilter(event.target.value)} value={filter}>
@@ -144,6 +146,7 @@ export function AdminLabShell({ data }: { data: AdminLabData }) {
           </section>
         )}
 
+        {fixtureLoaded && tab === "applications" && <ApplicationReviewQueue initialApplications={data.applications} />}
         {fixtureLoaded && tab === "doctors" && <DoctorGrid doctors={doctors} />}
         {fixtureLoaded && tab === "patients" && <PatientGrid patients={patients} />}
         {fixtureLoaded && tab === "flow" && <FlowMap data={data} />}

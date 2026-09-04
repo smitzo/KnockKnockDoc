@@ -4,10 +4,11 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { loginWithPassword } from "@/lib/api";
+import { getSessionHomePath } from "@/lib/session-navigation";
 
 import { Icon } from "./icons";
 
-const ALLOWED_NEXT_PATHS = new Set(["/network", "/workspace", "/refer", "/admin/lab"]);
+const ALLOWED_NEXT_PATHS = new Set(["/network", "/workspace", "/refer", "/admin/lab", "/hospital"]);
 
 export function LoginForm({
   localAdminEnabled,
@@ -28,10 +29,9 @@ export function LoginForm({
     setError("");
     try {
       const session = await loginWithPassword(email, password);
-      const isAdmin = session.memberships.some((membership) => membership.role === "admin");
-      const roleHome = session.profile.account_type === "professional" ? "/network" : "/workspace";
+      const roleHome = getSessionHomePath(session);
       const safeNext = ALLOWED_NEXT_PATHS.has(nextPath) ? nextPath : roleHome;
-      router.replace(isAdmin ? "/admin/lab" : safeNext);
+      router.replace(roleHome === "/admin/lab" ? roleHome : safeNext);
       router.refresh();
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : "Sign-in failed.");

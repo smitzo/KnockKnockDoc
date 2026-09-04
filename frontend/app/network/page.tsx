@@ -6,6 +6,7 @@ import { NetworkShell } from "@/components/network/network-shell";
 import { Brand } from "@/components/site-header";
 import { ApiRequestError, getProductMode, getProfessionalNetwork, getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
+import { getSessionHomePath } from "@/lib/session-navigation";
 import accessStyles from "@/styles/access.module.css";
 
 export const metadata: Metadata = { title: "Doctor network" };
@@ -19,7 +20,9 @@ export default async function NetworkPage() {
   ]);
   if (!session) redirect("/login?next=/network");
   const isAdmin = session.memberships.some((membership) => membership.role === "admin");
-  if (session.profile.account_type !== "professional" && !isAdmin) redirect("/workspace");
+  if (session.profile.account_type !== "professional" && !isAdmin) {
+    redirect(getSessionHomePath(session));
+  }
 
   let data = null;
   let accessDenied = false;

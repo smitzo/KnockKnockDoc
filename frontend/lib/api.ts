@@ -6,6 +6,8 @@ import type {
   DemoWorkspaceResponse,
   PaginatedResponse,
   PartnerApplicationPayload,
+  PartnerApplicationReview,
+  PartnerApplicationReviewAction,
   PartnerApplicationResponse,
   ProfessionalCard,
   ProfessionalConnection,
@@ -82,7 +84,7 @@ export async function getDemoWorkspace(cookieHeader: string): Promise<DemoWorksp
 }
 
 export async function getAdminLab(cookieHeader: string): Promise<AdminLabData> {
-  const [summary, doctors, patients] = await Promise.all([
+  const [summary, doctors, patients, applications] = await Promise.all([
     serverGet<AdminLabSummary>("/api/v1/admin/lab/summary/", cookieHeader),
     serverGet<PaginatedResponse<SyntheticDoctor>>(
       "/api/v1/admin/lab/doctors/?page_size=60",
@@ -92,8 +94,17 @@ export async function getAdminLab(cookieHeader: string): Promise<AdminLabData> {
       "/api/v1/admin/lab/patients/?page_size=60",
       cookieHeader,
     ),
+    serverGet<PaginatedResponse<PartnerApplicationReview>>(
+      "/api/v1/onboarding/review/applications/?page_size=50",
+      cookieHeader,
+    ),
   ]);
-  return { summary, doctors: doctors.results, patients: patients.results };
+  return {
+    summary,
+    doctors: doctors.results,
+    patients: patients.results,
+    applications: applications.results,
+  };
 }
 
 export async function getProfessionalNetwork(
@@ -237,6 +248,32 @@ export async function submitPartnerApplication(
     throw new Error(flattenApiError(body) || "The application could not be submitted.");
   }
   return body as PartnerApplicationResponse;
+}
+
+export async function reviewPartnerApplication(
+  applicationId: string,
+  action: PartnerApplicationReviewAction,
+  payload: { reason_code?: string; reviewer_note?: string } = {},
+): Promise<PartnerApplicationReview> {
+  const csrfToken = await getCsrfToken();
+  const response = await fetch(
+    `/api/backend/onboarding/review/applications/${encodeURIComponent(applicationId)}/${action}/`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify(payload),
+    },
+  );
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The review action could not be completed.");
+  }
+  return body as PartnerApplicationReview;
 }
 
 export async function searchProfessionalDoctors(query: string): Promise<ProfessionalCard[]> {

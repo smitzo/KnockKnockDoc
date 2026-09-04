@@ -220,6 +220,7 @@ export interface AdminLabData {
   summary: AdminLabSummary;
   doctors: SyntheticDoctor[];
   patients: SyntheticPatient[];
+  applications: PartnerApplicationReview[];
 }
 
 export interface PartnerApplicationPayload {
@@ -245,6 +246,50 @@ export interface PartnerApplicationResponse {
   next_step: string;
 }
 
+export type PartnerApplicationStatus =
+  | "submitted"
+  | "under_review"
+  | "changes_requested"
+  | "approved"
+  | "rejected"
+  | "withdrawn";
+
+export type PartnerApplicationReviewAction =
+  | "start-review"
+  | "request-changes"
+  | "approve"
+  | "reject";
+
+export interface PartnerApplicationReview {
+  id: string;
+  application_type: "doctor" | "hospital";
+  application_type_label: string;
+  status: PartnerApplicationStatus;
+  status_label: string;
+  normalized_email: string;
+  legal_name: string;
+  display_name: string;
+  country: string;
+  city: string;
+  timezone: string;
+  preferred_language: string;
+  organization_name: string;
+  professional_summary: string;
+  terms_version: string;
+  terms_accepted_at: string;
+  is_synthetic: true;
+  reviewer_name: string | null;
+  reviewed_at: string | null;
+  review_reason_code: string;
+  review_reason_label: string;
+  reviewer_note: string;
+  activated_at: string | null;
+  activated_organization: OrganizationSummary | null;
+  details: Record<string, string | number | string[]>;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ProfessionalRatingBreakdown {
   communication: number;
   collaboration: number;
@@ -264,7 +309,7 @@ export interface ProfessionalCard {
   organization_name: string;
   languages: string[];
   professional_summary: string;
-  verification_state: "synthetic_verified";
+  verification_state: "synthetic_verified" | "synthetic_admin_review";
   verification_label: string;
   avatar_url: string;
   rating_average: number | null;

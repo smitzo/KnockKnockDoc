@@ -5,6 +5,7 @@ import { LoginForm } from "@/components/login-form";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { getProductMode, getServerSession } from "@/lib/api";
 import { getServerCookieHeader } from "@/lib/server-cookies";
+import { getSessionHomePath } from "@/lib/session-navigation";
 import styles from "@/styles/login.module.css";
 
 export const metadata: Metadata = { title: "Sign in" };
@@ -20,11 +21,7 @@ export default async function LoginPage({
     getServerSession(cookieHeader),
     getProductMode(),
   ]);
-  if (session) {
-    const isAdmin = session.memberships.some((membership) => membership.role === "admin");
-    const isProfessional = session.profile.account_type === "professional";
-    redirect(isAdmin ? "/admin/lab" : isProfessional ? "/network" : "/workspace");
-  }
+  if (session) redirect(getSessionHomePath(session));
   const { next = "" } = await searchParams;
   const localAdminEnabled = process.env.LOCAL_DEMO_ADMIN_UI === "true";
   return (
