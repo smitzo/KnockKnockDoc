@@ -34,12 +34,12 @@ The project retains Django's migrated default `User`. Login usernames are normal
 
 | Entity | Key responsibility | Invariant |
 |---|---|---|
-| `IdentityProfile` | Display identity, normalized email, account type, verification/account state | One per user; normalized email unique |
+| `IdentityProfile` | Display identity, normalized email, account type, verification basis/account state | One per user; normalized email unique; `unverified` cannot authorize access |
 | `Organization` | Platform, hospital, or referring-practice boundary | Suspended organization cannot authorize membership |
 | `OrganizationMembership` | Explicit role for a user in one organization | Only active membership participates in authorization |
 | `SecurityEvent` | Authentication, access, admin fixture, and network evidence | Append-only; allowlisted metadata only |
 
-Passwords use Django hashers and validators. Partner submission creates an inactive user and profile. It does not create an active organization membership or discoverable professional profile.
+Passwords use Django hashers and validators. Partner submission creates an inactive user plus private application aggregate. It does not create an identity profile, active organization membership, or discoverable professional profile until a valid reviewer approval transaction succeeds.
 
 ## Professional network aggregate
 
@@ -115,7 +115,9 @@ V0 request rules:
 - generic accepted response avoids revealing whether an account already exists.
 - transaction creates an inactive account/profile and application.
 
-Implemented state is `submitted` pending review. Resume-safe drafts, hashed email-verification tokens, reviewer UI/transitions, evidence-file upload, publication, appeals, and reverification are future gates.
+The private admin queue lists only minimal summary fields. Opening one application performs a separate audited detail read. Review services lock both demo mode and the application row, derive the reviewer from the session, enforce the state machine, and keep free-text reviewer notes out of security-event metadata. Request-changes and rejection require an allowlisted reason code.
+
+Synthetic approval requires prototype mode, `is_synthetic=true`, and a `.test` email. Doctor approval creates an active identity with `synthetic_admin_review`, one dedicated organization, one role-specific membership, and one synthetic directory card. Hospital approval creates the active identity, hospital organization, and hospital-coordinator membership but no directory card. Both leave every referral assignment and grant empty. Resume-safe drafts, hashed email-verification tokens, real evidence files, public publication, appeals, and reverification remain future gates.
 
 ## Demo fixture contract
 
@@ -143,6 +145,9 @@ The API requires a platform-admin membership for summary, list, load, and delete
 | `GET /api/v1/auth/session/` | Authenticated active identity |
 | `POST /api/v1/auth/logout/` | Authenticated active identity, CSRF |
 | `POST /api/v1/onboarding/applications/` | Anonymous, throttled, fictional-only |
+| `GET /api/v1/onboarding/review/applications/` | Platform admin; minimal summary page |
+| `GET /api/v1/onboarding/review/applications/{id}/` | Platform admin; audited private detail |
+| `POST /api/v1/onboarding/review/applications/{id}/{action}/` | Platform admin; CSRF, throttle, row-locked transition |
 | `GET /api/v1/network/doctors/` | Eligible verified professional |
 | `GET/POST /api/v1/network/connections/` | Eligible professional; participant-shaped read |
 | `POST /api/v1/network/connections/{id}/{action}/` | Action-specific requester/recipient permission |

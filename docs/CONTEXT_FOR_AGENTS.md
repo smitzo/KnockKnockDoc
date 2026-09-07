@@ -26,7 +26,7 @@ Professional messaging builds the relationship. Patient-specific discussion belo
 - Platform admin route: `/admin/lab`.
 - Session authentication, CSRF, active identity/membership checks, case assignments/scoped grants, and append-only security events are implemented.
 - Professional directory, synthetic collaboration ratings, connection transitions, accepted-connection conversations, and append-only messages are implemented.
-- Partner application submission is implemented, but review activation, email verification, publication, and credential evidence are not.
+- Synthetic partner submission, private admin review transitions, atomic role-specific activation, and the hospital workspace are implemented. Real email verification, credential evidence, publication, appeals, and reverification are not.
 - A versioned JSON fixture contains at least 30 fictional doctors and 30 fictional patients; only a platform admin can load, fully inspect, or delete it.
 - Eligible synthetic professionals can see bounded professional cards; patient fixtures and operational login fields remain admin-only.
 - Five validated JSON articles with sources and local editorial images are reusable across the public site.
@@ -56,6 +56,8 @@ Normal demo credentials must pass the configured strong-password policy. This ch
 Do not copy that exception into CI, a shared environment, staging, a tunnel, a cloud host, or production. Never commit `.env` or any other credential.
 
 The application bootstraps the administrator only. Demo records are loaded explicitly from `/admin/lab`; they must never be auto-seeded at startup.
+
+`ProductModeState` is the authoritative standard/demo switch. Synthetic selectors and mutations must fail closed when it is not `demo`. New synthetic records must be owned by the demo lifecycle so **Delete demo data** can remove them without touching the persistent platform administrator.
 
 ## Engineering conventions
 

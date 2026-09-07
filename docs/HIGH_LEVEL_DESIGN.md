@@ -52,8 +52,14 @@ Authenticated doctor product
 ├── Messages
 └── Referrals
 
+Authenticated hospital product
+├── Organization readiness
+└── Assigned referral inbox
+
 Platform administration
-└── Demo data lab
+└── Data and review control
+    ├── Partner application queue
+    ├── Private application detail and transitions
     ├── Load/delete fixture
     ├── 30 fictional doctors
     └── 30 fictional patients
@@ -81,7 +87,7 @@ Django owns password hashing and server-side sessions. The browser stores only H
 A synthetic referral read is allowed only when all conditions are current:
 
 1. user and identity profile are active;
-2. the prototype email is marked verified;
+2. the identity has a non-unverified verification basis (fixture, synthetic admin review, or future email token);
 3. organization and exact membership are active;
 4. that membership has an active assignment to the case;
 5. its grant is active, unexpired, and unrevoked; and
@@ -91,11 +97,13 @@ Professional discovery additionally requires an eligible active professional ide
 
 Partner applications are deliberately separate from authorization. A submitted doctor or hospital application leaves the account inactive pending review. Email control, credential verification, application approval, organization membership, discoverability, and publication are different facts.
 
+In demo mode, a platform administrator can row-lock an explicitly synthetic application and move it through `submitted|changes_requested → under_review → changes_requested|approved|rejected`. Approval is one transaction: it marks the identity with `synthetic_admin_review`, activates the user, creates one dedicated organization and eligible membership, and creates a synthetic directory card only for doctors. Hospital approval creates a hospital-coordinator workspace but no doctor card. Failure rolls the entire projection back, and no approval creates patient, case, conversation, or referral access.
+
 ## Demo fixture lifecycle
 
 The application bootstraps only the persistent local platform administrator. It does not auto-seed product data.
 
-The administrator explicitly loads a validated, versioned JSON fixture. The transaction creates organizations, accounts, 30 doctor profiles, 30 patient profiles, bounded directory cards, fictional collaboration ratings, connections, conversations, and a referral workspace. The delete operation removes fixture-owned records in dependency order while retaining the administrator and producing an allowlisted security event.
+The administrator explicitly loads a validated, versioned JSON fixture and atomically switches the persisted product mode to `demo`. The transaction creates organizations, accounts, 30 doctor profiles, 30 patient profiles, bounded directory cards, fictional collaboration ratings, connections, conversations, and a referral workspace. Delete first switches back to `standard`, then removes fixture-owned and synthetic review-created records in dependency order while retaining the administrator and producing an allowlisted security event.
 
 The local `admin` / `admin` convenience credential is an explicit loopback-only development exception. It requires prototype mode, Django debug mode, and a dedicated opt-in flag. Startup fails if the flag is enabled outside that boundary. Strong password validation remains the default.
 

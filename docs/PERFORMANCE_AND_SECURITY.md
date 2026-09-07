@@ -18,7 +18,7 @@ The allowed operating boundary is:
 | Boundary | Current control | Remaining gate |
 |---|---|---|
 | Anonymous → account | Login throttle, generic failure, password hashing, CSRF session establishment | MFA, breached-password service, recovery, email/channel verification, bot/abuse controls |
-| Applicant → professional | Account remains inactive after submission | Reviewer workflow, credential evidence, dual control, appeal, reverification, suspension |
+| Applicant → professional | Inactive account; admin-only row-locked synthetic review; atomic least-privilege projection; distinct synthetic verification basis | Real mailbox/credential evidence, dual control, appeal, reverification, suspension |
 | Professional → directory | Active eligible identity and bounded professional card | Real verification/publication methodology, moderation, blocking/reporting |
 | Professional → connection | Server-derived actor, canonical unique pair, purpose, actor-specific state transitions | Block lists, reporting, abuse investigation, retention policy |
 | Participant → conversation | Accepted connection and exact participant query; append-only bounded messages | Moderation/DLP, notification privacy, deletion/export policy, delivery semantics |
@@ -57,6 +57,9 @@ The allowed operating boundary is:
 - Django password validators and hashers apply. Login errors do not reveal account existence.
 - The local `admin` / `admin` escape hatch is disabled by default and accepted only with prototype mode + debug + explicit opt-in. Startup refuses that opt-in outside the boundary.
 - Partner applications create inactive accounts and cannot self-assign organization membership or professional privileges.
+- Review queue summaries exclude email, legal name, evidence details, and private reviewer notes; those fields require a separate audited admin detail read.
+- Review transitions derive the reviewer from the active platform-admin session, use row locks and bounded reason codes, and never copy private reviewer notes into security-event metadata.
+- Synthetic approval is transactional and projects only the eligible organization/membership/directory boundary. The distinct `synthetic_admin_review` basis must never be presented as real mailbox, credential, accreditation, or facility verification.
 - Professional directory output is a dedicated bounded serializer/model, separate from admin fixtures and private application fields.
 - Connection pair uniqueness and database constraints prevent self/duplicate relationships; transitions use server-derived actor rules.
 - Conversations and messages are visible only to accepted participants; messages are append-only and attachments are absent.

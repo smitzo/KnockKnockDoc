@@ -9,6 +9,8 @@ Knock Knock Doc is a light-mode, doctor-first product prototype for discovering 
 - Public website: Home, Doctors, Hospitals, How it works, Blogs, About, Join, and Sign in.
 - Five reusable, file-backed, sourced articles with stable detail routes.
 - Doctor and hospital application forms with strict fictional `.test` / `.example` inputs and review-gated inactive accounts.
+- Platform-admin application review queue with audited start-review, request-changes, approve, and reject transitions.
+- Atomic synthetic approval that activates only the eligible doctor or hospital-coordinator boundary, plus a dedicated hospital workspace.
 - Django session authentication, CSRF protection, throttling, and append-only security events.
 - Doctor-only professional discovery with specialty/location search and fictional collaboration ratings.
 - Purpose-bound connection requests, accept/decline/withdraw transitions, and participant-only messaging.
@@ -45,8 +47,11 @@ Demo records are never loaded automatically. The intended flow is:
 1. Open `/login` and sign in as the platform administrator.
 2. Land on `/admin/lab`.
 3. Select **Load demo data** to create the complete fictional dataset.
-4. Explore the doctor network, messages, referrals, and admin-only patient catalog.
-5. Select **Delete demo data** to remove only fixture-owned records while preserving the administrator.
+4. Explore the doctor network, messages, referrals, admin-only patient catalog, and partner-application review queue.
+5. Submit a doctor or hospital application from **Join**, then review and activate it from the **Applications** tab.
+6. Select **Delete demo data** to remove fixture and synthetic review-created records while preserving the administrator.
+
+Outside demo mode, the complete public sitemap, articles, normal sign-in surface, provider gateways, and authenticated empty states remain available. The persisted product mode fails closed to `standard`; fixture profiles, ratings, connections, messages, referrals, and synthetic applications remain hidden and non-mutable until the administrator loads demo data.
 
 This working tree has an ignored local-only opt-in for `admin` / `admin`. The shortcut is accepted only when `PROTOTYPE_MODE=true`, `DJANGO_DEBUG=true`, and `ALLOW_INSECURE_LOCAL_DEMO_ADMIN=true`; startup refuses that flag outside prototype debug mode. Never use it in shared, hosted, staging, or production environments.
 
@@ -111,11 +116,15 @@ Compose smoke tests are still required because SQLite cannot prove PostgreSQL co
 | Method | Path | Access and purpose |
 |---|---|---|
 | `GET` | `/api/v1/health/` | Anonymous bounded readiness response |
+| `GET` | `/api/v1/product-mode/` | Anonymous bounded standard/demo state |
 | `GET` | `/api/v1/auth/csrf/` | Anonymous throttled CSRF token issue |
 | `POST` | `/api/v1/auth/login/` | CSRF-protected session login |
 | `GET` | `/api/v1/auth/session/` | Active authenticated identity and memberships |
 | `POST` | `/api/v1/auth/logout/` | CSRF-protected session flush |
 | `POST` | `/api/v1/onboarding/applications/` | Fictional doctor/hospital application submission |
+| `GET` | `/api/v1/onboarding/review/applications/` | Platform-admin minimal application queue |
+| `GET` | `/api/v1/onboarding/review/applications/{uuid}/` | Platform-admin private application detail |
+| `POST` | `/api/v1/onboarding/review/applications/{uuid}/{action}/` | Row-locked admin review transition and optional activation |
 | `GET` | `/api/v1/network/doctors/` | Eligible verified professional directory |
 | `GET/POST` | `/api/v1/network/connections/` | Participant-visible connections / request creation |
 | `POST` | `/api/v1/network/connections/{uuid}/{action}/` | Authorized accept, decline, or withdraw transition |

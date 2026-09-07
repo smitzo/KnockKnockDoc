@@ -59,14 +59,15 @@ sequenceDiagram
     Service->>Files: Parse and validate manifest/collections/references
     Service->>DB: Lock platform namespace; idempotent transactional seed
     Service->>DB: Compare actual and expected counts
+    Service->>DB: Set ProductModeState=demo in the same transaction
     API->>DB: Append allowlisted admin fixture event
     API-->>UI: loaded state and counts
 
     Admin->>UI: Select Delete demo data and confirm
     UI->>API: DELETE fixtures + exact phrase + CSRF
     API->>Service: delete_demo_data()
-    Service->>DB: Lock namespace; resolve fixture-owned keys
-    Service->>DB: Delete dependencies then fixture accounts/organizations
+    Service->>DB: Lock namespace; set ProductModeState=standard
+    Service->>DB: Delete dependencies then fixture/review-created accounts and organizations
     Service->>DB: Preserve persistent admin
     API-->>UI: empty state and removal summary
 ```
@@ -219,11 +220,35 @@ components/registration/partner-application-form.tsx
           -> .test email / SYN-* registration / .example website guards
         -> services.submit_partner_application(validated_data)
           -> validate_password()
-          -> atomic inactive User + IdentityProfile + application/detail
+          -> atomic inactive User + application/detail
         -> generic 202 accepted response
 ```
 
-Submission proves neither email ownership nor professional credentials and grants no network/case access. Reviewer activation and publication are not implemented.
+Submission proves neither email ownership nor professional credentials and grants no network/case access.
+
+## Review and activate a synthetic partner
+
+```text
+components/admin/application-review-queue.tsx
+  -> GET /onboarding/review/applications/ (minimal summaries)
+  -> getApplicationReviewDetail(id) when one row is opened
+    -> audited admin-only private detail
+  -> reviewPartnerApplication(id, action, bounded reason/note)
+    -> POST /onboarding/review/applications/{id}/{action}/ + CSRF
+      -> ApplicationReviewActionSerializer
+      -> services.review_partner_application(actor=session user, ...)
+        -> lock ProductModeState and PartnerApplication
+        -> enforce current-state transition
+        -> approve only: _activate_synthetic_application()
+          -> active IdentityProfile(synthetic_admin_review)
+          -> dedicated Organization + role-specific Membership
+          -> doctor only: ProfessionalDirectoryProfile
+          -> activate User last
+        -> update application/reviewer state
+        -> append allowlisted security event without reviewer_note
+```
+
+Any projection error rolls the approval transaction back. Hospital approval creates a hospital-coordinator landing workspace; neither hospital nor doctor approval creates case assignments, grants, patient rows, ratings, connections, or messages.
 
 ## Deadline scan
 
