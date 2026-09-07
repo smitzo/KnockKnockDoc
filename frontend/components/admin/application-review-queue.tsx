@@ -56,7 +56,6 @@ export function ApplicationReviewQueue({
   useEffect(() => {
     if (!selectedId) return;
     let current = true;
-    setDetailLoading(true);
     getApplicationReviewDetail(selectedId)
       .then((application) => {
         if (current) setSelected(application);
