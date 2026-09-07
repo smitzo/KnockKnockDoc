@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
-from ..models import IdentityProfile, IdentityStatus, SecurityAction
+from ..models import IdentityProfile, IdentityStatus, SecurityAction, VerificationBasis
 from ..permissions import HasActiveIdentity
 from ..selectors import session_payload
 from ..services import normalize_login_email, record_security_event
@@ -47,7 +47,7 @@ class LoginView(APIView):
                 user=user,
                 status=IdentityStatus.ACTIVE,
                 email_verified_at__isnull=False,
-            ).first()
+            ).exclude(verification_basis=VerificationBasis.UNVERIFIED).first()
         if profile is None:
             return Response(
                 {"detail": "Email or password is incorrect."},

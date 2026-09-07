@@ -16,6 +16,7 @@ from apps.identity.models import (
     OrganizationType,
     SecurityAction,
     SecurityEvent,
+    VerificationBasis,
 )
 
 DEMO_PASSWORD = "local-test-password-only-42"
@@ -36,6 +37,7 @@ class SessionAuthenticationApiTests(TestCase):
             display_name="Dr. Referrer · synthetic",
             account_type=AccountType.PROFESSIONAL,
             email_verified_at=timezone.now(),
+            verification_basis=VerificationBasis.SYNTHETIC_FIXTURE,
         )
         organization = Organization.objects.create(
             name="Synthetic referring practice",
@@ -140,6 +142,21 @@ class SessionAuthenticationApiTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {"detail": "Email or password is incorrect."})
+
+    def test_unverified_basis_cannot_authorize_a_session(self):
+        self.profile.verification_basis = VerificationBasis.UNVERIFIED
+        self.profile.save(update_fields=["verification_basis", "updated_at"])
+
+        response = self.client.post(
+            "/api/v1/auth/login/",
+            {"email": self.email, "password": DEMO_PASSWORD},
+            format="json",
+            HTTP_X_CSRFTOKEN=self.csrf_token(),
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertNotIn("memberships", response.data)
+        self.assertEqual(self.client.get("/api/v1/auth/session/").status_code, 403)
 
     def test_security_events_are_append_only(self):
         event = SecurityEvent.objects.create(
