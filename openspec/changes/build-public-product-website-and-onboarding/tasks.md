@@ -27,17 +27,17 @@
 - [ ] 4.1 Add doctor and hospital application models, state machines, immutable acknowledgement evidence, and migrations.
 - [ ] 4.2 Add normalized-email registration, password validation, generic responses, throttling, and hashed single-use email verification.
 - [ ] 4.3 Add role-specific multi-step forms, accessible validation, resume-safe drafts, and clear review expectations.
-- [ ] 4.4a Add a bounded platform-admin application review list/detail API and frontend queue.
-- [ ] 4.4b Add row-locked start-review/change-request/approve/reject services with safe security events.
-- [ ] 4.4c Atomically project approved synthetic doctors/hospitals into only their eligible identity, organization, membership, and directory boundaries.
-- [ ] 4.5 Prove duplicate/race handling, applicant isolation, field-level privacy, invalid transition denial, activation rollback, and reviewer-only access.
+- [x] 4.4a Add a bounded platform-admin application review list/detail API and frontend queue.
+- [x] 4.4b Add row-locked start-review/change-request/approve/reject services with safe security events.
+- [x] 4.4c Atomically project approved synthetic doctors/hospitals into only their eligible identity, organization, membership, and directory boundaries.
+- [x] 4.5 Prove duplicate/race handling, applicant isolation, field-level privacy, invalid transition denial, activation rollback, and reviewer-only access.
 
 ## 5. Documentation, validation, and commits
 
-- [ ] 5.1 Update high/low-level design, agent context, data flow/method calls, performance/security, README, and append-only worklog.
+- [x] 5.1 Update high/low-level design, agent context, data flow/method calls, performance/security, README, and append-only worklog.
 - [ ] 5.2 Run backend checks/migrations/tests, frontend lint/typecheck/build, dependency audits, and keyboard/mobile/browser smoke tests.
 - [ ] 5.3 Prove anonymous/public/applicant/admin role isolation and that admin fixtures never enter public provider APIs.
-- [ ] 5.4 Create narrow convention-compliant product, backend, frontend, docs, and worklog commits.
+- [x] 5.4 Create narrow convention-compliant product, backend, frontend, docs, and worklog commits.
 
 ## 6. Real-launch gates
 

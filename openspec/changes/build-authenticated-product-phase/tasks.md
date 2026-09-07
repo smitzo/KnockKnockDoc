@@ -16,7 +16,7 @@
 - [x] 2.5 Build the responsive admin data-lab route with search, filters, summaries, and flow inspection.
 - [x] 2.6 Move all synthetic catalog/network/referral records into a versioned, validated JSON fixture collection without credentials.
 - [x] 2.7 Add an admin-only load/delete toggle, exact deletion confirmation, persistent admin bootstrap, mutation audit, and negative permission tests.
-- [ ] 2.8 Persist standard/demo mode, gate every synthetic product selector, keep normal feature shells/blogs available, and add a privacy-bounded admin coverage preview.
+- [x] 2.8 Persist standard/demo mode, gate every synthetic product selector, keep normal feature shells/blogs available, and add a privacy-bounded admin coverage preview.
 
 ## 3. Education and visual onboarding
 
@@ -29,15 +29,15 @@
 ## 4. Runtime and documentation
 
 - [x] 4.1 Require local strong demo passwords without committing credentials.
-- [ ] 4.2 Update startup, environment examples, developer handoff, architecture, data flow, security, and agent context.
-- [ ] 4.3 Append worklog entries for request, decisions, implementation, evidence, limitations, and next gate.
+- [x] 4.2 Update startup, environment examples, developer handoff, architecture, data flow, security, and agent context.
+- [x] 4.3 Append worklog entries for request, decisions, implementation, evidence, limitations, and next gate.
 
 ## 5. Validation
 
-- [ ] 5.1 Pass Django checks, migrations, full tests, and PostgreSQL-backed authorization tests in the venv.
+- [x] 5.1 Pass Django checks, migrations, full tests, and PostgreSQL-backed authorization tests in the venv.
 - [ ] 5.2 Pass frontend lint, typecheck, production build, dependency audit, and accessibility-focused browser smoke tests.
 - [ ] 5.3 Pass Compose health, Redis/Celery, login/CSRF/logout, admin isolation, and cross-hospital runtime smoke tests.
-- [ ] 5.4 Inspect every staged diff and create convention-compliant feature commits.
+- [x] 5.4 Inspect every staged diff and create convention-compliant feature commits.
 
 ## 6. Business and product scrutiny
 
