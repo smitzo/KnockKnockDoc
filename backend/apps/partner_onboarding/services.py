@@ -154,7 +154,7 @@ def review_partner_application(
 
     application = (
         PartnerApplication.objects.select_for_update()
-        .select_related("user", "doctor_details", "hospital_details")
+        .select_related("user")
         .filter(id=application_id)
         .first()
     )
