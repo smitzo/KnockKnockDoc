@@ -220,7 +220,7 @@ export interface AdminLabData {
   summary: AdminLabSummary;
   doctors: SyntheticDoctor[];
   patients: SyntheticPatient[];
-  applications: PartnerApplicationReview[];
+  applications: PartnerApplicationReviewSummary[];
 }
 
 export interface PartnerApplicationPayload {
@@ -260,34 +260,37 @@ export type PartnerApplicationReviewAction =
   | "approve"
   | "reject";
 
-export interface PartnerApplicationReview {
+export interface PartnerApplicationReviewSummary {
   id: string;
   application_type: "doctor" | "hospital";
   application_type_label: string;
   status: PartnerApplicationStatus;
   status_label: string;
-  normalized_email: string;
-  legal_name: string;
   display_name: string;
   country: string;
   city: string;
+  organization_name: string;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PartnerApplicationReview extends PartnerApplicationReviewSummary {
+  normalized_email: string;
+  legal_name: string;
   timezone: string;
   preferred_language: string;
-  organization_name: string;
   professional_summary: string;
   terms_version: string;
   terms_accepted_at: string;
   is_synthetic: true;
   reviewer_name: string | null;
-  reviewed_at: string | null;
   review_reason_code: string;
   review_reason_label: string;
   reviewer_note: string;
   activated_at: string | null;
   activated_organization: OrganizationSummary | null;
   details: Record<string, string | number | string[]>;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface ProfessionalRatingBreakdown {

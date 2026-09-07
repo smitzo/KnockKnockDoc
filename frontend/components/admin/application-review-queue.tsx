@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Icon } from "@/components/icons";
-import { reviewPartnerApplication } from "@/lib/api";
+import { getApplicationReviewDetail, reviewPartnerApplication } from "@/lib/api";
 import type {
   PartnerApplicationReview,
   PartnerApplicationReviewAction,
+  PartnerApplicationReviewSummary,
   PartnerApplicationStatus,
 } from "@/lib/types";
 import styles from "@/styles/application-review.module.css";
@@ -34,7 +35,7 @@ const reasons = [
 export function ApplicationReviewQueue({
   initialApplications,
 }: {
-  initialApplications: PartnerApplicationReview[];
+  initialApplications: PartnerApplicationReviewSummary[];
 }) {
   const [applications, setApplications] = useState(initialApplications);
   const [filter, setFilter] = useState<(typeof statusFilters)[number]["value"]>("all");
@@ -42,6 +43,8 @@ export function ApplicationReviewQueue({
   const [reasonCode, setReasonCode] = useState("");
   const [reviewerNote, setReviewerNote] = useState("");
   const [busyAction, setBusyAction] = useState<PartnerApplicationReviewAction | "">("");
+  const [selected, setSelected] = useState<PartnerApplicationReview | null>(null);
+  const [detailLoading, setDetailLoading] = useState(Boolean(initialApplications.length));
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
@@ -49,9 +52,30 @@ export function ApplicationReviewQueue({
     () => applications.filter((application) => filter === "all" || application.status === filter),
     [applications, filter],
   );
-  const selected = applications.find((application) => application.id === selectedId)
-    ?? filtered[0]
-    ?? null;
+
+  useEffect(() => {
+    if (!selectedId) return;
+    let current = true;
+    setDetailLoading(true);
+    getApplicationReviewDetail(selectedId)
+      .then((application) => {
+        if (current) setSelected(application);
+      })
+      .catch((detailError) => {
+        if (current) {
+          setSelected(null);
+          setError(
+            detailError instanceof Error
+              ? detailError.message
+              : "The application detail could not be loaded.",
+          );
+        }
+      })
+      .finally(() => {
+        if (current) setDetailLoading(false);
+      });
+    return () => { current = false; };
+  }, [selectedId]);
 
   async function applyAction(action: PartnerApplicationReviewAction) {
     if (!selected) return;
@@ -68,6 +92,7 @@ export function ApplicationReviewQueue({
         reviewer_note: reviewerNote,
       });
       setApplications((current) => current.map((item) => item.id === updated.id ? updated : item));
+      setSelected(updated);
       setReasonCode("");
       setReviewerNote("");
       setNotice(reviewNotice(action));
@@ -104,13 +129,15 @@ export function ApplicationReviewQueue({
       <div className={styles.layout}>
         <div className={styles.list} aria-label="Applications">
           {filtered.length === 0 ? <p className={styles.noMatch}>No applications have this status.</p> : filtered.map((application) => (
-            <button aria-current={selected?.id === application.id} key={application.id} onClick={() => { setSelectedId(application.id); setError(""); setNotice(""); }} type="button">
+            <button aria-current={selectedId === application.id} key={application.id} onClick={() => { setSelected(null); setDetailLoading(true); setSelectedId(application.id); setError(""); setNotice(""); }} type="button">
               <span className={styles.applicationIcon}><Icon name={application.application_type === "doctor" ? "people" : "home"} /></span>
               <span><small>{application.application_type_label}</small><strong>{application.display_name}</strong><em>{application.organization_name}</em></span>
               <i data-status={application.status}>{application.status_label}</i>
             </button>
           ))}
         </div>
+        {detailLoading && <article className={styles.detailLoading}><span /><strong>Loading private application detail…</strong><small>Only the selected record is requested.</small></article>}
+        {!detailLoading && !selected && <article className={styles.detailLoading}><Icon name="shield" /><strong>Application detail unavailable</strong><small role="alert">{error}</small></article>}
         {selected && <article className={styles.detail}>
           <header><div><span>{selected.application_type_label} application</span><h3>{selected.display_name}</h3><p>{selected.organization_name} · {selected.city}, {selected.country}</p></div><i data-status={selected.status}>{selected.status_label}</i></header>
           <div className={styles.identityGrid}><dl><div><dt>Login email</dt><dd>{selected.normalized_email}</dd></div><div><dt>Legal name</dt><dd>{selected.legal_name}</dd></div><div><dt>Language</dt><dd>{selected.preferred_language}</dd></div><div><dt>Submitted</dt><dd>{formatDate(selected.created_at)}</dd></div></dl><p>{selected.professional_summary}</p></div>

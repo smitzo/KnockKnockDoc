@@ -8,6 +8,7 @@ import type {
   PartnerApplicationPayload,
   PartnerApplicationReview,
   PartnerApplicationReviewAction,
+  PartnerApplicationReviewSummary,
   PartnerApplicationResponse,
   ProfessionalCard,
   ProfessionalConnection,
@@ -94,7 +95,7 @@ export async function getAdminLab(cookieHeader: string): Promise<AdminLabData> {
       "/api/v1/admin/lab/patients/?page_size=60",
       cookieHeader,
     ),
-    serverGet<PaginatedResponse<PartnerApplicationReview>>(
+    serverGet<PaginatedResponse<PartnerApplicationReviewSummary>>(
       "/api/v1/onboarding/review/applications/?page_size=50",
       cookieHeader,
     ),
@@ -272,6 +273,23 @@ export async function reviewPartnerApplication(
   const body = (await response.json()) as unknown;
   if (!response.ok) {
     throw new Error(flattenApiError(body) || "The review action could not be completed.");
+  }
+  return body as PartnerApplicationReview;
+}
+
+export async function getApplicationReviewDetail(
+  applicationId: string,
+): Promise<PartnerApplicationReview> {
+  const response = await fetch(
+    `/api/backend/onboarding/review/applications/${encodeURIComponent(applicationId)}/`,
+    {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    },
+  );
+  const body = (await response.json()) as unknown;
+  if (!response.ok) {
+    throw new Error(flattenApiError(body) || "The application detail could not be loaded.");
   }
   return body as PartnerApplicationReview;
 }
