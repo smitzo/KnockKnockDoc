@@ -3,7 +3,7 @@
   "category": "Research case study",
   "title": "What published traveller narratives teach about trust and handback",
   "dek": "A credible case study does not need an invented miracle story. Qualitative research exposes the recurring coordination work.",
-  "readMinutes": 7,
+  "readMinutes": 11,
   "reviewed": "11 August 2026",
   "image": "/images/referral-guide-hero.png",
   "imageAlt": "Illustrative AI-generated cross-border referral team; it does not depict a real case.",
@@ -32,7 +32,77 @@
         "Make an attributable handback a completion criterion, not an optional PDF at the end."
       ],
       "paragraphs": [
-        "These patterns explain why Knock Knock Doc is designed as a closed-loop referral workflow rather than a popularity-ranked doctor directory."
+        "These patterns explain why Knock Knock Doc is designed as a closed-loop referral workflow rather than a popularity-ranked doctor directory. A directory can support discovery, but it cannot replace the information exchange, decisions and handback that make a referral clinically intelligible."
+      ]
+    },
+    {
+      "heading": "Trust is built from attributable details",
+      "paragraphs": [
+        "Traveller narratives show why a large quantity of online information does not automatically create confidence. Readers must judge whether a profile is current, whether a testimonial is representative, who wrote a treatment statement and whether a commercial intermediary has changed the message.",
+        "A trustworthy referral keeps each claim attached to a source and date. The home doctor authors the referral question. The receiving clinician authors the clinical response. The hospital owns operational information such as the facility and estimate. The patient or authorized representative owns consent choices. The coordinator helps the workflow move without impersonating any of those roles."
+      ]
+    },
+    {
+      "heading": "Before travel: make the question answerable",
+      "paragraphs": [
+        "A referral should explain what decision is being considered and why another opinion or service is being sought. Sending a folder of reports without a concise question forces the receiving team to reconstruct context and increases the chance of a generic response.",
+        "The record set should be bounded and source-labelled. Identify the current clinical summary, relevant imaging or pathology, medication list, prior interventions and known gaps. If a translation or image file is incomplete, mark that limitation instead of allowing the recipient to assume completeness."
+      ],
+      "bullets": [
+        "State the question in the referring clinician's own words.",
+        "List which documents were included and their dates.",
+        "Name the receiving clinician expected to review the material.",
+        "Set a clear next action when clarification is required.",
+        "Keep sales promises out of the clinical record."
+      ]
+    },
+    {
+      "heading": "During planning: preserve uncertainty",
+      "paragraphs": [
+        "A preliminary remote opinion may narrow options, but the plan can change after physical examination, repeat imaging, pathology review or multidisciplinary discussion. Good coordination makes that uncertainty understandable before travel. It does not bury limitations beneath a confident headline.",
+        "The response should distinguish what is recommended now, what is conditional and what cannot be decided remotely. It should also identify alternatives and the circumstances that would cause the receiving team to pause, redirect or decline the proposed pathway."
+      ]
+    },
+    {
+      "heading": "At discharge: a document bundle is not yet a handback",
+      "paragraphs": [
+        "A patient may leave with several reports, prescriptions, images and invoices but no clear account of which document is authoritative or what happens next. The handback should synthesize the episode for the home clinician and patient, not merely transfer files.",
+        "At minimum, it should identify the final diagnosis or working assessment as issued by the treating team, major interventions, current medicines, pending results, warning signs, activity or travel advice, required follow-up and a contact route for clinical clarification. Each item should have an owner and timing."
+      ]
+    },
+    {
+      "heading": "After return: test whether continuity actually worked",
+      "paragraphs": [
+        "A closed loop is demonstrated when the home clinician receives and understands the handback, the patient knows the next step, and unresolved questions have an accountable destination. A sent email or uploaded PDF does not prove this happened.",
+        "Follow-up should record acknowledgement, clarification requests and any inaccessible medicines, tests or services. When the original plan cannot be continued at home, that is a pathway failure to learn from rather than an inconvenience to hide."
+      ],
+      "bullets": [
+        "Did the home clinician acknowledge the summary?",
+        "Were pending results delivered and explained?",
+        "Can the recommended medicines and follow-up services be obtained locally?",
+        "Is there a named route back to the receiving clinical team?",
+        "Are warning signs and emergency instructions understood?"
+      ]
+    },
+    {
+      "heading": "How to read testimonials responsibly",
+      "paragraphs": [
+        "A first-person story can reveal communication, logistics and emotional experience. It cannot establish an expected clinical outcome for another person. Positive stories may be selected for publication, negative experiences may be underreported, and important differences in condition or care may be missing.",
+        "Use narratives to generate questions, not probabilities. Ask what support made the journey easier, where information failed, how complications were handled and whether continuity worked after return. Verify clinical and institutional claims through appropriate current sources."
+      ]
+    },
+    {
+      "heading": "Metrics for a real closed-loop service",
+      "paragraphs": [
+        "A platform should measure more than enquiries and bookings. Operational evidence includes time to acknowledgement, time to clinically attributable response, clarification cycles, reasons cases pause, estimate changes, handback completion and home-clinician acknowledgement.",
+        "Qualitative feedback remains important: did the referring doctor trust the response, did the patient understand uncertainty, and did the receiving team receive usable information? These measures are less glamorous than traffic or lead volume, but they test whether the service is reducing coordination failure."
+      ]
+    },
+    {
+      "heading": "The central lesson",
+      "paragraphs": [
+        "Cross-border care is not one transaction. It is a sequence of decisions shared across people, organizations and countries. Discovery matters, but trust depends on who said what, using which evidence, with what limits and who owns the next step.",
+        "That is why Knock Knock Doc treats connection, messaging, referral access and handback as distinct stages. A professional connection does not grant access to a case, and a popular profile does not answer a clinical question. The workflow must earn each transition."
       ]
     }
   ],

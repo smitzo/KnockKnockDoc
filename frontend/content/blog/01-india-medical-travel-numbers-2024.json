@@ -3,7 +3,7 @@
   "category": "Evidence brief",
   "title": "How many international medical travellers came to India?",
   "dek": "The strongest current public number is useful—but it needs the right definition and context.",
-  "readMinutes": 5,
+  "readMinutes": 9,
   "reviewed": "11 August 2026",
   "image": "/images/medical-travel-planning.png",
   "imageAlt": "Illustrative AI-generated scene of a fictional family reviewing a care-travel plan with a coordinator.",
@@ -33,7 +33,57 @@
     {
       "heading": "What this means for a referral network",
       "paragraphs": [
-        "The public data supports the existence of meaningful cross-border demand. It does not prove that a new platform can acquire trusted referrals, improve hospital response, or close the handback loop. Those are product hypotheses that must be measured case by case."
+        "The public data supports the existence of meaningful cross-border demand. It does not prove that a new platform can acquire trusted referrals, improve hospital response, or close the handback loop. Those are product hypotheses that must be measured case by case.",
+        "For a referral network, the useful unit is not an arrival but a traceable care journey. That journey starts with a clear question from a home clinician, continues through a named receiving team and an attributable response, and ends only when the next owner and follow-up plan are understood. National arrival totals cannot tell us how often that loop happens."
+      ]
+    },
+    {
+      "heading": "Five different numbers that are often mixed together",
+      "paragraphs": [
+        "Medical-travel discussions often place unlike measures side by side. An arrival, a visa, a patient, a hospital episode and a procedure are not interchangeable. One person may enter more than once, travel with an attendant, visit several facilities, or receive no procedure after assessment. Conversely, one hospital episode may contain several services.",
+        "Before repeating a number, write down its unit, period, geography, source and collection method. If any of those are missing, the number is context rather than a decision-grade measure."
+      ],
+      "bullets": [
+        "Arrivals count border events classified by travel purpose.",
+        "Visas count permissions issued, not journeys completed.",
+        "Unique patients require a deduplicated provider or system record.",
+        "Cases require a defined start, end and outcome state.",
+        "Revenue or market-size forecasts are estimates, not observed patient volume."
+      ]
+    },
+    {
+      "heading": "How to read the 2023 and 2024 comparison",
+      "paragraphs": [
+        "The reported series moves from 659,356 medical-purpose foreign tourist arrivals in 2023 to 644,387 in 2024. That is a modest decline, not evidence that demand disappeared. It is also not enough to identify the cause. Changes in travel classification, source-country conditions, flight capacity, visa processing, exchange rates or care-seeking patterns could all affect a yearly total.",
+        "A responsible reading avoids inventing an explanation. The series can establish approximate scale and direction; explaining the direction requires more evidence. For planning, use several years where available and pair the national series with corridor-level interviews and hospital data."
+      ]
+    },
+    {
+      "heading": "Questions a hospital should answer before quoting scale",
+      "paragraphs": [
+        "A hospital considering an international referral programme needs operational measures that national statistics cannot provide. Ask for a clearly dated export from the hospital's own system and record what is included or excluded. Numbers prepared for marketing should be reconciled with the operational definition used by clinical and finance teams."
+      ],
+      "bullets": [
+        "How many unique international patients were assessed, admitted and treated by specialty?",
+        "Which source countries produced those cases, and how concentrated was the volume?",
+        "How long did the team take to acknowledge a referral and issue a clinically attributable response?",
+        "How many estimates changed materially after in-person assessment?",
+        "How many journeys were postponed, declined or redirected, and why?",
+        "How often did the home clinician receive a usable discharge and follow-up handback?"
+      ]
+    },
+    {
+      "heading": "A better way to use the number",
+      "paragraphs": [
+        "Use 644,387 as a national context marker, not as a sales forecast. A new corridor should still begin narrowly: one source market, one or two specialties, a small set of receiving teams and a target number of completed referral loops. The first useful evidence may be ten well-documented cases, not a percentage of a national total.",
+        "For each case, record timestamps for referral receipt, clarification, clinical response, travel decision and handback. Record why a case paused or stopped. Those observations reveal whether the problem is trust, information quality, response time, affordability, logistics or clinical fit. They also give hospitals and referring doctors something concrete to improve."
+      ]
+    },
+    {
+      "heading": "What this evidence still cannot tell a patient",
+      "paragraphs": [
+        "A national arrival count cannot identify the right doctor, predict whether travel is appropriate, compare outcomes, estimate an individual cost or replace a clinical opinion. It cannot establish that one hospital, city or specialty is safer than another. Those decisions require current, case-specific information from licensed professionals and the relevant facility.",
+        "The honest conclusion is useful but limited: international medical travel to India occurs at substantial scale, and the coordination problem is real. Everything beyond that must be earned with more specific evidence."
       ]
     }
   ],

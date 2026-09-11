@@ -3,7 +3,7 @@
   "category": "Travel readiness",
   "title": "Medical-visa planning belongs after clinical fit—not before it",
   "dek": "The official e-Visa route has specific categories and documents. A platform should not turn eligibility into a promise.",
-  "readMinutes": 5,
+  "readMinutes": 10,
   "reviewed": "11 August 2026",
   "image": "/images/medical-travel-planning.png",
   "imageAlt": "Illustrative AI-generated planning meeting with no real patient or hospital shown.",
@@ -18,13 +18,83 @@
     {
       "heading": "A safer order of operations",
       "paragraphs": [
-        "First confirm that a named receiving team has reviewed enough sourced information to say an in-person assessment may be appropriate. Then obtain the facility’s required invitation or letter, verify passport and category rules, plan a companion where needed, and keep flexible travel arrangements until formal decisions exist."
+        "First confirm that a named receiving team has reviewed enough sourced information to say an in-person assessment may be appropriate. Then obtain the facility’s required invitation or letter, verify passport and category rules, plan a companion where needed, and keep flexible travel arrangements until formal decisions exist.",
+        "This order matters. A visa category enables travel; it does not establish that the proposed care is appropriate, that a quoted plan is final or that a particular outcome is likely. Clinical review and travel permission are separate decisions owned by different authorities."
       ],
       "bullets": [
         "Do not buy non-refundable travel based only on a directory profile.",
         "Keep originals and translated copies attributable to their source.",
         "Plan medication continuity, accessibility, recovery accommodation and the return handback.",
         "Use government channels; beware of anyone charging an unofficial ‘emergency visa’ fee."
+      ]
+    },
+    {
+      "heading": "Before starting an application",
+      "paragraphs": [
+        "Open the current official Government of India visa portal and confirm that the traveller's nationality, passport type and intended purpose fit the available route. Use the official eligibility and document instructions shown for that route. Rules and forms can change, so screenshots, blog posts and old coordinator checklists should not be treated as the final authority.",
+        "Check the passport's validity and blank-page requirements, the application window, permitted entries and stay conditions on the official page. Confirm whether the person must use an e-Visa route, a regular visa route or seek instructions from the relevant Indian mission."
+      ],
+      "bullets": [
+        "Use the exact passport identity consistently across the application and hospital letter.",
+        "Confirm the intended arrival date only after the care team provides a realistic planning window.",
+        "Keep copies of the submitted application, acknowledgement and official decision.",
+        "Do not send passport scans through an unverified chat account or public form."
+      ]
+    },
+    {
+      "heading": "Align the hospital letter with the care plan",
+      "paragraphs": [
+        "The receiving facility may need to provide a letter or supporting information for the medical travel route. Verify that it comes from the expected organization and that names, passport details, proposed purpose and likely timing are accurate. A commercial facilitator should not be presented as the clinical author or issuing hospital.",
+        "If the plan is preliminary, the letter and patient communication should say so. Avoid wording that implies admission, procedure or outcome is guaranteed before the facility completes its required assessment."
+      ]
+    },
+    {
+      "heading": "Plan for an attendant deliberately",
+      "paragraphs": [
+        "An attendant may help with mobility, communication, documents and recovery, but the appropriate arrangement depends on the person's needs and current rules. The official portal describes attendant categories linked to medical travel; verify the current allowance and relationship requirements rather than assuming every companion qualifies.",
+        "Agree who will receive logistics updates and who may receive health information. Being a travel companion does not automatically authorize access to private medical details or clinical decisions. Consent and privacy choices should be documented separately."
+      ]
+    },
+    {
+      "heading": "Create a travel-readiness pack",
+      "paragraphs": [
+        "Keep the pack organized, attributable and available offline. Separate identity and travel documents from clinical records, and share only what each recipient needs. The home clinician and receiving team should agree which records are current and which translation, imaging or pathology materials are still required."
+      ],
+      "bullets": [
+        "Passport, official visa decision, itinerary and verified hospital contact.",
+        "Named emergency contact and travel-insurance information where applicable.",
+        "Medication list using generic names, required supply and transport instructions.",
+        "Current clinical summary, referral question and source-labelled reports requested by the team.",
+        "Accessibility, mobility, dietary, communication and attendant needs.",
+        "Return-flight flexibility, follow-up contact and home-doctor handback plan."
+      ]
+    },
+    {
+      "heading": "Avoid irreversible bookings too early",
+      "paragraphs": [
+        "A fast appointment date can create pressure to buy flights and accommodation before the visa decision or clinical pathway is clear. Prefer changeable arrangements until the relevant approvals, timing and fitness-to-travel questions are resolved. Confirm cancellation and date-change terms in writing.",
+        "The likely length of stay should include assessment, possible changes to the plan and a medically appropriate recovery period. The cheapest return date is not useful if the treating team has not assessed whether travel is safe."
+      ]
+    },
+    {
+      "heading": "Common warning signs",
+      "bullets": [
+        "A person claims they can guarantee a visa or bypass the official process.",
+        "Payment is requested through an unrelated personal account or unverified link.",
+        "The hospital letter contains incorrect identity, facility or treatment information.",
+        "A coordinator discourages checking the official portal or relevant Indian mission.",
+        "Non-refundable travel is presented as necessary before a formal decision.",
+        "Passport or clinical documents are requested in a public group or insecure message."
+      ],
+      "paragraphs": [
+        "Stop and verify independently when details conflict. Use contact information obtained from the official government or hospital website rather than the same message that raised concern."
+      ]
+    },
+    {
+      "heading": "Re-check immediately before travel",
+      "paragraphs": [
+        "Review the official visa conditions, entry documents, airline requirements and hospital timing again shortly before departure. Confirm the correct facility address and point of contact. Policy pages, flight schedules and clinical plans can all change after the original application.",
+        "Visa planning is successful when it supports a reasoned care journey without pretending to make the clinical decision. The safest workflow keeps government permission, hospital coordination, clinical authorship and patient consent visible as separate responsibilities."
       ]
     }
   ],

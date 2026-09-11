@@ -3,7 +3,7 @@
   "category": "Economics",
   "title": "Why travellers consider India: value is broader than a low price",
   "dek": "Official economic material signals a large sector, while patient research shows that safety, expertise and information remain central.",
-  "readMinutes": 6,
+  "readMinutes": 10,
   "reviewed": "11 August 2026",
   "image": "/images/medical-travel-planning.png",
   "imageAlt": "Illustrative AI-generated scene of a care coordinator reviewing a fictional plan in a bright reception area.",
@@ -29,7 +29,64 @@
     {
       "heading": "The product implication",
       "paragraphs": [
-        "Value comes from a clear referral question, attributable response, realistic uncertainty, explicit next owner, and handback—not from presenting the cheapest provider first. Paid ranking and undisclosed referral incentives would undermine that model."
+        "Value comes from a clear referral question, attributable response, realistic uncertainty, explicit next owner, and handback—not from presenting the cheapest provider first. Paid ranking and undisclosed referral incentives would undermine that model.",
+        "A useful platform should help two options become comparable without pretending they are identical. It should display the source and date of each claim, show what remains unknown and keep commercial status separate from clinical relevance."
+      ]
+    },
+    {
+      "heading": "Build a total journey estimate, not a procedure price",
+      "paragraphs": [
+        "A hospital estimate is usually one component of the financial decision. The total journey may include pre-travel consultations and tests, visas, flights, local transport, accommodation, meals, companion costs, interpretation, medicines, rehabilitation, time away from work and follow-up after returning home.",
+        "The plan may also change after examination or new diagnostics. That does not automatically mean an estimate was misleading; preliminary information has limits. The important question is whether those limits, common exclusions and decision points were stated before travel."
+      ],
+      "bullets": [
+        "Record the currency, issue date and validity period.",
+        "Separate professional, facility, implant, medicine and diagnostic charges where possible.",
+        "Ask which complications or additional days are excluded.",
+        "Add a realistic travel and recovery budget rather than only the cheapest itinerary.",
+        "Do not treat an estimate as an outcome or final invoice guarantee."
+      ]
+    },
+    {
+      "heading": "Questions that make two estimates more comparable",
+      "paragraphs": [
+        "Two headline prices may describe different services. Ask both receiving teams the same questions and preserve their answers. If one plan includes an implant, intensive-care allowance or rehabilitation and another does not, comparing the totals alone creates false precision."
+      ],
+      "bullets": [
+        "What exact assessment or intervention does this estimate cover?",
+        "Which clinician and facility issued or approved it?",
+        "What information was reviewed, and what remains missing?",
+        "Which services, devices, medicines and length of stay are included?",
+        "What circumstances could materially change the plan or amount?",
+        "What follow-up is included, for how long, and through which channel?"
+      ]
+    },
+    {
+      "heading": "Cheap, affordable and good value are different claims",
+      "paragraphs": [
+        "Cheap describes a lower price. Affordable asks whether a person can pay without unacceptable financial harm. Good value considers whether the complete pathway is appropriate, understandable and sustainable relative to alternatives. None of these can be established from a directory card alone.",
+        "Waiting time and access may be genuine reasons to explore another country, but speed is not automatically value. A rapid response that skips review, omits uncertainty or cannot support follow-up may shift cost and risk to the patient and home clinician later."
+      ]
+    },
+    {
+      "heading": "Make commercial incentives visible",
+      "paragraphs": [
+        "A referral platform, facilitator, hospital or coordinator may be paid in several ways. That commercial relationship can influence which options are presented even when the clinical information is accurate. Readers should be told who pays, what service the payment covers and whether payment changes ranking or eligibility.",
+        "Knock Knock Doc's intended professional-network model does not treat a paid relationship as evidence that one provider is clinically preferable. Recommendations still require attributable reasons. Sponsored placement, if ever introduced, would need to be visually and operationally separate from relevance."
+      ]
+    },
+    {
+      "heading": "A practical decision record",
+      "paragraphs": [
+        "Create one dated record for each option. List confirmed facts, source documents, estimates, assumptions, missing answers and the next person responsible. Include the home-country alternative even when it is slower or more expensive, because the comparison should reflect continuity and recovery as well as the initial intervention.",
+        "Record the decision as proceed, pause, clarify or decline. A pause is not a failed conversion; it may be the safest result when key information is absent. The value of a referral process is partly measured by whether it helps people avoid poorly supported travel."
+      ]
+    },
+    {
+      "heading": "What the market projection can and cannot do",
+      "paragraphs": [
+        "The published US$13.42 billion projection signals commercial interest in medical value travel. It cannot validate a specific business, predict future revenue, establish a provider's quality or show what any patient should pay. Forecasts depend on assumptions that may not survive policy, currency, capacity or demand changes.",
+        "For a new product, bottom-up evidence is stronger: how many qualified referrals enter a narrow corridor, how quickly receiving teams respond, how often the case reaches a reasoned decision, what the coordination costs, and whether doctors and hospitals choose to repeat the workflow."
       ]
     }
   ],

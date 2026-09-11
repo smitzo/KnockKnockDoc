@@ -13,6 +13,7 @@ import type {
   ProfessionalCard,
   ProfessionalConnection,
   ProfessionalConversation,
+  ProfessionalDoctorFilters,
   ProfessionalMessage,
   ProfessionalNetworkData,
   ProductModeResponse,
@@ -294,9 +295,14 @@ export async function getApplicationReviewDetail(
   return body as PartnerApplicationReview;
 }
 
-export async function searchProfessionalDoctors(query: string): Promise<ProfessionalCard[]> {
+export async function searchProfessionalDoctors(filters: ProfessionalDoctorFilters): Promise<ProfessionalCard[]> {
   const params = new URLSearchParams({ page_size: "50" });
-  if (query.trim()) params.set("q", query.trim());
+  if (filters.query?.trim()) params.set("q", filters.query.trim());
+  if (filters.specialty) params.set("specialty", filters.specialty);
+  if (filters.city) params.set("city", filters.city);
+  if (filters.minimumExperience) params.set("min_experience", filters.minimumExperience);
+  if (filters.language) params.set("language", filters.language);
+  if (filters.ordering) params.set("ordering", filters.ordering);
   const response = await fetch(`/api/backend/network/doctors/?${params}`, {
     credentials: "same-origin",
     headers: { Accept: "application/json" },

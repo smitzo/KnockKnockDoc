@@ -69,6 +69,42 @@ class ProfessionalNetworkApiTests(TestCase):
         self.assertNotIn("response_hours", card)
         self.assertNotIn("availability", card)
 
+    def test_doctor_directory_filters_specialty_location_experience_and_language(self):
+        self.client.force_authenticate(user=self.referrer)
+
+        response = self.client.get(
+            "/api/v1/network/doctors/",
+            {
+                "specialty": "Oncology",
+                "city": "Delhi NCR",
+                "min_experience": "20",
+                "language": "Swahili",
+                "ordering": "experience_desc",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(response.data["count"], 0)
+        experience_values = [item["experience_years"] for item in response.data["results"]]
+        self.assertEqual(experience_values, sorted(experience_values, reverse=True))
+        for card in response.data["results"]:
+            self.assertEqual(card["specialty"], "Oncology")
+            self.assertEqual(card["city"], "Delhi NCR")
+            self.assertGreaterEqual(card["experience_years"], 20)
+            self.assertIn("Swahili", card["languages"])
+
+    def test_doctor_directory_searches_professional_summary(self):
+        profile = self.doctor_two.professional_directory_profile
+        profile.professional_summary = "Synthetic specialist with a focus on handback planning."
+        profile.save(update_fields=["professional_summary", "updated_at"])
+        self.client.force_authenticate(user=self.referrer)
+
+        response = self.client.get("/api/v1/network/doctors/?q=handback")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(profile.id))
+
     def test_patient_and_non_clinical_operator_cannot_open_directory(self):
         for user in [self.patient, self.coordinator]:
             self.client.force_authenticate(user=user)

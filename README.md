@@ -7,12 +7,12 @@ Knock Knock Doc is a light-mode, doctor-first product prototype for discovering 
 ## What works now
 
 - Public website: Home, Doctors, Hospitals, How it works, Blogs, About, Join, and Sign in.
-- Five reusable, file-backed, sourced articles with stable detail routes.
+- Five reusable, file-backed, sourced long-form articles with stable detail routes, practical checklists, evidence limits, and direct sources.
 - Doctor and hospital application forms with strict fictional `.test` / `.example` inputs and review-gated inactive accounts.
 - Platform-admin application review queue with audited start-review, request-changes, approve, and reject transitions.
 - Atomic synthetic approval that activates only the eligible doctor or hospital-coordinator boundary, plus a dedicated hospital workspace.
 - Django session authentication, CSRF protection, throttling, and append-only security events.
-- Doctor-only professional discovery with specialty/location search and fictional collaboration ratings.
+- Doctor-only professional discovery with Vaidam-informed catalogue cards; keyword, specialty, Indian location, experience, language, and sorting controls; expandable profile context; and fictional collaboration ratings.
 - Purpose-bound connection requests, accept/decline/withdraw transitions, and participant-only messaging.
 - Structured synthetic referral creation with assignment and scoped-grant authorization.
 - Platform-admin-only demo controls for loading or deleting 30 fictional doctors, 30 fictional patients, network records, ratings, and a referral workspace.

@@ -3,7 +3,7 @@
   "category": "Decision guide",
   "title": "Which Indian city is ‘best’ for planned care? Start with the team, not a ranking",
   "dek": "Delhi NCR, Mumbai, Chennai, Bengaluru, Hyderabad and other clusters can all be relevant. A universal winner is not evidence-based.",
-  "readMinutes": 7,
+  "readMinutes": 11,
   "reviewed": "11 August 2026",
   "image": "/images/referral-guide-hero.png",
   "imageAlt": "Illustrative AI-generated referral journey connecting a fictional patient, home doctor and Indian care team.",
@@ -31,7 +31,70 @@
     {
       "heading": "A repeatable verification sequence",
       "paragraphs": [
-        "Search the current NABH directory by city and specialty, but treat accreditation as one signal rather than a guarantee of an individual outcome. Confirm the certificate scope and status directly, then ask the receiving team to answer the original referral question in writing."
+        "Search the current NABH directory by city and specialty, but treat accreditation as one signal rather than a guarantee of an individual outcome. Confirm the certificate scope and status directly, then ask the receiving team to answer the original referral question in writing.",
+        "Do the verification in the same order for every candidate. A consistent sequence makes it harder for a polished profile, famous city or fast sales response to crowd out the clinical and continuity questions that matter."
+      ]
+    },
+    {
+      "heading": "Start with the clinical team, not the skyline",
+      "paragraphs": [
+        "Define the specialty and subspecialty needed before searching by destination. A broad label such as oncology, cardiology or orthopaedics may hide very different teams and procedures. Ask who will review the case, who is expected to perform or supervise the proposed care, and whether that person currently treats the relevant type of case.",
+        "A profile can help create a shortlist, but it is not proof of fit. Current designation, facility affiliation, registration, credentials and stated focus should be checked at their source. If a coordinator cannot name the clinical author of a recommendation, the response is not ready to guide travel."
+      ],
+      "bullets": [
+        "Preserve the home doctor's original referral question.",
+        "Ask the receiving clinician to state what information was reviewed.",
+        "Separate a preliminary opinion from a confirmed treatment plan.",
+        "Record limitations, missing tests and reasons an in-person assessment may change the plan."
+      ]
+    },
+    {
+      "heading": "Evaluate the facility as a system",
+      "paragraphs": [
+        "The named doctor is only one part of a care pathway. Anaesthesia, critical care, imaging, pathology, infection prevention, blood services, rehabilitation, pharmacy and emergency escalation may all matter. The relevant combination depends on the proposed care and the person's health status.",
+        "Accreditation is a useful verification input because it can show that an organization has been assessed against a defined standard and scope. It should not be translated into a promise about an individual result. Confirm the exact facility, certificate status and scope rather than relying on a group brand or an old badge in a brochure."
+      ]
+    },
+    {
+      "heading": "Build a city comparison worksheet",
+      "paragraphs": [
+        "Compare candidates in one table using the same fields. Keep facts, estimates and unanswered questions separate. A blank cell is more honest than an assumption and creates a clear follow-up action."
+      ],
+      "bullets": [
+        "Clinical fit: named team, subspecialty, current role and information reviewed.",
+        "Facility fit: exact site, relevant support services and current accreditation evidence.",
+        "Plan clarity: proposed next step, alternatives, limitations and reasons the plan may change.",
+        "Cost clarity: inclusions, exclusions, validity period, payment schedule and contingency categories.",
+        "Travel practicality: airport transfer, local journey time, accessibility and companion needs.",
+        "Continuity: home-doctor involvement, discharge documents, medication supply and follow-up owner."
+      ]
+    },
+    {
+      "heading": "Location becomes important after clinical fit",
+      "paragraphs": [
+        "Once two options are clinically credible, location can decide which journey is workable. Estimate door-to-door time, not only flight time. In a large metropolitan area, travel between an airport, accommodation, diagnostics and the hospital can add strain. Recovery needs may make proximity and accessibility more important than tourism or city reputation.",
+        "Ask whether an attendant is expected, which languages are supported during clinical conversations, what happens outside office hours and whether the accommodation can safely support the likely recovery period. Climate, air quality, mobility and food requirements may also deserve case-specific discussion with the care team."
+      ]
+    },
+    {
+      "heading": "Plan the return before booking the outward journey",
+      "paragraphs": [
+        "A destination decision is incomplete until the return pathway is visible. The receiving team should explain the anticipated recovery window, warning signs, medication plan, fitness-to-travel decision and documents that will be issued. The home clinician should know what follow-up they are being asked to provide and how to reach the receiving team for clarification.",
+        "If follow-up requires repeated travel, specialist equipment or medicines that are difficult to obtain at home, that belongs in the comparison before a commitment is made. A lower initial estimate can become poor value when continuity is fragile."
+      ]
+    },
+    {
+      "heading": "Red flags that should pause the decision",
+      "bullets": [
+        "A universal 'best city' or 'best doctor' claim with no case-specific reasoning.",
+        "Pressure to book travel before a named clinician reviews adequate information.",
+        "A quote that omits likely exclusions or has no validity period.",
+        "Credentials or accreditation shown without a current source and exact facility.",
+        "No clear distinction between coordinator, commercial contact and clinical author.",
+        "No answer about complications, emergency escalation or handback to the home doctor."
+      ],
+      "paragraphs": [
+        "Pausing is a valid decision. A trustworthy process should make uncertainty visible and allow the referring doctor or patient to request clarification without sales pressure."
       ]
     }
   ],

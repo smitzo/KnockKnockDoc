@@ -322,6 +322,15 @@ export interface ProfessionalCard {
   is_synthetic: true;
 }
 
+export interface ProfessionalDoctorFilters {
+  query?: string;
+  specialty?: string;
+  city?: string;
+  minimumExperience?: string;
+  language?: string;
+  ordering?: "recommended" | "experience_desc" | "experience_asc" | "name";
+}
+
 export interface ProfessionalConnection {
   id: string;
   requester: ProfessionalCard;

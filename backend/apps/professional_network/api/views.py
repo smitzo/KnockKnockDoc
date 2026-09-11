@@ -63,6 +63,10 @@ class ProfessionalDirectoryListView(NetworkPermissionMixin, ListAPIView):
         query = self.request.query_params.get("q", "").strip()[:80]
         specialty = self.request.query_params.get("specialty", "").strip()[:80]
         country = self.request.query_params.get("country", "").strip()[:80]
+        city = self.request.query_params.get("city", "").strip()[:80]
+        language = self.request.query_params.get("language", "").strip()[:40]
+        minimum_experience = self.request.query_params.get("min_experience", "").strip()
+        ordering = self.request.query_params.get("ordering", "recommended").strip()
         if query:
             queryset = queryset.filter(
                 Q(user__identity_profile__display_name__icontains=query)
@@ -70,12 +74,27 @@ class ProfessionalDirectoryListView(NetworkPermissionMixin, ListAPIView):
                 | Q(country__icontains=query)
                 | Q(city__icontains=query)
                 | Q(organization_name__icontains=query)
+                | Q(professional_summary__icontains=query)
             )
         if specialty:
-            queryset = queryset.filter(specialty=specialty)
+            queryset = queryset.filter(specialty__iexact=specialty)
         if country:
-            queryset = queryset.filter(country=country)
-        return queryset.order_by("user__identity_profile__display_name", "id")
+            queryset = queryset.filter(country__iexact=country)
+        if city:
+            queryset = queryset.filter(city__iexact=city)
+        if language:
+            queryset = queryset.filter(languages__icontains=language)
+        if minimum_experience.isdigit():
+            queryset = queryset.filter(experience_years__gte=min(int(minimum_experience), 80))
+
+        ordering_fields = {
+            "recommended": ("-rating_count_value", "-experience_years"),
+            "experience_desc": ("-experience_years",),
+            "experience_asc": ("experience_years",),
+            "name": ("user__identity_profile__display_name",),
+        }
+        selected_ordering = ordering_fields.get(ordering, ordering_fields["recommended"])
+        return queryset.order_by(*selected_ordering, "user__identity_profile__display_name", "id")
 
 
 class ConnectionListCreateView(NetworkPermissionMixin, APIView):

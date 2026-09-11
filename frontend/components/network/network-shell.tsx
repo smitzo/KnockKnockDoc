@@ -20,6 +20,7 @@ import type {
   ProfessionalCard,
   ProfessionalConnection,
   ProfessionalConversation,
+  ProfessionalDoctorFilters,
   ProfessionalMessage,
   ProfessionalNetworkData,
   SessionResponse,
@@ -41,6 +42,19 @@ const purposes = [
   ["handback_coordination", "Home-doctor handback"],
   ["professional_introduction", "Professional introduction"],
 ];
+
+const emptyDoctorFilters: Required<ProfessionalDoctorFilters> = {
+  query: "",
+  specialty: "",
+  city: "",
+  minimumExperience: "",
+  language: "",
+  ordering: "recommended",
+};
+
+function uniqueValues(values: string[]) {
+  return [...new Set(values)].sort((left, right) => left.localeCompare(right));
+}
 
 function displayDate(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -71,7 +85,7 @@ export function NetworkShell({
   const [doctors, setDoctors] = useState(data.doctors);
   const [connections, setConnections] = useState(data.connections);
   const [conversations, setConversations] = useState(data.conversations);
-  const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState(emptyDoctorFilters);
   const [searching, setSearching] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
   const [connectionBusy, setConnectionBusy] = useState<string | null>(null);
@@ -92,15 +106,44 @@ export function NetworkShell({
   );
   const acceptedConnections = connections.filter((connection) => connection.status === "accepted");
   const activeConversation = conversations.find((item) => item.id === selectedConversation) ?? null;
+  const filterOptions = useMemo(() => ({
+    specialties: uniqueValues(data.doctors.map((doctor) => doctor.specialty)),
+    cities: uniqueValues(data.doctors.map((doctor) => doctor.city)),
+    languages: uniqueValues(data.doctors.flatMap((doctor) => doctor.languages)),
+  }), [data.doctors]);
+  const activeFilterCount = [
+    filters.query,
+    filters.specialty,
+    filters.city,
+    filters.minimumExperience,
+    filters.language,
+  ].filter(Boolean).length;
+
+  function updateFilter<Key extends keyof typeof filters>(key: Key, value: (typeof filters)[Key]) {
+    setFilters((current) => ({ ...current, [key]: value }));
+  }
 
   async function searchDoctors(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSearching(true);
     setError("");
     try {
-      setDoctors(await searchProfessionalDoctors(query));
+      setDoctors(await searchProfessionalDoctors(filters));
     } catch (searchError) {
       setError(searchError instanceof Error ? searchError.message : "Search failed.");
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  async function resetDoctorFilters() {
+    setFilters(emptyDoctorFilters);
+    setSearching(true);
+    setError("");
+    try {
+      setDoctors(await searchProfessionalDoctors(emptyDoctorFilters));
+    } catch (searchError) {
+      setError(searchError instanceof Error ? searchError.message : "Directory could not be reset.");
     } finally {
       setSearching(false);
     }
@@ -203,17 +246,30 @@ export function NetworkShell({
 
           {activeTab === "discover" && <section className={styles.view}>
             {adminPreview && <div className={styles.ratingBoundary}><Icon name="lock" /><p><strong>Read-only administrator preview.</strong> You can inspect demo doctor cards, but administrator status does not let you connect, read conversations, or open referral contents.</p></div>}
-            <div className={styles.viewHeading}><div><span>Professional discovery</span><h1>Find a specialist</h1><p>Compare specialties, experience, locations, and peer-collaboration feedback before you connect.</p></div><span className={styles.resultCount}>{doctors.length} profiles</span></div>
-            <form className={styles.search} onSubmit={searchDoctors}><Icon name="search" /><label><span className={styles.srOnly}>Search professionals</span><input maxLength={80} onChange={(event) => setQuery(event.target.value)} placeholder="Search specialty, doctor, city, or hospital" type="search" value={query} /></label><button className="button" disabled={searching} type="submit">{searching ? "Searching…" : "Search"}</button></form>
+            <div className={styles.catalogueHero}>
+              <div className={styles.viewHeading}><div><span>India specialist catalogue</span><h1>Find the right doctor for a professional referral</h1><p>Search reviewed profiles by specialty, experience, location, language, doctor, or hospital—then connect with a clear purpose.</p></div><span className={styles.resultCount}>{doctors.length} matching profiles</span></div>
+              <form className={styles.directoryFilters} onSubmit={searchDoctors}>
+                <label className={styles.keywordSearch}><span>Doctor, specialty or hospital</span><div><Icon name="search" /><input maxLength={80} onChange={(event) => updateFilter("query", event.target.value)} placeholder="Try oncology or a hospital name" type="search" value={filters.query} /></div></label>
+                <label><span>Specialty</span><select onChange={(event) => updateFilter("specialty", event.target.value)} value={filters.specialty}><option value="">All specialties</option>{filterOptions.specialties.map((specialty) => <option key={specialty} value={specialty}>{specialty}</option>)}</select></label>
+                <label><span>Location</span><select onChange={(event) => updateFilter("city", event.target.value)} value={filters.city}><option value="">All Indian locations</option>{filterOptions.cities.map((city) => <option key={city} value={city}>{city}</option>)}</select></label>
+                <label><span>Experience</span><select onChange={(event) => updateFilter("minimumExperience", event.target.value)} value={filters.minimumExperience}><option value="">Any experience</option><option value="10">10+ years</option><option value="15">15+ years</option><option value="20">20+ years</option><option value="25">25+ years</option></select></label>
+                <label><span>Language</span><select onChange={(event) => updateFilter("language", event.target.value)} value={filters.language}><option value="">Any language</option>{filterOptions.languages.map((language) => <option key={language} value={language}>{language}</option>)}</select></label>
+                <label><span>Sort by</span><select onChange={(event) => updateFilter("ordering", event.target.value as Required<ProfessionalDoctorFilters>["ordering"])} value={filters.ordering}><option value="recommended">Recommended</option><option value="experience_desc">Most experienced</option><option value="experience_asc">Experience: low to high</option><option value="name">Doctor name</option></select></label>
+                <div className={styles.filterActions}><button className="button" disabled={searching} type="submit">{searching ? "Searching…" : "Show doctors"} <Icon name="arrow" /></button><button disabled={searching || activeFilterCount === 0} onClick={resetDoctorFilters} type="button">Clear {activeFilterCount > 0 ? `${activeFilterCount} filters` : "filters"}</button></div>
+              </form>
+              <div className={styles.specialtyShortcuts}><span>Popular specialties</span>{filterOptions.specialties.slice(0, 6).map((specialty) => <button aria-pressed={filters.specialty === specialty} key={specialty} onClick={() => updateFilter("specialty", filters.specialty === specialty ? "" : specialty)} type="button">{specialty}</button>)}</div>
+            </div>
             <div className={styles.ratingBoundary}><Icon name="shield" /><p><strong>Collaboration ratings are not clinical quality scores.</strong> {demoModeEnabled ? "Demo ratings summarize sample peer feedback about communication, collaboration, and handback." : "They cover professional communication, collaboration, and handback only."} Always verify suitability independently.</p></div>
             {doctors.length === 0 ? <div className={styles.empty}><Icon name="search" /><h2>{demoModeEnabled ? "No matching professionals" : "No doctor profiles are published yet"}</h2><p>{demoModeEnabled ? "Try a specialty, location, hospital, or a shorter search." : "Reviewed professional profiles will appear here when the network opens in your corridor."}</p></div> : <div className={styles.doctorGrid}>{doctors.map((doctor) => {
               const connection = connectionByPeer.get(doctor.id);
               const isSelected = selectedDoctor === doctor.id;
               return <article className={styles.doctorCard} key={doctor.id}>
-                <div className={styles.doctorTop}><DoctorAvatar doctor={doctor} /><div><span>{doctor.professional_role_label}</span><h2>{doctor.display_name}</h2><p>{doctor.specialty} · {doctor.experience_years} years</p></div><span className={styles.verified}><Icon name="shield" /> {doctor.verification_label}</span></div>
+                <div className={styles.doctorTop}><DoctorAvatar doctor={doctor} /><div><span>{doctor.specialty}</span><h2>{doctor.display_name}</h2><p>{doctor.professional_role_label}</p></div><span className={styles.verified}><Icon name="shield" /> {doctor.verification_label}</span></div>
+                <div className={styles.cardHighlights}><span><strong>{doctor.experience_years}+</strong> years experience</span><span><Icon name="location" /> {doctor.city}, {doctor.country}</span></div>
                 <p className={styles.summary}>{doctor.professional_summary}</p>
                 <dl className={styles.doctorFacts}><div><dt>Works at</dt><dd>{doctor.organization_name}</dd></div><div><dt>Location</dt><dd>{doctor.city}, {doctor.country}</dd></div><div><dt>Languages</dt><dd>{doctor.languages.join(", ")}</dd></div></dl>
                 <div className={styles.rating}><div><strong>{doctor.rating_average ?? "—"}<small>/5</small></strong><span>{doctor.rating_count} peer reviews</span></div><dl><div><dt>Communication</dt><dd>{doctor.rating_breakdown?.communication ?? "—"}</dd></div><div><dt>Collaboration</dt><dd>{doctor.rating_breakdown?.collaboration ?? "—"}</dd></div><div><dt>Handback</dt><dd>{doctor.rating_breakdown?.handback ?? "—"}</dd></div></dl></div>
+                <details className={styles.profileDetails}><summary>Professional profile details <Icon name="arrow" /></summary><div><p><strong>Specialist focus</strong>{doctor.specialty}</p><p><strong>Professional setting</strong>{doctor.organization_name}</p><p><strong>Languages</strong>{doctor.languages.join(", ")}</p><small>This synthetic catalogue demonstrates discovery and referral collaboration. It does not establish clinical suitability or treatment outcomes.</small></div></details>
                 {adminPreview ? <span className={styles.verified}><Icon name="lock" /> Preview only</span> : connection ? <div className={styles.connectionState}><Icon name={connection.status === "accepted" ? "check" : "timeline"} /><span><strong>{connection.status_label}</strong>{connection.purpose_label}</span>{connection.status === "accepted" && <button onClick={() => setActiveTab("messages")} type="button">Message</button>}</div> : <button className="button button--ghost" disabled={!doctor.accepts_connections} onClick={() => setSelectedDoctor(isSelected ? null : doctor.id)} type="button">{isSelected ? "Cancel" : "Connect"} {!isSelected && <Icon name="plus" />}</button>}
                 {!adminPreview && isSelected && !connection && <form className={styles.connectForm} onSubmit={(event) => requestConnection(event, doctor)}><h3>Why do you want to connect?</h3><label><span>Purpose</span><select defaultValue="referral_collaboration" name="purpose">{purposes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label><span>Short introduction <small>(optional)</small></span><textarea maxLength={400} name="note" placeholder="Introduce your professional collaboration interest." rows={3} /></label><p><Icon name="lock" /> Keep patient details inside an approved referral.</p><button className="button" disabled={connectionBusy === doctor.id} type="submit">{connectionBusy === doctor.id ? "Sending…" : "Send request"}</button></form>}
               </article>;
